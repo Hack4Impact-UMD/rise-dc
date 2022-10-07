@@ -1,5 +1,11 @@
-.navbar-right-container {
+.navbar-comb {
     display: flex;
-    align-items: right;
-    
+    /* justify-content: space-between; */
+}
+
+.navbar-left-container {
+    align-self: left;
+}
+.navbar-right-container {
+    align-self: right;
 }

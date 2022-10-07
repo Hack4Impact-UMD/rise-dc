@@ -1,16 +1,15 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, Link} from "react-router-dom";
 import React from 'react';
 import "./Navbar.css"
 
-export function NavBar() {
+const NavBar = () => {
   return (
-
-    <nav>
+    <nav className = "navbar-comp">
+        
         <a className = 'navbar-left-container'>
             <NavLink to = "/">
                 RiseDC logo
             </NavLink>
-            <p>Temp </p>
         </a>
         <a className = 'navbar-right-container'>
             <NavLink to="/">
@@ -19,6 +18,9 @@ export function NavBar() {
             <NavLink to="/about">About</NavLink>
             <NavLink to="/settings">Contact</NavLink>
         </a>
+        {/* <Link to ="">Test</Link> */}
     </nav>
   );
 }
+
+export default NavBar
