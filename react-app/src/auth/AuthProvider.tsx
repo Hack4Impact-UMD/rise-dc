@@ -38,8 +38,6 @@ export const AuthProvider: React.FC<Props> = ({children}) => {
         user.getIdTokenResult().then((token) => {
           setToken(token);
         });
-      } else {
-        return <DummyLogin/>
       }
     });
   }, [])
