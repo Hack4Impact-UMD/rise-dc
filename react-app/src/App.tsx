@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import AdminSettingsPage from './pages/AdminSettingsPage';
-import MentorTutorSettingsPage from './pages/MentorTutorSettingsPage';
+import AdminSettingsPage from './settings-page/AdminSettingsPage';
+import MentorTutorSettingsPage from './settings-page/MentorTutorSettingsPage';
 
 import "./App.css";
 
