@@ -1,11 +1,16 @@
 .navbar-comb {
     display: flex;
-    /* justify-content: space-between; */
+    align-content: stretch;
 }
 
-.navbar-left-container {
+/* .navbar-left-container {
     align-self: left;
 }
 .navbar-right-container {
     align-self: right;
-}
+} */
+
+/* .navbar-left-container,
+.navbar-right-container {
+    display: inline-block;
+} */
