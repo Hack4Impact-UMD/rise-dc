@@ -1,0 +1,13 @@
+.landing {
+  font-family: "Fjalla One";
+}
+
+.header {
+  background-color: white;
+  height: 30vh;
+}
+
+.content {
+  background-color: #d7ebd3;
+  height: 70vh;
+}

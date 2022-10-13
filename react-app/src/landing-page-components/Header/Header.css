@@ -1,0 +1,22 @@
+.header {
+  display: flex;
+  flex-direction: column;
+  text-decoration: bold;
+  align-items: center;
+  line-height: 15%;
+  font-size: 0.6rem;
+  background-color: white;
+}
+
+.circle {
+  height: 10vh;
+  width: 10vh;
+  background-color: #a0b9dc;
+  border-radius: 50%;
+  display: inline-block;
+  margin-top: 5vh;
+}
+
+.upper-text {
+  padding-top: 0.6rem;
+}
