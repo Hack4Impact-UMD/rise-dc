@@ -1,29 +1,15 @@
-import {useState} from 'react'
-import {getAuth} from 'firebase/auth'
-const DummyLanding = () => {
+import "./Statistics.css";
 
-    const [role, setRole] = useState<String | null>(null);
-    const auth = getAuth()
-    const user = auth.currentUser
-    if (user) {
-        user.getIdTokenResult()
-        .then((idTokenResult) => {
-            if (!!idTokenResult.claims.admin) {
-                setRole("Admin")
-            } else {
-                setRole("User")
-            }
-        })
-        .catch((error: any) => {
-            console.log(error);
-        })
-    }
+type statProp = {
+  title: string;
+  value: number;
+};
 
-    return (
-            <div>
-                {role}
-            </div>
-    )
+export default function Statistics({title, value}: statProp) {
+  return (
+    <div className="statistic">
+      <h1 className="text">{value}</h1>
+      <h2>{title}</h2>
+    </div>
+  );
 }
-
-export default DummyLanding;
