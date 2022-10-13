@@ -1,0 +1,11 @@
+
+.input-group input{
+    height: 9%;
+    margin-top: 5px;
+    border: 1px lightgrey solid;
+    outline: none;
+ 
+    padding: 15px 15px;
+    border-radius: 1rem;
+    font-size: 1rem;
+  }

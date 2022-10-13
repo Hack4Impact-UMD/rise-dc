@@ -1,0 +1,17 @@
+
+
+.login-btn {
+    width: 100%;
+    height: 9%;
+    border: none;
+    color: black;
+    font-size: 1rem;
+    background-color: #A0B9DC;
+    margin-top: 20px;
+    border-radius: 1.6rem;
+  }
+  
+  .login-btn:hover {
+    background-color: #8ca7cc;
+    cursor: pointer;
+  }
