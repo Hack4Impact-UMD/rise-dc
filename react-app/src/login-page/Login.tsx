@@ -4,15 +4,14 @@ import { AuthError, getAuth } from "@firebase/auth";
 import TextField, { TextFieldTypes } from "./TextField/TextField"
 import Button from "./Button/Button";
 import logo from "./assets/rise-dc-logo.png";
-import "./LoginPage.css";
+import "./Login.css";
 import app from "../config/firebase";
 
-const StudentLoginPage: React.FC<any> = () => {
+const LoginPage: React.FC<any> = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
 
   return (
     <div className="login-page">
@@ -37,4 +36,4 @@ const StudentLoginPage: React.FC<any> = () => {
   );
 };
 
-export default StudentLoginPage;
+export default LoginPage;

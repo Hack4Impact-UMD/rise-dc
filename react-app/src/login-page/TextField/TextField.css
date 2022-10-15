@@ -6,6 +6,11 @@
     outline: none;
  
     padding: 15px 15px;
+    margin-top: 7px;
     border-radius: 1.4rem;
     font-size: 1rem;
+  }
+
+  .header {
+    margin-left: 10px;
   }

@@ -1,5 +1,5 @@
 import React from 'react';
-import StudentLoginPage from './login-page/StudentLoginPage';
+import LoginPage from './login-page/Login';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
@@ -7,9 +7,12 @@ import "./App.css";
 
 function App() {
   return (
-      <div>
-        <StudentLoginPage/>
-      </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/login" element={<LoginPage/>} />
+      </Routes>
+    </Router>
   );
 }
 
