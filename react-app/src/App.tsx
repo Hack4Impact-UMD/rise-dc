@@ -6,9 +6,11 @@ import DummyLogin from './temp-components/DummyLogin'
 import DummyLanding from './temp-components/DummyLanding';
 import AdminSettingsPage from './settings-page/AdminSettingsPage';
 import "./App.css";
+import {AuthProvider} from './auth/AuthProvider'
 
 function App() {
   return (
+    <AuthProvider>
       <BrowserRouter>
         <Routes>
           <Route path = '/' element = {<DummyLogin />} />
@@ -17,6 +19,7 @@ function App() {
           <Route path = "/settings" element = {<RequireAdminAuth children = {<AdminSettingsPage/>} />}/>
         </Routes>
       </BrowserRouter>
+    </AuthProvider>
   );
 }
 
