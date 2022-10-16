@@ -1,32 +1,60 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import app from '../config/firebase'
-import {getAuth, signInWithEmailAndPassword} from 'firebase/auth'
+import {getAuth, signInWithEmailAndPassword, AuthError} from 'firebase/auth'
+import { useAuth } from "../auth/AuthProvider";
+import { useNavigate } from 'react-router-dom';
 
-const DummyLogin = () => {
+const DummyLogin: React.FC<any> = () => {
 
-    const [loginInfo, setLoginInfo] = useState({email: '', password: ''})
-    const auth = getAuth(app);
+    const [email, setEmail] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
+    const [errorMessage, setErrorMessage] = useState<string>("");
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const navigate = useNavigate();
+    const auth = useAuth();
+    const firebaseAuth = getAuth(app);
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        signInWithEmailAndPassword(auth, loginInfo.email, loginInfo.password)
-            .then((userCredential) => {
-                const user = userCredential.user;
-                console.log(user)
+        await signInWithEmailAndPassword(firebaseAuth, email, password)
+            .then( async (userCredential: any) => {
+                if (userCredential != null) {
+                    let token = await userCredential.user.getIdTokenResult();
+                    navigate("../landing")
+                } else {
+                    setErrorMessage("User not found")
+                }
             })
             .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
+                let code = (error as AuthError).code;
+                if (code === "auth/user-not-found") {
+                  setErrorMessage("Account does not exist");
+                } else if (code === "auth/wrong-password") {
+                  setErrorMessage("Incorrect Password");
+                } else if (code === "auth/too-many-requests") {
+                  setErrorMessage(
+                    "Access to this account has been temporarily disabled due to many failed login attempts. You can reset your password or try again later."
+                  );
+                } else {
+                  setErrorMessage("Make sure your email is correct. If that does not work, please try again later.");
+                }
             });
         
     }    
+    useEffect(() => {
+      firebaseAuth.signOut();
+    }, []);
 
     return (
-        <form onSubmit = {handleSubmit}>
-            <input id="usernameInput" placeholder = 'email' type="text" onChange = {(e) => setLoginInfo ({...loginInfo, email: e.target.value})}/>
-            <input id="usernameInput" placeholder = 'password' type="text" onChange = {(e) => setLoginInfo ({...loginInfo, password: e.target.value})}/>
-            <button type="submit">Submit</button>
-        </form>
+        <div>
+            <form onSubmit = {handleSubmit}>
+                <input id="usernameInput" placeholder = 'email' type="text" onChange = {(e) => setEmail (e.target.value)}/>
+                <input id="usernameInput" placeholder = 'password' type="text" onChange = {(e) => setPassword (e.target.value)}/>
+                <button type="submit">Submit</button>
+            </form>
+            {errorMessage}
+        </div>
+
     )
 }
 
