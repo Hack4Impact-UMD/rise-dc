@@ -10,16 +10,7 @@ import {AuthProvider} from './auth/AuthProvider'
 
 function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path = '/' element = {<DummyLogin />} />
-          <Route path = "/login" element = {<DummyLogin/>} /> 
-          <Route path = "/landing" element={<RequireAuth children={<DummyLanding />} /> }/>
-          <Route path = "/settings" element = {<RequireAdminAuth children = {<AdminSettingsPage/>} />}/>
-        </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+    <AdminSettingsPage/>
   );
 }
 
