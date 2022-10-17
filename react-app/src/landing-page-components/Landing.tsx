@@ -5,15 +5,15 @@ import RecentLogs from './RecentLogs/RecentLogs';
 import Statistics from './Statistics/Statistics';
 import Hours from './Hours/Hours';
 import './Landing.css'
+import GoogleCalendar from './GoogleCalendar/GoogleCalendar';
+import Students from './Students/Students';
 
 const Landing = () => {
 
 
     return (
             <div className = "landing">
-                <div className = "header">
-                    <Header/>
-                </div>
+                <Header />
                 <div className = "content">
                   <div className='statistics'>
                     <Statistics title="Sessions Conducted" value={50} />
@@ -22,6 +22,11 @@ const Landing = () => {
                     <Statistics title="Tutors Participating" value={50} />
                   </div>
                   <Hours/>
+                  <div className = "logs-row">
+                    <RecentLogs/>
+                    <GoogleCalendar />
+                  </div>
+                  <Students />
                 </div>
             </div>
     )

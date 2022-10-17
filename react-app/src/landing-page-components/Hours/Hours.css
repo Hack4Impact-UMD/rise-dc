@@ -1,12 +1,18 @@
 .graph {
   box-sizing: border-box;
   background-color: white;
-  border: 1px solid #C4C4C4;
-  width: 100%;
-  height: 20vh;
+  border: 1px solid #c4c4c4;
+  width: calc(616px + 6vw);
+  height: 450px;
   padding: 1rem;
-  margin: 1rem;
-  border-radius: 10%;
+  margin: 1vw;
+  border-radius: 4%;
   box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
   text-align: center;
+}
+
+@media screen and (max-width: 800px) {
+  .graph {
+    width: calc(67vw + 2rem);
+  }
 }

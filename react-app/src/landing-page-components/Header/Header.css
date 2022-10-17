@@ -1,22 +1,52 @@
 .header {
+  background-color: white;
+  height: 30vh;
+  min-height: 200px;
   display: flex;
   flex-direction: column;
-  text-decoration: bold;
   align-items: center;
-  line-height: 15%;
+  line-height: 10%;
   font-size: 0.6rem;
   background-color: white;
 }
 
-.circle {
+.header-circle {
   height: 10vh;
+  min-height: 50px;
   width: 10vh;
+  min-width: 50px;
   background-color: #a0b9dc;
   border-radius: 50%;
   display: inline-block;
-  margin-top: 5vh;
+  margin-top: min(7vh, 1.5rem);
 }
 
-.upper-text {
-  padding-top: 0.6rem;
+.header-upper-text {
+  padding-top: 0.5rem;
+}
+
+@media screen and (min-height: 850px) {
+  .header {
+    font-size: 0.75rem;
+    line-height: 15%;
+  }
+  .header-circle {
+    margin-top: 2rem;
+  }
+  .header-upper-text {
+    padding-top: 1rem;
+  }
+}
+
+@media screen and (min-height: 1100px) {
+  .header {
+    font-size: 1rem;
+    line-height: 15%;
+  }
+  .header-circle {
+    margin-top: 2.5rem;
+  }
+  .header-upper-text {
+    padding-top: 1.5rem;
+  }
 }

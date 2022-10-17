@@ -1,15 +1,21 @@
-.text{
-  font-family: 'Fjalla One';
-}
-
 .statistic {
-  box-sizing: border-box;
+  width: 120px;
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   background-color: white;
-  border: 1px solid #C4C4C4;
-  width: min(20vh, 20vw);
-  height: min(20vh, 20vw);
-  padding: 1rem;
+  border: 1px solid #c4c4c4;
+  padding: 1rem 1rem 0 1rem;
   margin: 1vw;
   border-radius: 10%;
   box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+  font-size: 0.7rem;
+  font-family: "Fjalla One";
+}
+
+@media screen and (max-width: 800px) {
+  .statistic {
+    width: 30vw;
+  }
 }

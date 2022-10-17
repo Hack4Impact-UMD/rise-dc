@@ -1,29 +1,12 @@
-import {useState} from 'react'
-import {getAuth} from 'firebase/auth'
-const DummyLanding = () => {
+import './GoogleCalendar.css'
 
-    const [role, setRole] = useState<String | null>(null);
-    const auth = getAuth()
-    const user = auth.currentUser
-    if (user) {
-        user.getIdTokenResult()
-        .then((idTokenResult) => {
-            if (!!idTokenResult.claims.admin) {
-                setRole("Admin")
-            } else {
-                setRole("User")
-            }
-        })
-        .catch((error: any) => {
-            console.log(error);
-        })
-    }
+const GoogleCalendar = () => {
 
     return (
-            <div>
-                {role}
-            </div>
+        <div className = "google-container">
+            <h1 className = "google-title"> Upcoming Events </h1>
+        </div>
     )
 }
 
-export default DummyLanding;
+export default GoogleCalendar;
