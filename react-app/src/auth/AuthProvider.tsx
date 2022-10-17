@@ -1,7 +1,6 @@
-import { getAuth, onAuthStateChanged } from '@firebase/auth';
+import { getAuth, onIdTokenChanged } from '@firebase/auth';
 import React, { createContext, useContext, useEffect, useState} from 'react';
 import app from '../config/firebase';
-import DummyLogin from '../temp-components/DummyLogin';
 
 
 interface Props {
@@ -21,18 +20,13 @@ interface IdToken {
 
 let AuthContext = createContext<AuthContextType>(null!);
 
-// custom hook to useAuth
-export const useAuth = () => {
-    return useContext(AuthContext);
-}
 
 export const AuthProvider: React.FC<Props> = ({children}) => {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<any>({});
   const [token, setToken] = useState<any>({claims: {role: "none"}});
-
   useEffect(() => {
     const auth = getAuth(app);
-    onAuthStateChanged(auth, (user) => {
+    onIdTokenChanged(auth, (user) => {
       setUser(user);
       if (user != null) {
         user.getIdTokenResult().then((token) => {
@@ -42,10 +36,13 @@ export const AuthProvider: React.FC<Props> = ({children}) => {
     });
   }, [])
 
-
   return (
     <AuthContext.Provider value={{user, token }}>
       {children}
     </AuthContext.Provider>
   )
 };
+
+export const useAuth = () => {
+  return useContext(AuthContext);
+}
