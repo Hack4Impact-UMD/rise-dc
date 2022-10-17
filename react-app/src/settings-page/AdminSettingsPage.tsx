@@ -3,6 +3,7 @@ import "./AdminSettingsPage.css"
 import SettingsForm from "./SettingsForm"
 import ResetButton from './ResetButton';
 import FormInput from './FormInput';
+import AddButton from './AddButton';
 
 export default function AdminSettingsPage() {
     return (
@@ -17,17 +18,17 @@ export default function AdminSettingsPage() {
                     <label className="reset-password"><b>Add New Mentor</b></label>
                     <div className="button-container">
                         <FormInput className = 'input' name = 'email' placeholder = "Enter mentor's email address" />   
-                        <ResetButton/>
+                        <AddButton/>
                     </div>
                     <label className="reset-password"><b>Add New Tutor</b></label>
                     <div className="button-container">
                         <FormInput className = 'input' name = 'email' placeholder = "Enter tutor's email address" /> 
-                        <ResetButton/>
+                        <AddButton/>
                     </div>
                     <label className="reset-password"><b>Add New Administrator</b></label>
                     <div className="button-container">
                         <FormInput className = 'input' name = 'email' placeholder = "Enter administrator's email address" /> 
-                        <ResetButton/>
+                        <AddButton/>
                     </div>
                 </form> 
                </div>
