@@ -1,15 +1,12 @@
 .navbar {
     display: flex;
-    position: fixed;
-    padding: 2vh 2vh 2vh 2vh;
-    top: 2vh;
+    position: absolute;
+    padding: 1vh 2vh 2vh 2vh;
+    top: 1vh;
     right: 3vh;
-    background-color: white;
-
 }
 
 .nav {
-    background-color: white;
     height: 3.3vh;
     width: 3vh;
     margin: 3vh;
@@ -17,14 +14,7 @@
 }
 
 .navbar img{
-    background-color: white;
     height: 3.3vh;
     width: auto;
     
-}
-
-.buttons{
-    background-color: white;
-    margin-left: 1vh;
-
 }
