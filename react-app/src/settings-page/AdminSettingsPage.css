@@ -1,0 +1,153 @@
+@import url('https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fjalla+One&family=Gothic+A1:wght@300;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Libre+Franklin&display=swap');
+*{
+    margin: 0px;
+    padding: 0px;
+}
+.container{
+  display: flex;
+  flex-flow: column;
+}
+
+.header{
+    height: 14vh;
+    background-color: #FFFFFF;
+}
+
+.body{
+    height: 10vh;
+    background-color: #D7ECD3;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex: 1 1 100%;
+    overflow: auto;
+ }
+
+ .green-background{
+    height: 86vh;
+    background-color: #D7ECD3; 
+ }
+
+.rise-dc-img{
+    position: absolute;
+    object-fit: contain;
+    margin-top: 25px;
+    margin-left: 60px;
+    height: 20px;
+    width: 20px;
+}
+
+.settings-page-title{
+    font-family: 'Gothic A1', sans-serif;
+    font-size: 40px;
+    font-weight: 400;
+    margin-top: 50px;
+    margin-left: 190px;
+}
+
+.form{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    background-color: #FFFFFF;
+    margin-top: 25px;
+    height: 310px;
+    width: 620px;
+    max-height: 100%;
+    max-width: 100%;
+    overflow-y: scroll;
+    flex-grow: 1;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+    overflow: hidden;
+}
+
+.form-second{
+    display: flex;
+    flex-direction: column;
+    position:relative;
+    background-color: #FFFFFF;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    height: 310px;
+    width: 620px; 
+    max-height: 100%;
+    max-width: 100%;
+    overflow-y: scroll;
+    flex-grow: 1;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+    overflow: hidden;
+}
+
+.profile{
+    margin-top: 20px;
+    margin-left: 20px;
+    font-size: 20px;
+    font-family: 'Fjalla One', sans-serif;
+}
+
+.reset-email{
+    display: block;
+    margin-top: 30px;
+    margin-left: 20px;
+    margin-bottom: 4px;
+    font-size: 13px;
+    color: #000000;
+    font-weight: 100;
+    font-family: 'Libre Franklin', sans-serif;
+}
+
+.reset-password{
+    display: block;
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-bottom: 4px;    
+    font-size: 13px;
+    color: #000000;
+    font-weight: 100;
+    font-family: 'Libre Franklin', sans-serif;
+}
+
+.input{
+    display: block;
+    margin-left: 20px;
+    color: #afaeae;
+    font-family: 'Libre Franklin', sans-serif;
+    padding-right: 200px;
+    padding-left: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-radius: 20px;
+    border: 1px solid #C4C4C4;
+    margin-top: 10px;
+    color: black;
+    background-color: #eae7e7;
+}
+
+input::placeholder{
+    overflow: visible;
+}
+
+.button-container{
+    display: flex;
+    flex-direction: row;
+}
+
+.reset-button{
+    display: block;
+    margin-left: 20px;
+    color: #afaeae;
+    font-family: 'Libre Franklin', sans-serif;
+    padding-right: 40px;
+    padding-left: 40px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-radius: 20px;
+    border: 1px solid #A0B9DC;
+    margin-top: 10px;
+    color: black;
+    background-color: #A0B9DC;
+    font-weight: 100;
+}
