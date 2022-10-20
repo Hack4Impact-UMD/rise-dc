@@ -1,22 +1,17 @@
 import { NavLink, Link} from "react-router-dom";
 import React from 'react';
 import "./Navbar.css"
-
+import home from "./assets/home.png";
+import log from "./assets/log.png";
+import setting from "./assets/setting.png";
 const NavBar = () => {
   return (
-    <nav className = "navbar-comp">
-        
-        <a className = 'navbar-left-container'>
-            <NavLink to = "/">
-                RiseDC logo
-            </NavLink>
-        </a>
-        <a className = 'navbar-right-container'>
-            <NavLink to="/"> Home </NavLink>
-            <NavLink to="/about">About</NavLink>
-            <NavLink to="/settings">Contact</NavLink>
-        </a>
-        {/* <Link to ="">Test</Link> */}
+    <nav className = "navbar">
+      <div className="buttons">
+        <NavLink className="nav" to="/"> <img src={home} alt="Home" /> </NavLink>
+        <NavLink className="nav" id="log" to="/log"> <img src={log} alt="Log" /></NavLink>
+        <NavLink className="nav" id="settings" to="/settings"> <img src={setting} alt="Settings" /></NavLink>
+      </div>   
     </nav>
   );
 }

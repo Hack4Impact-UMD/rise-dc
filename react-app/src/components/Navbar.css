@@ -1,16 +1,30 @@
-.navbar-comb {
+.navbar {
     display: flex;
-    align-content: stretch;
+    position: fixed;
+    padding: 2vh 2vh 2vh 2vh;
+    top: 2vh;
+    right: 3vh;
+    background-color: white;
+
 }
 
-/* .navbar-left-container {
-    align-self: left;
+.nav {
+    background-color: white;
+    height: 3.3vh;
+    width: 3vh;
+    margin: 3vh;
+    text-decoration: none;
 }
-.navbar-right-container {
-    align-self: right;
-} */
 
-/* .navbar-left-container,
-.navbar-right-container {
-    display: inline-block;
-} */
+.navbar img{
+    background-color: white;
+    height: 3.3vh;
+    width: auto;
+    
+}
+
+.buttons{
+    background-color: white;
+    margin-left: 1vh;
+
+}
