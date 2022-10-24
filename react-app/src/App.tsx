@@ -1,4 +1,6 @@
 import React from 'react';
+import LoginPage from './login-page/Login';
+
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import RequireAuth from './auth/RequireAuth';
 import RequireAdminAuth from './auth/RequireAdminAuth';
@@ -10,7 +12,7 @@ import {AuthProvider} from './auth/AuthProvider'
 
 function App() {
   return (
-    <AdminSettingsPage/>
+    <LoginPage/>
   );
 }
 
