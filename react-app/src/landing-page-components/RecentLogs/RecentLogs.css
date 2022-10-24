@@ -1,16 +1,14 @@
 .log-container {
-  width: calc(313px + 3vw - 3.5rem);
-  height: 35vh;
-  min-height: 400px;
-  margin: 2rem;
+  width: 300px;
+  height: 350px;
   background-color: white;
   border-radius: 30px;
   box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
-  padding-right: 1.5rem;
+  padding: 1.5rem 1.5rem 0 1.5rem;
+  margin: 2rem 1rem 0 0;
 }
 
 .log-title {
-  padding: 1.5rem 0 0 1.5rem;
   font-family: "Fjalla One";
   font-size: 1.5rem;
 }
@@ -25,7 +23,6 @@
   background-color: white;
   border: none;
   background: none;
-  padding-left: 1.5rem;
 }
 
 .logs:hover {
@@ -45,16 +42,16 @@
 }
 
 .log-view-more {
-  text-decoration: none;
   width: 100%;
-  font-family: "Libre Franklin";
-  font-size: 15px;
   display: flex;
   flex-direction: row;
   justify-content: right;
   align-items: center;
-  font-style: italic;
   padding-top: 2vh;
+  text-decoration: none;
+  font-family: "Libre Franklin";
+  font-size: 15px;
+  font-style: italic;
 }
 
 .log-view-more:hover {
@@ -63,7 +60,14 @@
 }
 
 @media screen and (max-width: 800px) {
-  .graph {
-    width: calc(67vw + 2rem);
+  .log-container {
+    margin-right: 0;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .log-container {
+    width: 250px;
+    height: 270px;
   }
 }

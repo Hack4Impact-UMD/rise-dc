@@ -7,6 +7,7 @@ import Hours from './Hours/Hours';
 import './Landing.css'
 import GoogleCalendar from './GoogleCalendar/GoogleCalendar';
 import Students from './Students/Students';
+import Calendar from './Calendar/Calendar';
 
 const Landing = () => {
 
@@ -15,6 +16,7 @@ const Landing = () => {
             <div className = "landing">
                 <Header />
                 <div className = "content">
+                  <div className = "calendar"> <Calendar/> </div>
                   <div className='statistics'>
                     <Statistics title="Sessions Conducted" value={50} />
                     <Statistics title="Students Participating" value={50} />

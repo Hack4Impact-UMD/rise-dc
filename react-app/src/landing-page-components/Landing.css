@@ -1,9 +1,13 @@
 .landing {
   font-family: "Fjalla One";
+  background-color: #d7ebd3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .content {
-  background-color: #d7ebd3;
+  width: 750px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -11,15 +15,37 @@
   padding-right: 7vw;
 }
 
+.calendar {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+}
+
 .statistics {
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-between;
 }
 
 .logs-row {
+  width: 100%;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-between;
+}
+
+@media screen and (max-width: 800px) {
+  .content {
+    width: 90vw;
+  }
+  .statistics {
+    justify-content: center;
+  }
+  .logs-row {
+    flex-direction: column;
+    align-items: center;
+  }
 }

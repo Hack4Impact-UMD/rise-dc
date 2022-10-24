@@ -1,29 +1,13 @@
-import {useState} from 'react'
-import {getAuth} from 'firebase/auth'
-const DummyLanding = () => {
-
-    const [role, setRole] = useState<String | null>(null);
-    const auth = getAuth()
-    const user = auth.currentUser
-    if (user) {
-        user.getIdTokenResult()
-        .then((idTokenResult) => {
-            if (!!idTokenResult.claims.admin) {
-                setRole("Admin")
-            } else {
-                setRole("User")
-            }
-        })
-        .catch((error: any) => {
-            console.log(error);
-        })
-    }
+import calPic from './calPic.svg'
+import './Calendar.css'
+const Calendar = () => {
 
     return (
-            <div>
-                {role}
-            </div>
+            <button className = "calendar-box">
+                <img src = {calPic} alt = "Calendar Picture" className = "calendar-image"/>
+                <p> Aug 2022 - September 2022</p>
+            </button>
     )
 }
 
-export default DummyLanding;
+export default Calendar;

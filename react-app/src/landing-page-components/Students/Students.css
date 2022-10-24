@@ -1,35 +1,37 @@
 .student-container {
-  width: calc(616px + 6vw);
+  width: calc(750px - 3.5rem);
   height: 50vh;
-  margin: 2rem;
+  min-height: 300px;
+  max-height: 400px;
+  display: flex;
+  flex-direction: column;
   background-color: white;
   border-radius: 30px;
   box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  padding-right: 1.5rem;
+  padding: 1.5rem 2rem 0 1.5rem;
+  margin: 2rem;
 }
 
 .student-title {
-  padding: 1.5rem 0 0 1.5rem;
   font-family: "Fjalla One";
   font-size: 1.5rem;
 }
 
 .student {
-  height: 18%;
+  height: 15%;
   display: flex;
   flex-direction: row;
   align-items: center;
   background-color: #a0b9dc;
   border-radius: 8px;
-  margin: 0 0 0.5rem 1.5rem;
+  padding: 0.3rem 0.3rem 0.3rem 1rem;
+  margin: 0 0 0.6rem 0;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
 }
 
 .student-name {
   width: 20%;
-  padding-left: 1rem;
   font-family: "Fjalla One";
   font-size: 1rem;
 }
@@ -61,26 +63,26 @@
 }
 
 .view-more-student {
-  text-decoration: none;
   width: 100%;
-  font-family: "Libre Franklin";
-  font-size: 15px;
   display: flex;
   flex-direction: row;
   justify-content: right;
   align-items: center;
   font-style: italic;
-  padding-top: 6vh;
+  font-family: "Libre Franklin";
+  font-size: 15px;
+  text-decoration: none;
+  padding-top: 15px;
 }
 
 .view-more-student:hover {
-  font-size: 13px;
+  font-size: 14px;
   cursor: pointer;
 }
 
 @media screen and (max-width: 800px) {
   .student-container {
-    width: calc(67vw + 2rem);
+    width: calc(100% - 3.5rem);
   }
   .view-more-student {
     padding-top: 2vh;
