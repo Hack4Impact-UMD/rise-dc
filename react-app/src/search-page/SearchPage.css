@@ -64,14 +64,14 @@
 
 .element-button{
     display: block;
-    margin-left: 43px;
+    margin-left: 40px;
     color: #afaeae;
     font-family: 'Libre Franklin', sans-serif;
-    padding-right: 28px;
+    padding-right: 30px;
     padding-left: 28px;
     padding-top: 6px;
     padding-bottom: 6px;
-    border-radius: 20px;
+    border-radius: 13px;
     border: 1px solid #A0B9DC;
     margin-top: 10px;
     color: black;
