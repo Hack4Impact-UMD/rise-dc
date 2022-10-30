@@ -1,36 +1,87 @@
-import { AuthError, User } from "@firebase/auth";
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, getAuth, updateEmail, updatePassword, sendPasswordResetEmail} from "firebase/auth";
-import {doc, collection, getDoc, getDocs, arrayUnion, DocumentData, FirestoreError, DocumentSnapshot, QuerySnapshot, setDoc, updateDoc, deleteDoc, query, where, orderBy, limit} from "firebase/firestore"
+import {doc, collection, getDoc, DocumentData, FirestoreError, DocumentSnapshot, DocumentReference, getDocFromCache, setDoc, getDocs} from "firebase/firestore"
+import {db} from "../config/firebase";
 
-import app, {db, storage } from "../config/firebase";
-import { getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
-import { getFunctions, httpsCallable } from "firebase/functions";
-import { resolve } from "dns";
-import { rejects } from "assert";
-
-function getStudent(
+async function getStudent(
     name : string
-): Promise<DocumentSnapshot<DocumentData>> {
-    
-    return new Promise((resolve, rejects) => {
-        getDoc(doc(db, "Students", name))
-        .then((snap) => {
-            resolve(snap);
-        }).catch((error) => {
-            rejects(error);
-        });
-    });
+): Promise<DocumentData> {
 
+    const querySnapshot = await getDocs(collection(db, "Students"))
+    querySnapshot.forEach((doc) => {
+        if(doc.data()["name"] == name) {
+            return Promise.resolve(doc.data())
+        }
+    })
+    return Promise.reject(new Error('Student not found'))
 }
 
 async function getAddress(
     name : string
 ): Promise<string> {
-    
-    const student = await getStudent(name);
-    console.log(student);
-    return ""
+    const student = await getStudent(name)
+    return student["address"]
 }
 
-getAddress("Fake Name")
-export default getStudent;
+async function getEmail(
+    name : string
+): Promise<string> {
+    const student = await getStudent(name)
+    return student["email"]
+}
+
+async function getGrade(
+    name : string
+): Promise<string> {
+    const student = await getStudent(name)
+    return student["grade"]
+}
+
+async function getGradeLevel(
+    name : string
+): Promise<string> {
+    const student = await getStudent(name)
+    return student["grade_level"]
+}
+
+async function getGuardianEmail(
+    name : string
+): Promise<string> {
+    const student = await getStudent(name)
+    return student["guardian_email"]
+}
+
+async function getGuardianName(
+    name : string
+): Promise<string> {
+    const student = await getStudent(name)
+    return student["guardian_name"]
+}
+
+async function getGuardianPhone(
+    name : string
+): Promise<string> {
+    const student = await getStudent(name)
+    return student["guardian_phone"]
+}
+
+async function getHighSchool(
+    name : string
+): Promise<string> {
+    const student = await getStudent(name)
+    return student["high_school"]
+}
+
+async function getPhoneNumber(
+    name : string
+): Promise<string> {
+    const student = await getStudent(name)
+    return student["phone_number"]
+}
+
+async function getReadingLevel(
+    name : string
+): Promise<string> {
+    const student = await getStudent(name)
+    return student["reading_level"]
+}
+
+export {getStudent, getAddress, getEmail, getGrade, getGradeLevel, getGuardianEmail, getGuardianName, getGuardianPhone, getHighSchool, getPhoneNumber, getReadingLevel};
