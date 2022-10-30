@@ -1,0 +1,90 @@
+.student-container {
+  width: calc(750px - 3.5rem);
+  height: 50vh;
+  min-height: 300px;
+  max-height: 400px;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 30px;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+  overflow: hidden;
+  padding: 1.5rem 2rem 0 1.5rem;
+  margin: 2rem;
+}
+
+.student-title {
+  font-family: "Fjalla One";
+  font-size: 1.5rem;
+}
+
+.student {
+  height: 15%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: #a0b9dc;
+  border-radius: 8px;
+  padding: 0.3rem 0.3rem 0.3rem 1rem;
+  margin: 0 0 0.6rem 0;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+}
+
+.student-name {
+  width: 20%;
+  font-family: "Fjalla One";
+  font-size: 1rem;
+}
+
+.icons {
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
+  margin-right: 1.5rem;
+}
+
+.icon {
+  width: 30px;
+}
+
+.icon:hover {
+  width: 28px;
+  margin-left: 2px;
+}
+
+.button {
+  background-color: #a0b9dc;
+  border-style: none;
+}
+
+.button:hover {
+  cursor: pointer;
+}
+
+.view-more-student {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
+  align-items: center;
+  font-style: italic;
+  font-family: "Libre Franklin";
+  font-size: 15px;
+  text-decoration: none;
+  padding-top: 15px;
+}
+
+.view-more-student:hover {
+  font-size: 14px;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 800px) {
+  .student-container {
+    width: calc(100% - 3.5rem);
+  }
+  .view-more-student {
+    padding-top: 2vh;
+  }
+}

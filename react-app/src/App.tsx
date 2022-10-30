@@ -1,18 +1,23 @@
 import React from 'react';
-import LoginPage from './login-page/Login';
-
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import {BrowserRouter, Routes, Route } from 'react-router-dom';
 import RequireAuth from './auth/RequireAuth';
-import RequireAdminAuth from './auth/RequireAdminAuth';
 import DummyLogin from './temp-components/DummyLogin'
-import DummyLanding from './temp-components/DummyLanding';
-import AdminSettingsPage from './settings-page/AdminSettingsPage';
+import Landing from './landing-page-components/Landing';
 import "./App.css";
-import {AuthProvider} from './auth/AuthProvider'
+import { AuthProvider } from './auth/AuthProvider';
+
 
 function App() {
   return (
-    <LoginPage/>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path = '/' element = {<DummyLogin/>} />
+          <Route path = "/login" element = {<DummyLogin/>} /> 
+          <Route path = "/landing" element = {<RequireAuth children = {<Landing/>} />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 
