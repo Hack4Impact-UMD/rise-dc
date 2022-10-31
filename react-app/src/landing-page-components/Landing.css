@@ -1,9 +1,9 @@
 .landing {
-  font-family: "Fjalla One";
   background-color: #d7ebd3;
   display: flex;
   flex-direction: column;
   align-items: center;
+  font-family: "Fjalla One";
 }
 
 .content {
