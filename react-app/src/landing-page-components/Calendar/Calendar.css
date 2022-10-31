@@ -8,7 +8,7 @@
   margin: 1rem 0 0.5rem 0;
   padding: 0.25rem 0.5rem 0.25rem 0.5rem;
   box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
-  border: none;
+  border: 1.5px solid transparent;
 }
 
 .calendar-image {
@@ -18,7 +18,7 @@
 }
 
 .calendar-box:hover {
-  border-style: solid;
+  border: 1.5px solid;
   cursor: pointer;
 }
 
