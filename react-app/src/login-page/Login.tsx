@@ -1,18 +1,29 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { AuthError, getAuth } from "@firebase/auth";
+import { Navigate, useNavigate } from "react-router-dom";
+import { User } from "@firebase/auth";
 import TextField, { TextFieldTypes } from "./TextField/TextField"
 import Button from "./Button/Button";
 import logo from "./assets/rise-dc-logo.png";
 import "./Login.css";
 import app from "../config/firebase";
-import { getAddress } from "../student-info-retrieval/retrieval-functions";
+import {authenticateUser} from "../backend/FirebaseCalls";
 
 const LoginPage: React.FC<any> = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  console.log(getAddress("test1"));
+  const [failureMessage, setFailureMessage] = useState<string>("");
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const navigate = useNavigate();
+
+  const login = () => {
+    authenticateUser(email, password).then(() => {
+      navigate("/landing");
+    }).catch(() => {
+      setFailureMessage("Incorrect email or password");
+    });
+  }
 
   return (
     <div className="login-page">
@@ -29,7 +40,7 @@ const LoginPage: React.FC<any> = () => {
           fieldType={TextFieldTypes.password}
           onChange={(val) => setPassword(val)} />
         <a href="" className="forgot">Forgot Password?</a>
-        <Button text="Login" isDisabled={isLoading} />
+        <Button text="Login" isDisabled={isLoading} handleClick={login} />
       </div>
 
     </div>
