@@ -6,11 +6,12 @@ import Button from "./Button/Button";
 import logo from "./assets/rise-dc-logo.png";
 import "./Login.css";
 import app from "../config/firebase";
+import { getAddress } from "../student-info-retrieval/retrieval-functions";
 
 const LoginPage: React.FC<any> = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-
+  console.log(getAddress("test1"));
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   return (
