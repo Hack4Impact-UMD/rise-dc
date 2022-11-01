@@ -12,7 +12,7 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path = '/' element = {<Login/>} />
+          <Route path = "/" element = {<Login/>} />
           <Route path = "/login" element = {<Login/>} /> 
           <Route path = "/landing" element = {<RequireAuth children = {<Landing/>} />} />
         </Routes>
