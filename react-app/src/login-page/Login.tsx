@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { User } from "@firebase/auth";
 import TextField, { TextFieldTypes } from "./TextField/TextField"
 import Button from "./Button/Button";
