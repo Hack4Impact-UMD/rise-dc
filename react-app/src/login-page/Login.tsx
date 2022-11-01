@@ -22,7 +22,6 @@ const LoginPage: React.FC<any> = () => {
           isDisabled={isLoading}
           fieldType={TextFieldTypes.email}
           onChange={(val) => setEmail(val)} />
-        <a href="" className="forgot">Forgot Email?</a>
         <TextField
           header="Password"
           isDisabled={isLoading}
