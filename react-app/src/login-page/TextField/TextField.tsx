@@ -18,7 +18,7 @@ interface TextFieldProps{
 const LoginTextField:React.FC<TextFieldProps> = ({header, fieldType, isDisabled, onChange, onSubmit = () => {}})=> {
   return (
     <div className="input-group">
-        <label className="header">{header}</label> <br/>
+        <label className="text-field-header">{header}</label> <br/>
         <input 
           disabled = {isDisabled}
           type={fieldType}
