@@ -13,4 +13,4 @@ export function authenticateUser(email: string, password: string): Promise<User>
           reject(error);
         });
     });
-  }
+}
