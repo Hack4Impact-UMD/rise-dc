@@ -1,9 +1,6 @@
-import {
-  getAuth,
-  updateEmail,
-  reauthenticateWithCredential,
-} from "firebase/auth";
+import { getAuth, updateEmail, reauthenticateWithCredential } from "firebase/auth";
 import app from "../src/config/firebase";
+import functions from "../src/config/firebase";
 
 /*
 Updates the logged-in user's email.
@@ -15,7 +12,7 @@ field in the frontend for this.
 Parameters:
 Email: the new email
 */
-async function updateUserEmail(fn: (email: string) => void) {
+function updateUserEmail(fn: (email: string) => void) {
   const auth = getAuth(app);
   const user = auth.currentUser;
 
@@ -28,7 +25,7 @@ async function updateUserEmail(fn: (email: string) => void) {
 Updates the logged-in user's password.
 Shouldn't face the re-authentication issue because password is provided to re-authenticate within the function.
  */
-async function updateUserPassword(
+function updateUserPassword(
   fn: (newPassword: string, oldPassword: string) => void
 ) {
   const auth = getAuth(app);
@@ -44,3 +41,4 @@ async function updateUserPassword(
       console.error(error);
     });
 }
+
