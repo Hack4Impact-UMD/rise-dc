@@ -87,3 +87,24 @@ exports.setUserRole = functions.https.onCall((data, context) => {
         );
       });
 });
+
+exports.createFirstAdmin = functions.https.onRequest((req, res) => {
+  const auth = admin.auth();
+  auth
+      .setCustomUserClaims("OSTlNGSgPWhcDya9QnNaD0OJmVr1", {role: "admin"})
+      .then( () => {
+        auth
+            .getUserByEmail("songa@umd.edu")
+            .then((userRecord) => {
+              const role = userRecord.customClaims["role"];
+              res.json({result: `songa@umd.edu role is ${role}`});
+            })
+            .catch((error) => {
+              res.json({result: error});
+            });
+      })
+      .catch((error) => {
+        res.json({result: "Operation Failed:" + error});
+      });
+});
+
