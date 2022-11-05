@@ -1,7 +1,7 @@
 import React from 'react';
 import {BrowserRouter, Routes, Route } from 'react-router-dom';
 import RequireAuth from './auth/RequireAuth';
-import DummyLogin from './temp-components/DummyLogin'
+import Login from './login-page/Login'
 import Landing from './landing-page-components/Landing';
 import "./App.css";
 import { AuthProvider } from './auth/AuthProvider';
@@ -12,8 +12,8 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path = '/' element = {<DummyLogin/>} />
-          <Route path = "/login" element = {<DummyLogin/>} /> 
+          <Route path = "/" element = {<Login/>} />
+          <Route path = "/login" element = {<Login/>} /> 
           <Route path = "/landing" element = {<RequireAuth children = {<Landing/>} />} />
         </Routes>
       </BrowserRouter>
