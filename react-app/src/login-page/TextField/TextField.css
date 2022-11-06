@@ -1,0 +1,17 @@
+
+.input-group input{
+    width: 31vh;
+    height: 2vh;
+    border: .2vh lightgrey solid;
+    outline: none;
+ 
+    padding: 1.3vh 1.3vh;
+    margin-top: .8vh;
+    border-radius: 1.4rem;
+    font-size: 1.7vh;
+  }
+
+  .header {
+    font-size: 1.8vh;
+    margin-left: 1.2vh;
+  }
