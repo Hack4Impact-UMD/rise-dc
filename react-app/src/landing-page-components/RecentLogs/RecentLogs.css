@@ -9,7 +9,6 @@
 }
 
 .log-title {
-  font-family: "Fjalla One";
   font-size: 1.5rem;
 }
 
@@ -55,7 +54,7 @@
 }
 
 .log-view-more:hover {
-  font-size: 13px;
+  font-size: 16px;
   cursor: pointer;
 }
 
