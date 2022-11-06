@@ -1,19 +1,23 @@
 import React from 'react';
-
-import NavBar from './components/Navbar';
-
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import {BrowserRouter, Routes, Route } from 'react-router-dom';
 import RequireAuth from './auth/RequireAuth';
-import RequireAdminAuth from './auth/RequireAdminAuth';
-import DummyLogin from './temp-components/DummyLogin'
-import DummyLanding from './temp-components/DummyLanding';
-import AdminSettingsPage from './settings-page/AdminSettingsPage';
+import Login from './login-page/Login'
+import Landing from './landing-page-components/Landing';
 import "./App.css";
-import {AuthProvider} from './auth/AuthProvider'
+import { AuthProvider } from './auth/AuthProvider';
+
 
 function App() {
   return (
-    <AdminSettingsPage/>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path = "/" element = {<Login/>} />
+          <Route path = "/login" element = {<Login/>} /> 
+          <Route path = "/landing" element = {<RequireAuth children = {<Landing/>} />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 
