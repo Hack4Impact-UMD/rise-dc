@@ -1,4 +1,8 @@
-import { getAuth, updateEmail, reauthenticateWithCredential } from "firebase/auth";
+import {
+  getAuth,
+  updateEmail,
+  reauthenticateWithCredential,
+} from "firebase/auth";
 import app from "../src/config/firebase";
 import functions from "../src/config/firebase";
 
@@ -41,4 +45,3 @@ function updateUserPassword(
       console.error(error);
     });
 }
-
