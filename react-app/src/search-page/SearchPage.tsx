@@ -3,6 +3,8 @@ import "./SearchPage.css"
 import FormInput from '../settings-page/FormInput';
 import AddElementButton from './AddElementButton';
 import StudentProfile from './StudentProfile';
+import notepad from './assets/notepad.svg';
+import person from './assets/person.svg';
 
 export default function SearchPage() {
     return (
@@ -12,18 +14,10 @@ export default function SearchPage() {
             <div className='green-background'>
                 <div className = 'white-background'>
                     <div className='display-horizontal'>
-                        <FormInput className = 'search' name = 'email' placeholder = "Search" />
-                        <AddElementButton className = 'element-button' text='New Student'/>
+                        <input className = 'search' name = 'email' placeholder = "Search"/>
+                        <AddElementButton className = 'element-button' text='New Student' />
                     </div>
-                    <StudentProfile student = 'Alice Lee'/>
-                    <StudentProfile student = 'Bobby Clark'/>
-                    <StudentProfile student = 'Eve Smith'/>
-                    <StudentProfile student = 'Alice Lee'/>
-                    <StudentProfile student = 'Bobby Clark'/>
-                    <StudentProfile student = 'Eve Smith'/>
-                    <StudentProfile student = 'Alice Lee'/>
-                    <StudentProfile student = 'Bobby Clark'/>
-                    <StudentProfile student = 'Eve Smith'/>
+                    <StudentProfile/>
                 </div>
             </div>
         </div>
