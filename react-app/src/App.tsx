@@ -13,7 +13,7 @@ import {AuthProvider} from './auth/AuthProvider'
 
 function App() {
   return (
-    <AdminSettingsPage/>
+    <NavBar title='setting'/>
   );
 }
 
