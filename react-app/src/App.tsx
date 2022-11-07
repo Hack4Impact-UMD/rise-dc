@@ -5,7 +5,6 @@ import Login from './login-page/Login'
 import Landing from './landing-page-components/Landing';
 import "./App.css";
 import { AuthProvider } from './auth/AuthProvider';
-import storeLog from './session-logs/store-log';
 
 function App() {
   return (
