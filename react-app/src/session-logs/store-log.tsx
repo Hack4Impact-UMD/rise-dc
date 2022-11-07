@@ -1,8 +1,10 @@
 import {Timestamp, collection, addDoc} from "firebase/firestore"
 import {db} from "../config/firebase"
 
+// add log session to firebase
+
 async function storeLog(
-    date: Timestamp, duration: number, reason: string, subject: string, summary: string, type: string
+    date: Timestamp, duration: number, reason: string, subject: string, summary: string
     ): Promise<void> {
     // missing getcurrentuser auxillary for name and type
     const docData = {
@@ -15,7 +17,12 @@ async function storeLog(
         type: "dummy"
     };
 
-    await addDoc(collection(db, "Logs"), docData);
+    addDoc(collection(db, "Logs"), docData).then(
+        () => {
+            return Promise.resolve()})
+            .catch((e) => {
+                return Promise.reject(e)
+            });
 }
 
 
