@@ -19,3 +19,9 @@ export function getStudentWithID(
     })
     })
 }
+
+export async function getAllStudents(): 
+Promise<Array<Student>> {
+    const querySnapshot = await getDocs(collection(db, "Students"))
+    return querySnapshot.docs.map(doc => doc.data() as Student)    
+}
