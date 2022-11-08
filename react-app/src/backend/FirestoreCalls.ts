@@ -1,6 +1,7 @@
 import {doc, collection, addDoc, getDoc, DocumentData, FirestoreError, DocumentSnapshot, DocumentReference, getDocFromCache, setDoc, getDocs} from "firebase/firestore"
 import {db} from "../config/firebase";
 import {Student, Grades} from "../types/StudentType"
+import {Log} from "../types/LogType"
 
 export function getStudentWithID(
     id : string
@@ -29,3 +30,14 @@ export function storeStudent(student: Student): Promise<void> {
         })
     })
 } 
+
+export function storeLog(log: Log): Promise<void> {
+    return new Promise((resolve, reject) => {
+        addDoc(collection(db, "Logs"), log).then(
+        () => {
+            return Promise.resolve()})
+            .catch((e) => {
+                return Promise.reject(e)
+        })
+    });
+}
