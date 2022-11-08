@@ -8,7 +8,7 @@ import './Landing.css'
 import GoogleCalendar from './GoogleCalendar/GoogleCalendar';
 import Students from './Students/Students';
 import Calendar from './Calendar/Calendar';
-import NavBar from '../components/Navbar';
+import NavBar from '../navbar/Navbar';
 
 const Landing = () => {
 
