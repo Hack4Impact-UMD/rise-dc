@@ -1,4 +1,4 @@
-import {doc, collection, getDoc, DocumentData, FirestoreError, DocumentSnapshot, DocumentReference, getDocFromCache, setDoc, getDocs} from "firebase/firestore"
+import {doc, collection, addDoc, getDoc, DocumentData, FirestoreError, DocumentSnapshot, DocumentReference, getDocFromCache, setDoc, getDocs} from "firebase/firestore"
 import {db} from "../config/firebase";
 import {Student, Grades} from "../types/StudentType"
 
@@ -19,3 +19,13 @@ export function getStudentWithID(
     })
     })
 }
+
+export function storeStudent(student: Student): Promise<void> {
+    return new Promise((resolve, reject) => {
+        addDoc(collection(db, "Students"), student).then(() => {
+            return resolve();
+        }).catch((e) => {
+            return reject(e);
+        })
+    })
+} 
