@@ -158,3 +158,8 @@ input::placeholder{
     transition: all .3s ease;
     border: none;
 }
+
+.admin-form{
+    overflow-y: scroll;
+    margin-bottom: 20px;
+}
