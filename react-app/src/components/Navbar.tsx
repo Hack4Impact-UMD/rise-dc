@@ -11,7 +11,6 @@ interface Title{
 
 const NavBar = (props: Title) => {
   return (
-    <BrowserRouter>
       <nav className = "navbar">
         <NavLink to="/" end 
           className={isActive =>
@@ -55,7 +54,6 @@ const NavBar = (props: Title) => {
           </svg>
         </NavLink>
       </nav>
-    </BrowserRouter>
       
   );
 }
