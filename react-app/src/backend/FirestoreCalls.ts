@@ -13,7 +13,9 @@ export function getStudentWithID(
     const studentRef = doc(db, "Students", id)
     getDoc(studentRef).then((studentSnap) => {
         if(studentSnap.exists()) {
-            return resolve((studentSnap.data() as Student))
+            let student = studentSnap.data()
+            student.id = id
+            return resolve((student as Student))
         }
         else {
             return reject(new Error("Student not found"))
@@ -61,4 +63,14 @@ export function storeLog(log: Log): Promise<void> {
                 return Promise.reject(e)
         })
     });
+}
+export async function getAllStudents(): 
+Promise<Array<Student>> {
+    const querySnapshot = await getDocs(collection(db, "Students"))
+    return querySnapshot.docs.map(doc =>
+        {
+            let student : Student = doc.data() as Student
+            student.id = doc.id
+            return student
+        })    
 }
