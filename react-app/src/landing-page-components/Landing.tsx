@@ -6,7 +6,7 @@ import GoogleCalendar from "./GoogleCalendar/GoogleCalendar";
 import Students from "./Students/Students";
 import Calendar from "./Calendar/Calendar";
 import NavBar from "../navbar/Navbar";
-import styles from "./Landing.css";
+import styles from "./Landing.module.css";
 
 const Landing = () => {
   return (

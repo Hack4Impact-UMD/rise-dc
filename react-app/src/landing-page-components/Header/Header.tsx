@@ -5,7 +5,7 @@ const Header = () => {
     <div className={styles.header}>
       <span className={styles.circle}></span>
       <h1 className={styles.text}>Welcome back,</h1>
-      <h1>name!</h1>
+      <h1 className={styles.text}>name!</h1>
       <p className={styles.role}>role</p>
     </div>
   );

@@ -17,7 +17,7 @@ const RecentLogs = ({ props }: any) => {
       </button>
       <button onClick={handleClick} className={styles.logs}>
         <h1 className={styles.logName}>Log 3</h1>
-        <img src={Arrow} alt="Arrow" className={styles.arrows} />
+        <img src={Arrow} alt="Arrow" className={styles.arrow} />
       </button>
       <a className={styles.viewMore} href={props}>
         View More

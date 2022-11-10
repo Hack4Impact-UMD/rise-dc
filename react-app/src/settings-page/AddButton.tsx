@@ -1,5 +1,5 @@
-import styles from "AddButton.module.css";
+import styles from "./AdminSettingsPage.module.css";
 
 export default function ResetButton() {
-  return <button className={styles.reset}>Add</button>;
+  return <button className={styles.resetButton}>Add</button>;
 }

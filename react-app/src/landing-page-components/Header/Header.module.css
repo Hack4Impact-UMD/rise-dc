@@ -25,7 +25,12 @@
 }
 
 .text {
-  padding-top: 0.5rem;
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
+.role {
+  margin-top: 1.5rem;
 }
 
 @media screen and (min-height: 700px) {
