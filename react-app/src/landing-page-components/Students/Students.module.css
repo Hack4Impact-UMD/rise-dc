@@ -1,4 +1,4 @@
-.student-container {
+.container {
   width: calc(750px - 3.5rem);
   height: 50vh;
   min-height: 300px;
@@ -13,7 +13,7 @@
   margin: 2rem;
 }
 
-.student-title {
+.title {
   font-size: 1.5rem;
 }
 
@@ -29,7 +29,7 @@
   box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
 }
 
-.student-name {
+.studentName {
   width: 20%;
   font-family: "Fjalla One";
   font-size: 1rem;
@@ -61,7 +61,7 @@
   cursor: pointer;
 }
 
-.view-more-student {
+.viewMore {
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -74,16 +74,16 @@
   padding-top: 15px;
 }
 
-.view-more-student:hover {
+.viewMore:hover {
   font-size: 16px;
   cursor: pointer;
 }
 
 @media screen and (max-width: 800px) {
-  .student-container {
+  .container {
     width: calc(100% - 3.5rem);
   }
-  .view-more-student {
+  .viewMore {
     padding-top: 2vh;
   }
 }

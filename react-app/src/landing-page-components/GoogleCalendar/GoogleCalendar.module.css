@@ -1,4 +1,4 @@
-.google-container {
+.container {
   width: 300px;
   height: 350px;
   padding: 1.5rem 1.5rem 0 1.5rem;
@@ -9,18 +9,18 @@
   overflow: hidden;
 }
 
-.google-title {
+.title {
   font-size: 1.5rem;
 }
 
 @media screen and (max-width: 800px) {
-  .google-container {
+  .container {
     margin-left: 0;
   }
 }
 
 @media screen and (max-width: 400px) {
-  .google-container {
+  .container {
     width: 250px;
     height: 270px;
   }

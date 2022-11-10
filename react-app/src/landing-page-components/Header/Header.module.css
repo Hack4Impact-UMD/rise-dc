@@ -11,7 +11,7 @@
   font-size: 0.6rem;
 }
 
-.header-circle {
+.circle {
   height: 12vh;
   min-height: 60px;
   max-height: 180px;
@@ -24,7 +24,7 @@
   margin-top: min(7vh, 1.5rem);
 }
 
-.header-upper-text {
+.text {
   padding-top: 0.5rem;
 }
 
@@ -33,36 +33,10 @@
     font-size: min(1.5vh, 1rem);
     line-height: 15%;
   }
-  .header-circle {
+  .circle {
     margin-top: 5vh;
   }
-  .header-upper-text {
+  .text {
     padding-top: 2vh;
   }
 }
-/*
-@media screen and (min-height: 850px) {
-  .header {
-    font-size: 0.75rem;
-    line-height: 15%;
-  }
-  .header-circle {
-    margin-top: 2.5rem;
-  }
-  .header-upper-text {
-    padding-top: 1.5rem;
-  }
-}
-
-@media screen and (min-height: 1000px) {
-  .header {
-    font-size: 0.9rem;
-    line-height: 15%;
-  }
-  .header-circle {
-    margin-top: 3rem;
-  }
-  .header-upper-text {
-    padding-top: 1rem;
-  }
-} */
