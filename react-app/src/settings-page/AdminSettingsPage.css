@@ -150,4 +150,16 @@ input::placeholder{
     color: black;
     background-color: #A0B9DC;
     font-weight: 100;
+    cursor: pointer;
+}
+
+.reset-button:hover{
+    background-color:#D0ECFC;
+    transition: all .3s ease;
+    border: none;
+}
+
+.admin-form{
+    overflow-y: scroll;
+    margin-bottom: 20px;
 }
