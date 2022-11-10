@@ -3,12 +3,15 @@ import app from '../config/firebase'
 import {getAuth, signInWithEmailAndPassword, AuthError} from 'firebase/auth'
 import { useAuth } from "../auth/AuthProvider";
 import { useNavigate } from 'react-router-dom';
-
+//
+import { Timestamp } from 'firebase/firestore';
+import storeLog from '../session-logs/store-log';
 const DummyLogin: React.FC<any> = () => {
 
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [errorMessage, setErrorMessage] = useState<string>("");
+    storeLog(Timestamp.fromDate(new Date("December 10, 1815")), 1, "test1", "test2", "test3", "test4", "test5");
 
     const navigate = useNavigate();
     const auth = useAuth();
