@@ -31,6 +31,7 @@ export type Logs = {
     duration_minutes : BigInteger,
     instructor_name : string,
     reason : string,
+    student_id : string,
     subject : string,
     summary : string,
     type : string
