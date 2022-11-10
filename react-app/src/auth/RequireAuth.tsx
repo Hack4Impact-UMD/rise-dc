@@ -7,8 +7,10 @@ interface Props {
 }
 
 const RequireAuth:React.FC<Props> = ({ children }) => {
-  const auth = useAuth();
-  if (!auth.user) {
+  const authContext = useAuth();
+  if (authContext.loading) {
+    return (<div>Loading</div>);
+  } else if (!auth.user) {
     return <Navigate to="/login" />;
   }
 
