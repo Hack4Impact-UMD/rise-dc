@@ -5,6 +5,7 @@ import DummyLogin from './temp-components/DummyLogin'
 import Landing from './landing-page-components/Landing';
 import "./App.css";
 import { AuthProvider } from './auth/AuthProvider';
+import Session from './session-log-components/Session';
 
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
           <Route path = '/' element = {<DummyLogin/>} />
           <Route path = "/login" element = {<DummyLogin/>} /> 
           <Route path = "/landing" element = {<RequireAuth children = {<Landing/>} />} />
+          <Route path = "/logs" element = {<RequireAuth children = {<Session/>} />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
