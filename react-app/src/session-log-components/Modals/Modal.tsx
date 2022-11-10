@@ -1,4 +1,4 @@
-import "./Modal.css";
+import styles from "./Modal.module.css";
 
 type modalPropsType = {
   open: boolean;
@@ -11,9 +11,9 @@ const Modal = ({ open, onClose, children }: modalPropsType) => {
     <div>
       {open ? (
         <>
-          <div className="dark-background" onClick={() => onClose()} />
-          <div className="centered">
-            <div className="modal">{children}</div>
+          <div className={styles.background} onClick={() => onClose()} />
+          <div className={styles.centered}>
+            <div className={styles.modal}>{children}</div>
           </div>
         </>
       ) : (

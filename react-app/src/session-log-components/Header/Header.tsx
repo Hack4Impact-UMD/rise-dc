@@ -1,15 +1,11 @@
-import './Header.css'
+import styles from "./Header.module.css";
 
 type sessionHeaderProp = {
-    title: string;
+  title: string;
 };
 
-const Header = ({title}: sessionHeaderProp) => {
-    return (
-        <div className = "session-header">
-            {title}'s Logs
-        </div>
-    )
-}
+const Header = ({ title }: sessionHeaderProp) => {
+  return <div className={styles.header}>{title}'s Logs</div>;
+};
 
 export default Header;

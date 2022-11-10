@@ -3,8 +3,9 @@
   font-family: "Fjalla One";
 }
 
-.session-content {
+.sessionContent {
   width: 100%;
+  min-height: calc(100vh - 50px - 5rem);
   background-color: #d7ebd3;
   display: flex;
   flex-direction: column;
@@ -12,7 +13,7 @@
   overflow-x: auto;
 }
 
-.session-buttons {
+.sessionButtons {
   width: calc(900px + 6rem);
   margin: 2rem 0 2rem 0;
   display: flex;
@@ -21,7 +22,7 @@
 }
 
 @media screen and (max-width: 1000px) {
-  .session-content {
+  .sessionContent {
     margin: auto;
     align-items: normal;
   }

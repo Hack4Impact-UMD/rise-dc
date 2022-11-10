@@ -1,19 +1,18 @@
 import sessionPic from "./sessionPic.svg";
-import "./AddSession.css";
+import styles from "./AddSession.module.css";
 import { Dispatch, SetStateAction } from "react";
 
 type addSessionFunction = {
-  addSession: boolean;
   setAddSession: Dispatch<SetStateAction<boolean>>;
 };
 
-const AddSession = ({ addSession, setAddSession }: addSessionFunction) => {
+const AddSession = ({ setAddSession }: addSessionFunction) => {
   return (
-    <button className="add-session-box" onClick={() => setAddSession(true)}>
+    <button className={styles.addSession} onClick={() => setAddSession(true)}>
       <img
         src={sessionPic}
         alt="Add Session Picture"
-        className="add-session-image"
+        className={styles.sessionImage}
       />
       <p> New Session Log </p>
     </button>

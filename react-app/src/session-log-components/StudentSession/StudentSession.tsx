@@ -2,9 +2,9 @@ import moment from "moment";
 import downArrow from "./downArrow.svg";
 import rightArrow from "./rightArrow.svg";
 import { useState, useEffect } from "react";
-import "./StudentSession.css";
 import SaveModal from "../Modals/SaveModal/SaveModal";
 import CancelModal from "../Modals/CancelModal/CancelModal";
+import styles from "./StudentSession.module.css";
 
 type studentSessionProp = {
   teacherName: string;
@@ -61,6 +61,8 @@ const StudentSession = ({
       endTimeMinutes += 60;
       if (hoursTaken == 0) {
         hoursString = `${hoursTaken + 23} hours `;
+      } else {
+        hoursString = `${hoursTaken - 1} hours `;
       }
     }
     const minutesTaken = endTimeMinutes - startTimeMinutes;
@@ -99,35 +101,35 @@ const StudentSession = ({
     <div
       className={
         collapsed
-          ? "student-session student-session-collapsed"
-          : "student-session"
+          ? `${styles.studentSession} ${styles.collapsedSession}`
+          : styles.studentSession
       }
     >
-      <div className="top-session-line">
-        <h2 className="session-student-name">{information.teacherName}</h2>
+      <div className={styles.topLine}>
+        <h2 className={styles.studentName}>{information.teacherName}</h2>
         {collapsed ? (
           <div>
             <button
-              className="collapse-session-image-button"
+              className={styles.collapseButton}
               onClick={() => setCollapsed(!collapsed)}
             >
               <img
                 src={rightArrow}
                 alt="Expand Session"
-                className="collapse-session-image"
+                className={styles.collapseImage}
               />
             </button>
           </div>
         ) : newLog ? (
-          <div className="session-edit-and-collapse">
+          <div className={styles.editButtons}>
             <button
-              className="session-edit session-save"
+              className={styles.edit}
               onClick={() => setOpenSaveModal(true)}
             >
               Save
             </button>
             <button
-              className="session-edit session-cancel"
+              className={`${styles.edit} ${styles.cancelButton}`}
               onClick={() => setOpenCancelModal(true)}
             >
               Cancel
@@ -143,18 +145,18 @@ const StudentSession = ({
             />
           </div>
         ) : (
-          <div className="session-edit-and-collapse">
-            <button className="session-edit" onClick={handleEdit}>
+          <div className={styles.editButtons}>
+            <button className={styles.edit} onClick={handleEdit}>
               {edit ? "Save" : "Edit"}
             </button>
             <button
-              className="collapse-session-image-button"
+              className={styles.collapseButton}
               onClick={() => setCollapsed(!collapsed)}
             >
               <img
                 src={downArrow}
                 alt="Collapse Session"
-                className="collapse-session-image"
+                className={styles.collapseImage}
               />
             </button>
           </div>
@@ -163,15 +165,15 @@ const StudentSession = ({
       {collapsed ? (
         <></>
       ) : (
-        <div className="session-information">
-          <div className="session-information-line">
-            <div className="session-information-label">{role}</div>
+        <div className={styles.container}>
+          <div className={styles.containerLines}>
+            <div className={styles.lineLabel}>{role}</div>
             <input
               type="text"
               className={
                 edit
-                  ? "session-information-edit session-information-text"
-                  : "session-information-text"
+                  ? `${styles.informationEdit} ${styles.informationText}`
+                  : styles.informationText
               }
               disabled={!edit}
               value={information.teacherName}
@@ -180,12 +182,12 @@ const StudentSession = ({
               }
             ></input>
           </div>
-          <div className="session-information-line">
-            <div className="session-information-label">Date</div>
+          <div className={styles.containerLines}>
+            <div className={styles.lineLabel}>Date</div>
             {edit ? (
               <input
                 type="date"
-                className="session-information-edit session-date-edit"
+                className={`${styles.informationEdit} ${styles.dateEdit}`}
                 disabled={!edit}
                 value={information.date}
                 onChange={(e) =>
@@ -197,8 +199,8 @@ const StudentSession = ({
                 type="text"
                 className={
                   edit
-                    ? "session-information-edit session-information-text"
-                    : "session-information-text"
+                    ? `${styles.informationEdit} ${styles.informationText}`
+                    : styles.informationText
                 }
                 disabled
                 value={moment(information.date, "YYYY-MM-DD").format(
@@ -207,17 +209,17 @@ const StudentSession = ({
               ></input>
             )}
           </div>
-          <div className="session-information-line">
-            <div className="session-time-line">
-              <div className={"session-information-label" && "session-time"}>
+          <div className={styles.containerLines}>
+            <div className={styles.timeLine}>
+              <div className={`${styles.lineLabel} ${styles.time}`}>
                 Start Time
               </div>
               <input
                 type="time"
                 className={
                   edit
-                    ? "session-information-text session-time-edit"
-                    : "session-information-text session-time-information"
+                    ? ` ${styles.informationEdit} ${styles.timeEdit}`
+                    : `${styles.timeInformation} ${styles.informationText}`
                 }
                 disabled={!edit}
                 value={information.startTime}
@@ -230,16 +232,16 @@ const StudentSession = ({
                 }
               ></input>
             </div>
-            <div className="session-time-line">
-              <div className={"session-information-label" && "session-time"}>
+            <div className={styles.timeLine}>
+              <div className={`${styles.lineLabel} ${styles.time}`}>
                 End Time
               </div>
               <input
                 type="time"
                 className={
                   edit
-                    ? "session-time-edit session-information-text"
-                    : "session-information-text"
+                    ? `${styles.informationEdit} ${styles.timeEdit}`
+                    : styles.informationText
                 }
                 disabled={!edit}
                 value={information.endTime}
@@ -256,11 +258,11 @@ const StudentSession = ({
               ></input>
             </div>
           </div>
-          <div className="session-information-line">
-            <div className="session-information-label">Duration</div>
+          <div className={styles.containerLines}>
+            <div className={styles.lineLabel}>Duration</div>
             <input
               type="text"
-              className="session-information-text"
+              className={styles.informationText}
               disabled
               value={information.duration}
               onChange={(e) =>
@@ -268,10 +270,10 @@ const StudentSession = ({
               }
             ></input>
           </div>
-          <div className="session-information-line">
-            <div className="session-information-label">Session Reason</div>
+          <div className={styles.containerLines}>
+            <div className={styles.lineLabel}>Session Reason</div>
             <select
-              className="session-reason"
+              className={styles.reason}
               disabled={!edit}
               value={information.reason}
               onChange={(e) =>
@@ -280,13 +282,13 @@ const StudentSession = ({
             >
               {edit ? (
                 <>
-                  <option className="session-reason-option" value="Reason 1">
+                  <option className={styles.selectOption} value="Reason 1">
                     Reason 1
                   </option>
-                  <option className="session-reason-option" value="Reason 2">
+                  <option className={styles.selectOption} value="Reason 2">
                     Reason 2
                   </option>
-                  <option className="session-reason-option" value="Reason 3">
+                  <option className={styles.selectOption} value="Reason 3">
                     Reason 3
                   </option>
                 </>
@@ -295,14 +297,14 @@ const StudentSession = ({
               )}
             </select>
           </div>
-          <div className="session-information-line session-summary-line">
-            <div className="session-information-label">Session Summary</div>
+          <div className={`${styles.summaryLine} ${styles.containerLines}`}>
+            <div className={styles.lineLabel}>Session Summary</div>
             {edit ? (
               <textarea
                 className={
                   edit
-                    ? "session-summary-edit session-information-text"
-                    : "session-information-text"
+                    ? `${styles.informationEdit} ${styles.informationText}`
+                    : styles.informationText
                 }
                 disabled={!edit}
                 value={information.summary}
@@ -312,9 +314,7 @@ const StudentSession = ({
               ></textarea>
             ) : (
               <div
-                className={
-                  edit ? "session-summary-edit" : "session-information-text"
-                }
+                className={edit ? styles.summaryEdit : styles.informationText}
               >
                 {information.summary}
               </div>

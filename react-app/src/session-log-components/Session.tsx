@@ -3,19 +3,19 @@ import AddSession from "./AddSession/AddSession";
 import Header from "./Header/Header";
 import StudentSession from "./StudentSession/StudentSession";
 import CollapseButton from "./CollapseButton/CollapseButton";
-import "./Session.css";
+import styles from "./Session.module.css";
 
 const Session = () => {
   const [collapse, setCollapse] = useState<boolean>(false);
   const [addSession, setAddSession] = useState<boolean>(false);
 
   return (
-    <div className="session">
+    <div className={styles.session}>
       <Header title="Alice Lee" />
-      <div className="session-content">
-        <div className="session-buttons">
+      <div className={styles.sessionContent}>
+        <div className={styles.sessionButtons}>
           <CollapseButton collapse={collapse} setCollapse={setCollapse} />
-          <AddSession addSession={addSession} setAddSession={setAddSession} />
+          <AddSession setAddSession={setAddSession} />
         </div>
         {addSession ? (
           <StudentSession

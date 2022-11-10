@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import "./CollapseButton.css";
+import styles from "./CollapseButton.module.css";
 
 type collapseFunction = {
   collapse: boolean;
@@ -8,10 +8,7 @@ type collapseFunction = {
 
 const CollapseButton = ({ collapse, setCollapse }: collapseFunction) => {
   return (
-    <button
-      className="session-collapse-all"
-      onClick={() => setCollapse(!collapse)}
-    >
+    <button className={styles.collapse} onClick={() => setCollapse(!collapse)}>
       <p> {collapse ? "Expand All" : "Collapse All"} </p>
     </button>
   );

@@ -1,5 +1,5 @@
-.add-session-box {
-  width: 178.6px;
+.addSession {
+  width: 200px;
   height: 40px;
   display: flex;
   flex-direction: row;
@@ -14,19 +14,19 @@
   font-size: 0.9rem;
 }
 
-.add-session-image {
+.sessionImage {
   width: 25px;
   height: 25px;
   padding-right: 0.25rem;
 }
 
-.add-session-box:hover {
+.addSession:hover {
   background-color: #cbebf8;
   cursor: pointer;
 }
 
 @media screen and (max-width: 800px) {
-  .add-session-box {
+  .addSession {
     height: 35px;
   }
 }
