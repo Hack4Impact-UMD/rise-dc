@@ -24,12 +24,12 @@
     overflow: auto;
  }
 
- .green-background{
+ .greenBackground{
     height: 86vh;
     background-color: #D7ECD3; 
 }
 
-.white-background{
+.whiteBackground{
     display: flex;
     flex-direction: column;
     position: relative;
@@ -46,7 +46,7 @@
     border-radius: 15px;
 }
 
-.search{
+.searchBar {
     background: url('./assets/Search.svg') no-repeat right;
     background-size: 22px;
     background-position: 97%;
@@ -66,7 +66,7 @@
     background-color: #F2F2F2;
 }
 
-.element-button{
+.elementButton{
     background: url('./assets/Add.svg') no-repeat right;
     background-size: 18px;
     background-position: 6%;
@@ -93,7 +93,7 @@
     border: none;
 }
 
-.display-horizontal{
+.displayHorizontal{
     display: flex;
     flex-direction: row;
 }
