@@ -1,48 +1,48 @@
-import { getAuth, onIdTokenChanged } from '@firebase/auth';
-import React, { createContext, useContext, useEffect, useState} from 'react';
-import app from '../config/firebase';
-
+import { getAuth, onIdTokenChanged, User, IdTokenResult } from "@firebase/auth";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import app from "../config/firebase";
 
 interface Props {
-  children: JSX.Element
+  children: JSX.Element;
 }
 
 interface AuthContextType {
-  user: any;
-  token: IdToken;
+  user: User;
+  token: IdTokenResult;
+  loading: boolean;
 }
 
-interface IdToken {
-  claims: {
-    role: String
-  }
-}
-
+// The AuthContext that other components may subscribe to.
 let AuthContext = createContext<AuthContextType>(null!);
 
+// Updates the AuthContext and re-renders children when the user changes.
+// See onIdTokenChanged for what events trigger a change.
+export const AuthProvider: React.FC<Props> = ({ children }) => {
+  const [user, setUser] = useState<User | any>(null!);
+  const [token, setToken] = useState<IdTokenResult>(null!);
+  // The loading state is used by RequireAuth/RequireAdminAuth
+  const [loading, setLoading] = useState<boolean>(true);
 
-export const AuthProvider: React.FC<Props> = ({children}) => {
-  const [user, setUser] = useState<any>({});
-  const [token, setToken] = useState<any>({claims: {role: "none"}});
   useEffect(() => {
     const auth = getAuth(app);
-    onIdTokenChanged(auth, (user) => {
-      setUser(user);
-      if (user != null) {
-        user.getIdTokenResult().then((token) => {
-          setToken(token);
+    onIdTokenChanged(auth, (newUser) => {
+      setUser(newUser);
+      if (newUser != null) {
+        newUser.getIdTokenResult().then((newToken) => {
+          setToken(newToken);
         });
       }
+      setLoading(false);
     });
-  }, [])
+  }, []);
 
   return (
-    <AuthContext.Provider value={{user, token }}>
+    <AuthContext.Provider value={{ user, token, loading }}>
       {children}
     </AuthContext.Provider>
-  )
+  );
 };
 
 export const useAuth = () => {
   return useContext(AuthContext);
-}
+};

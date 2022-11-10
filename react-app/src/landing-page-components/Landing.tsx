@@ -8,12 +8,14 @@ import './Landing.css'
 import GoogleCalendar from './GoogleCalendar/GoogleCalendar';
 import Students from './Students/Students';
 import Calendar from './Calendar/Calendar';
+import NavBar from '../navbar/Navbar';
 
 const Landing = () => {
 
 
     return (
             <div className = "landing">
+              <NavBar title="title"></NavBar>
                 <Header />
                 <div className = "content">
                   <div className = "calendar"> <Calendar/> </div>

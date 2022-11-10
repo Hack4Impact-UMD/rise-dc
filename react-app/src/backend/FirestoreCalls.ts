@@ -1,7 +1,7 @@
-import {doc, collection, query, where, getDoc, DocumentData, FirestoreError, DocumentSnapshot, DocumentReference, getDocFromCache, setDoc, getDocs} from "firebase/firestore"
-import {db} from "../config/firebase";
+import { doc, collection, addDoc, getDoc, query, where, getDocs } from "firebase/firestore"
+import { db } from "../config/firebase";
 import { getAuth } from "firebase/auth";
-import {Student, Grades} from "../types/StudentType";
+import { Student, Grades } from "../types/StudentType";
 import { RISEUser } from "../types/UserType";
 import app from '../config/firebase'
 
@@ -39,4 +39,15 @@ export function getCurrentUser(): Promise<RISEUser> {
         return reject(new Error("Error retrieving user"));
       }
     })
-  }
+}
+
+export function storeStudent(student: Student): Promise<void> {
+    return new Promise((resolve, reject) => {
+        addDoc(collection(db, "Students"), student).then(() => {
+            return resolve();
+        }).catch((e) => {
+            return reject(e);
+        })
+    })
+} 
+
