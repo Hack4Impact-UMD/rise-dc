@@ -1,8 +1,9 @@
+import { useState } from "react";
+import { getAuth } from "firebase/auth";
 import Header from "./Header/Header";
 import RecentLogs from "./RecentLogs/RecentLogs";
 import Statistics from "./Statistics/Statistics";
 import Hours from "./Hours/Hours";
-import GoogleCalendar from "./GoogleCalendar/GoogleCalendar";
 import Students from "./Students/Students";
 import Calendar from "./Calendar/Calendar";
 import NavBar from "../navbar/Navbar";
@@ -27,7 +28,6 @@ const Landing = () => {
         <Hours />
         <div className={styles.logsRow}>
           <RecentLogs />
-          <GoogleCalendar />
         </div>
         <Students />
       </div>
