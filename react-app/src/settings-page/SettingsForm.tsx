@@ -12,7 +12,7 @@ export default function SettingsForm() {
             {ResetPasswordForm()}
         </div>
       );
-    }
+}
 
 function ResetEmailForm() {
     const [value, setValue] = useState('');
