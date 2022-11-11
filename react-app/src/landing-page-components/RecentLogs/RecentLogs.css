@@ -1,5 +1,5 @@
 .log-container {
-  width: 300px;
+  width: calc(750px - 3.5rem);
   height: 350px;
   background-color: white;
   border-radius: 30px;

@@ -5,7 +5,6 @@ import RecentLogs from './RecentLogs/RecentLogs';
 import Statistics from './Statistics/Statistics';
 import Hours from './Hours/Hours';
 import './Landing.css'
-import GoogleCalendar from './GoogleCalendar/GoogleCalendar';
 import Students from './Students/Students';
 import Calendar from './Calendar/Calendar';
 import NavBar from '../navbar/Navbar';
@@ -26,10 +25,7 @@ const Landing = () => {
                     <Statistics title="Tutors Participating" value={50} />
                   </div>
                   <Hours/>
-                  <div className = "logs-row">
-                    <RecentLogs/>
-                    <GoogleCalendar />
-                  </div>
+                  <RecentLogs/>
                   <Students />
                 </div>
             </div>

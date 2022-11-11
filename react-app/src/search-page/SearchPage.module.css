@@ -1,0 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap');
+*{
+    margin: 0px;
+    padding: 0px;
+}
+.container{
+  display: flex;
+  flex-flow: column;
+}
+
+.header{
+    height: 14vh;
+    background-color: #FFFFFF;
+}
+
+.body{
+    height: 10vh;
+    background-color: #D7ECD3;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex: 1 1 100%;
+    overflow: auto;
+ }
+
+ .greenBackground{
+    height: 86vh;
+    background-color: #D7ECD3; 
+}
+
+.whiteBackground{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    background-color: #FFFFFF;
+    margin-top: 25px;
+    height: 75vh;
+    width: 620px;
+    max-height: 100%;
+    max-width: 100%;
+    overflow-y: scroll;
+    flex-grow: 1;
+    border: 1px solid #C4C4C4;
+    box-shadow: 7px 7px 6px rgba(0, 0, 0, 0.25);
+    border-radius: 15px;
+}
+
+.searchBar {
+    background: url('./assets/Search.svg') no-repeat right;
+    background-size: 22px;
+    background-position: 97%;
+    display: block;
+    margin-left: 30px;
+    margin-right: 20px;
+    color: #afaeae;
+    font-family: 'Libre Franklin', sans-serif;
+    padding-right: 200px;
+    padding-left: 20px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border-radius: 12px;
+    border: 1px solid #F2F2F2;
+    margin-top: 10px;
+    color: black;
+    background-color: #F2F2F2;
+}
+
+.elementButton{
+    background: url('./assets/Add.svg') no-repeat right;
+    background-size: 18px;
+    background-position: 6%;
+    display: block;
+    margin-left: 40px;
+    color: #afaeae;
+    font-family: 'Libre Franklin', sans-serif;
+    padding-right: 30px;
+    padding-left: 28px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    border-radius: 13px;
+    border: 1px solid #A0B9DC;
+    margin-top: 10px;
+    color: black;
+    background-color: #A0B9DC;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+.element-button:hover{
+    background-color:#D0ECFC;
+    transition: all .3s ease;
+    border: none;
+}
+
+.displayHorizontal{
+    display: flex;
+    flex-direction: row;
+}
+
+.student-profile{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 66px;
+    margin-left: 30px;
+    margin-right: 30px;
+    margin-top: 12px;
+    margin-bottom: 2px;
+    color: black;
+    font-family: 'Libre Franklin', sans-serif;
+    border-radius: 10px;
+    border: 1px solid #A0B9DC;
+    color: black;
+    background-color: #A0B9DC;
+}
+
+.student-name{
+    margin-left: 25px;
+    font-family: 'Fjalla One', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 40px;
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.02em;
+}
+
+.add-button-img{
+    height: 2.3vh;
+    width: auto;
+    float: left;
+}
