@@ -26,6 +26,11 @@
 
 .header-upper-text {
   padding-top: 0.5rem;
+  padding-bottom: 1.5rem;
+}
+
+.header-role {
+  padding-top: 1.5rem
 }
 
 @media screen and (min-height: 700px) {
@@ -39,6 +44,12 @@
   .header-upper-text {
     padding-top: 2vh;
   }
+}
+
+.welcome-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 /*
 @media screen and (min-height: 850px) {

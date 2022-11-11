@@ -15,7 +15,7 @@ const Landing = () => {
 
     return (
             <div className = "landing">
-              <NavBar title="title"></NavBar>
+              <NavBar title=""></NavBar>
                 <Header />
                 <div className = "content">
                   <div className = "calendar"> <Calendar/> </div>

@@ -4,11 +4,12 @@ import SettingsForm from "./SettingsForm"
 import ResetButton from './ResetButton';
 import FormInput from './FormInput';
 import AddButton from './AddButton';
+import NavBar from '../navbar/Navbar';
 
 export default function AdminSettingsPage() {
     return (
     <div className='container'>
-        <div className = "header"></div> {/* Inset Navbar Here */}
+        <div className = "header"></div> {<NavBar title = "Settings"></NavBar>}
         <div className='body'>
             <div className='green-background'>
                 <SettingsForm/>
