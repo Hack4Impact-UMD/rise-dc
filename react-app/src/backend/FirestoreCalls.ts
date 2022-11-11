@@ -26,6 +26,22 @@ export function getStudentWithID(
     })
 }
 
+export function getAllStudents(): 
+Promise<Array<Student>> {
+    return new Promise((resolve, reject) => {
+        getDocs(collection(db, "Students")).then((snap) => {
+            const students = snap.docs.map(doc =>
+                {
+                    let student : Student = doc.data() as Student
+                    student.id = doc.id
+                    return student
+                })
+            return resolve(students);
+        }).catch((e) => {
+            reject(e);
+        })
+    })  
+    
 export function getCurrentUser(): Promise<RISEUser> {
     return new Promise((resolve, reject) => {
       const user = getAuth(app).currentUser;
@@ -53,14 +69,3 @@ export function storeStudent(student: Student): Promise<void> {
         })
     })
 } 
-
-export function storeLog(log: Log): Promise<void> {
-    return new Promise((resolve, reject) => {
-        addDoc(collection(db, "Logs"), log).then(
-        () => {
-            return Promise.resolve()})
-            .catch((e) => {
-                return Promise.reject(e)
-        })
-    });
-}
