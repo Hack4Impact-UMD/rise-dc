@@ -64,13 +64,3 @@ export function storeLog(log: Log): Promise<void> {
         })
     });
 }
-export async function getAllStudents(): 
-Promise<Array<Student>> {
-    const querySnapshot = await getDocs(collection(db, "Students"))
-    return querySnapshot.docs.map(doc =>
-        {
-            let student : Student = doc.data() as Student
-            student.id = doc.id
-            return student
-        })    
-}
