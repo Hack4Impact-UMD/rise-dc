@@ -1,7 +1,8 @@
-import { doc, collection, addDoc, getDoc, query, where, getDocs } from "firebase/firestore"
-import { db } from "../config/firebase";
+import {doc, collection, query, where, addDoc, getDoc, DocumentData, FirestoreError, DocumentSnapshot, DocumentReference, getDocFromCache, setDoc, getDocs} from "firebase/firestore"
+import {db} from "../config/firebase";
+import {Student, Grades} from "../types/StudentType"
+import {Log} from "../types/LogType"
 import { getAuth } from "firebase/auth";
-import { Student, Grades } from "../types/StudentType";
 import { RISEUser } from "../types/UserType";
 import app from '../config/firebase'
 
@@ -51,3 +52,13 @@ export function storeStudent(student: Student): Promise<void> {
     })
 } 
 
+export function storeLog(log: Log): Promise<void> {
+    return new Promise((resolve, reject) => {
+        addDoc(collection(db, "Logs"), log).then(
+        () => {
+            return Promise.resolve()})
+            .catch((e) => {
+                return Promise.reject(e)
+        })
+    });
+}
