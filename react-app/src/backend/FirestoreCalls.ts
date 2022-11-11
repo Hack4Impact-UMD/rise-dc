@@ -22,15 +22,21 @@ export function getStudentWithID(
     })
 }
 
-export async function getAllStudents(): 
+export function getAllStudents(): 
 Promise<Array<Student>> {
-    const querySnapshot = await getDocs(collection(db, "Students"))
-    return querySnapshot.docs.map(doc =>
-        {
-            let student : Student = doc.data() as Student
-            student.id = doc.id
-            return student
-        })    
+    return new Promise((resolve, reject) => {
+        getDocs(collection(db, "Students")).then((snap) => {
+            const students = snap.docs.map(doc =>
+                {
+                    let student : Student = doc.data() as Student
+                    student.id = doc.id
+                    return student
+                })
+            return resolve(students);
+        }).catch((e) => {
+            reject(e);
+        })
+    })  
 }
 
 export function storeStudent(student: Student): Promise<void> {
