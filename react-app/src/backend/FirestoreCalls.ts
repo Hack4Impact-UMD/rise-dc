@@ -68,4 +68,15 @@ export function storeStudent(student: Student): Promise<void> {
             return reject(e);
         })
     })
-} 
+}
+
+export function storeLog(log: Log): Promise<void> {
+    return new Promise((resolve, reject) => {
+        addDoc(collection(db, "Logs"), log).then(
+        () => {
+            return Promise.resolve()})
+            .catch((e) => {
+                return Promise.reject(e)
+        })
+    });
+}
