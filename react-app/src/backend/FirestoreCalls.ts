@@ -13,7 +13,9 @@ export function getStudentWithID(
     const studentRef = doc(db, "Students", id)
     getDoc(studentRef).then((studentSnap) => {
         if(studentSnap.exists()) {
-            return resolve((studentSnap.data() as Student))
+            let student = studentSnap.data()
+            student.id = id
+            return resolve((student as Student))
         }
         else {
             return reject(new Error("Student not found"))
@@ -24,6 +26,22 @@ export function getStudentWithID(
     })
 }
 
+export function getAllStudents(): 
+Promise<Array<Student>> {
+    return new Promise((resolve, reject) => {
+        getDocs(collection(db, "Students")).then((snap) => {
+            const students = snap.docs.map(doc =>
+                {
+                    let student : Student = doc.data() as Student
+                    student.id = doc.id
+                    return student
+                })
+            return resolve(students);
+        }).catch((e) => {
+            reject(e);
+        })
+    })  
+    
 export function getCurrentUser(): Promise<RISEUser> {
     return new Promise((resolve, reject) => {
       const user = getAuth(app).currentUser;
@@ -50,7 +68,7 @@ export function storeStudent(student: Student): Promise<void> {
             return reject(e);
         })
     })
-} 
+}
 
 export function storeLog(log: Log): Promise<void> {
     return new Promise((resolve, reject) => {
