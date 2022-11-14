@@ -1,7 +1,6 @@
 import { useState } from "react";
 import styles from "./AdminSettingsPage.module.css";
 import ResetButton from "./ResetButton";
-import FormInput from "./FormInput";
 import { updateUserEmail, updateUserPassword } from "../backend/AuthCalls";
 
 export default function SettingsForm() {
@@ -47,6 +46,8 @@ function ResetEmailForm() {
 
 // TODO: improve error messaging
 function ResetPasswordForm() {
+  //TODO: update this state handling to match AdminSettingsPage account
+  // creation.
   const [currPass, setCurrPass] = useState("");
   const [newPass, setNewPass] = useState("");
   const [confirmNewPass, setConfirmNewPass] = useState("");
