@@ -42,7 +42,6 @@ Promise<Array<Student>> {
         })
     })  
 }
-    
 export function getCurrentUser(): Promise<RISEUser> {
     return new Promise((resolve, reject) => {
       const user = getAuth(app).currentUser;

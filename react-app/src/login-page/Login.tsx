@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { KeyboardEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { authenticateUser } from "../backend/FirebaseCalls";
 import TextField, { TextFieldTypes } from "./TextField/TextField";
@@ -34,17 +34,19 @@ const LoginPage: React.FC<any> = () => {
           isDisabled={isLoading}
           fieldType={TextFieldTypes.email}
           onChange={(val) => setEmail(val)}
+          onSubmit={login}
         />
         <TextField
           header="Password"
           isDisabled={isLoading}
           fieldType={TextFieldTypes.password}
           onChange={(val) => setPassword(val)}
+          onSubmit={login}
         />
         <a href="" className={styles.forgot}>
           Forgot Password?
         </a>
-        <Button text="Login" isDisabled={isLoading} handleClick={login} />
+        <Button text="Login" isDisabled={isLoading} handleClick={login}/>
       </div>
     </div>
   );
