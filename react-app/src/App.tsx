@@ -7,6 +7,7 @@ import Landing from "./landing-page-components/Landing";
 import AdminSettingsPage from "./settings-page/AdminSettingsPage";
 import { AuthProvider } from "./auth/AuthProvider";
 import styles from "./App.module.css";
+import StudentProfile from "./student-profile/StudentProfile";
 
 function App() {
   const s = styles;
@@ -19,6 +20,10 @@ function App() {
           <Route
             path="/landing"
             element={<RequireAuth children={<Landing />} />}
+          />
+          <Route
+            path="/profile"
+            element={<RequireAuth children={<StudentProfile />} />}
           />
           <Route
             path="/settings"
