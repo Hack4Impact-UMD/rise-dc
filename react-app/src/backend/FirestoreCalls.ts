@@ -82,7 +82,7 @@ export function storeLog(log: Log): Promise<void> {
     });
 }
 
-export function getLogs(): Promise<Array<Log>> {
+export function getRecentLogs(): Promise<Array<Log>> {
     return new Promise((resolve, reject) => {
         getDocs(collection(db, "Logs")).then((snap) => {
             const docs = snap.docs;
