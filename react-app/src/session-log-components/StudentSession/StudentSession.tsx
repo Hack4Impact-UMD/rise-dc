@@ -1,4 +1,4 @@
-import moment from "moment";
+import dayjs from "dayjs";
 import downArrow from "./downArrow.svg";
 import rightArrow from "./rightArrow.svg";
 import { useState, useEffect } from "react";
@@ -203,7 +203,7 @@ const StudentSession = ({
                     : styles.informationText
                 }
                 disabled
-                value={moment(information.date, "YYYY-MM-DD").format(
+                value={dayjs(information.date, "YYYY-MM-DD").format(
                   "MMMM DD, YYYY"
                 )}
               ></input>
