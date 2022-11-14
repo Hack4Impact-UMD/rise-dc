@@ -4,10 +4,9 @@ import TextField, { TextFieldTypes } from "./TextField/TextField";
 import Button from "./Button/Button";
 import logo from "./assets/rise-dc-logo.png";
 import styles from "./Login.module.css";
-import "./Login.css";
 import app from "../config/firebase";
 import {authenticateUser} from "../backend/FirebaseCalls";
-import { addStudent, addLog } from "../backend/FirestoreCalls";
+import { addStudent, addLog, getAllLogs } from "../backend/FirestoreCalls";
 
 const LoginPage: React.FC<any> = () => {
   const [email, setEmail] = useState<string>("");
@@ -51,6 +50,11 @@ const LoginPage: React.FC<any> = () => {
   }
 
   const login = () => {
+    getAllLogs().then((logs) => {
+      logs.forEach((log) => {
+      console.log(log.date.toDate())
+      })
+    })
     authenticateUser(email, password)
       .then(() => {
         navigate("/landing");

@@ -25,6 +25,21 @@ export function getStudentWithID(
     })
 }
 
+export function getAllLogs(
+): Promise<Log[]> {
+    return new Promise((resolve, reject) => {
+        getDocs(collection(db, "Logs")).then((snap) => {
+            const logs = snap.docs.map(doc =>
+                {
+                    return doc.data() as Log
+                })
+            return resolve(logs);
+        }).catch((e) => {
+            reject(e);
+        })
+    })
+}
+
 export function addStudent(student : Student) : Promise<void> {
     return new Promise((resolve, reject) => {
         addDoc(collection(db, "Students"), student).then(() => {
