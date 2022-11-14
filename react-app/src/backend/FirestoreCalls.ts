@@ -41,6 +41,7 @@ Promise<Array<Student>> {
             reject(e);
         })
     })  
+}
     
 export function getCurrentUser(): Promise<RISEUser> {
     return new Promise((resolve, reject) => {
