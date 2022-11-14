@@ -11,22 +11,23 @@ import styles from "./App.module.css";
 function App() {
   const s = styles;
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/login" element={<Login />} />
-          <Route
-            path="/landing"
-            element={<RequireAuth children={<Landing />} />}
-          />
-          <Route
-            path="/settings"
-            element={<RequireAdminAuth children={<AdminSettingsPage />} />}
-          />
-        </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+    // <AuthProvider>
+    //   <BrowserRouter>
+    //     <Routes>
+    //       <Route path="/" element={<Login />} />
+    //       <Route path="/login" element={<Login />} />
+    //       <Route
+    //         path="/landing"
+    //         element={<RequireAuth children={<Landing />} />}
+    //       />
+    //       <Route
+    //         path="/settings"
+    //         element={<RequireAdminAuth children={<AdminSettingsPage />} />}
+    //       />
+    //     </Routes>
+    //   </BrowserRouter>
+    // </AuthProvider>
+    <AdminSettingsPage />
   );
 }
 
