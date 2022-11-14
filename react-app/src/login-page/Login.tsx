@@ -5,7 +5,7 @@ import TextField, { TextFieldTypes } from "./TextField/TextField";
 import Button from "./Button/Button";
 import logo from "./assets/rise-dc-logo.png";
 import styles from "./Login.module.css";
-
+import {getLogs} from "../backend/FirestoreCalls";
 const LoginPage: React.FC<any> = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -16,6 +16,7 @@ const LoginPage: React.FC<any> = () => {
   const navigate = useNavigate();
 
   const login = () => {
+    console.log(getLogs());
     authenticateUser(email, password)
       .then(() => {
         navigate("/landing");

@@ -41,7 +41,8 @@ Promise<Array<Student>> {
             reject(e);
         })
     })  
-    
+}
+
 export function getCurrentUser(): Promise<RISEUser> {
     return new Promise((resolve, reject) => {
       const user = getAuth(app).currentUser;
@@ -79,4 +80,21 @@ export function storeLog(log: Log): Promise<void> {
                 return Promise.reject(e)
         })
     });
+}
+
+export function getLogs(): Promise<Array<Log>> {
+    return new Promise((resolve, reject) => {
+        getDocs(collection(db, "Logs")).then((snap) => {
+            const docs = snap.docs;
+            docs.sort((a, b) => (a.data().date > b.data().date) ? 1 : -1);
+            const logs: Log[] = [];
+            const length = Math.min(11, docs.length);
+            for (let i = 0; i < length; i++) {
+                logs.push(docs[i].data() as Log);
+            }
+            return resolve(logs);
+        }).catch((e) => {
+            reject(e);
+        })
+    })  
 }
