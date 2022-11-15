@@ -1,6 +1,7 @@
-import {doc, collection, query, where, addDoc, getDoc, DocumentData, FirestoreError, DocumentSnapshot, DocumentReference, getDocFromCache, setDoc, getDocs} from "firebase/firestore"
+import {doc, collection, addDoc, getDoc, query, where, getDocs} from "firebase/firestore"
+import {Student} from "../types/StudentType"
+import {Logs} from "../types/types"
 import {db} from "../config/firebase";
-import {Student, Grades} from "../types/StudentType"
 import {Log} from "../types/LogType"
 import { getAuth } from "firebase/auth";
 import { RISEUser } from "../types/UserType";
@@ -67,6 +68,18 @@ export function storeStudent(student: Student): Promise<void> {
             return resolve();
         }).catch((e) => {
             return reject(e);
+        })
+    })
+} 
+
+export async function getStudentLogs(student_id : string) : Promise<Array<Logs>> {
+    const q = query(collection(db, "Logs"), where("student_id", "==", student_id))
+    return new Promise((resolve, reject) => {
+        getDocs(q).then((querySnapshot) => {
+            return resolve(querySnapshot.docs.map((doc) => doc.data() as Logs))
+        }
+        ).catch((e) => {
+            return reject(e)
         })
     })
 }
