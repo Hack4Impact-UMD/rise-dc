@@ -1,4 +1,3 @@
-/* hi */
 import sessionPic from "./sessionPic.svg";
 import styles from "./AddSession.module.css";
 import { Dispatch, SetStateAction } from "react";

@@ -1,4 +1,3 @@
-/* hi */
 import styles from "./Header.module.css";
 
 type sessionHeaderProp = {

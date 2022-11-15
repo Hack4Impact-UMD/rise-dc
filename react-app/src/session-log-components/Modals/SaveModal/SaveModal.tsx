@@ -1,4 +1,3 @@
-/* hi*/
 import Modal from "../Modal";
 import styles from "./SaveModal.module.css";
 

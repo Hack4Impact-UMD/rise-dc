@@ -1,4 +1,3 @@
-/* hi */
 import styles from "./Modal.module.css";
 
 type modalPropsType = {
