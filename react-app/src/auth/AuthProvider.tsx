@@ -1,10 +1,9 @@
-import { getAuth, onIdTokenChanged, User, IdTokenResult } from '@firebase/auth';
-import React, { createContext, useContext, useEffect, useState} from 'react';
-import app from '../config/firebase';
-
+import { getAuth, onIdTokenChanged, User, IdTokenResult } from "@firebase/auth";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import app from "../config/firebase";
 
 interface Props {
-  children: JSX.Element
+  children: JSX.Element;
 }
 
 interface AuthContextType {
@@ -18,7 +17,7 @@ let AuthContext = createContext<AuthContextType>(null!);
 
 // Updates the AuthContext and re-renders children when the user changes.
 // See onIdTokenChanged for what events trigger a change.
-export const AuthProvider: React.FC<Props> = ({children}) => {
+export const AuthProvider: React.FC<Props> = ({ children }) => {
   const [user, setUser] = useState<User | any>(null!);
   const [token, setToken] = useState<IdTokenResult>(null!);
   // The loading state is used by RequireAuth/RequireAdminAuth
@@ -30,20 +29,20 @@ export const AuthProvider: React.FC<Props> = ({children}) => {
       setUser(newUser);
       if (newUser != null) {
         newUser.getIdTokenResult().then((newToken) => {
-            setToken(newToken);
+          setToken(newToken);
         });
       }
       setLoading(false);
     });
-  }, [])
+  }, []);
 
   return (
-    <AuthContext.Provider value={{user,token, loading}}>
+    <AuthContext.Provider value={{ user, token, loading }}>
       {children}
     </AuthContext.Provider>
-  )
+  );
 };
 
 export const useAuth = () => {
   return useContext(AuthContext);
-}
+};

@@ -6,7 +6,7 @@ interface Props {
   children: JSX.Element;
 }
 
-const RequireAuth:React.FC<Props> = ({ children }) => {
+const RequireAuth: React.FC<Props> = ({ children }) => {
   const authContext = useAuth();
   if (authContext.loading) {
     return (<div>Loading</div>);

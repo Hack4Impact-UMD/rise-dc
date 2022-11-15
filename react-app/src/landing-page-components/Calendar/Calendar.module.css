@@ -1,4 +1,4 @@
-.calendar-box {
+.calendar {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -11,19 +11,19 @@
   border: 1.5px solid transparent;
 }
 
-.calendar-image {
+.image {
   width: 25px;
   height: 100%;
   padding-right: 0.25rem;
 }
 
-.calendar-box:hover {
+.calendar:hover {
   border: 1.5px solid;
   cursor: pointer;
 }
 
 @media screen and (max-width: 800px) {
-  .calendar-box {
+  .calendar {
     height: 30px;
   }
 }
