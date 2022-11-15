@@ -1,16 +1,16 @@
-import React from 'react';
-import "./AdminSettingsPage.css"
-import SettingsForm from "./SettingsForm"
+import React from "react";
+import styles from "./AdminSettingsPage.module.css";
+import SettingsForm from "./SettingsForm";
 
 export default function MentorTutorSettingsPage() {
-    return (
-      <div className='container'>
-      <div className = "header"></div> {/* Inset Navbar Here */}
-      <div className='body'>
-          <div className='green-background'>
-              <SettingsForm/>
-          </div>
+  return (
+    <div className={styles.container}>
+      <div className={styles.header}></div> {/* Inset Navbar Here */}
+      <div className={styles.body}>
+        <div className={styles.background}>
+          <SettingsForm />
+        </div>
       </div>
     </div>
-    );
-  }
+  );
+}

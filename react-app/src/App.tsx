@@ -5,11 +5,11 @@ import Login from "./login-page/Login";
 import RequireAdminAuth from "./auth/RequireAdminAuth";
 import Landing from "./landing-page-components/Landing";
 import AdminSettingsPage from "./settings-page/AdminSettingsPage";
-import "./App.css";
 import { AuthProvider } from "./auth/AuthProvider";
-import Session from "./session-log-components/Session";
+import styles from "./App.module.css";
 
 function App() {
+  const s = styles;
   return (
     <AuthProvider>
       <BrowserRouter>
@@ -23,10 +23,6 @@ function App() {
           <Route
             path="/settings"
             element={<RequireAdminAuth children={<AdminSettingsPage />} />}
-          />
-          <Route
-            path="/logs"
-            element={<RequireAuth children={<Session />} />}
           />
         </Routes>
       </BrowserRouter>

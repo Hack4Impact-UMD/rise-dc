@@ -1,8 +1,5 @@
-import React from 'react';
-import "./AdminSettingsPage.css"
+import styles from "./AdminSettingsPage.module.css";
 
 export default function ResetButton() {
-    return (
-        <button className = "reset-button">Add</button>
-        );
-    }
+  return <button className={styles.resetButton}>Add</button>;
+}
