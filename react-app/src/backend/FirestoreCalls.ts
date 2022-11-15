@@ -88,7 +88,7 @@ export function getRecentLogs(): Promise<Array<Log>> {
             const docs = snap.docs;
             docs.sort((a, b) => (a.data().date > b.data().date) ? 1 : -1);
             const logs: Log[] = [];
-            const length = Math.min(11, docs.length);
+            const length = Math.min(5, docs.length);
             for (let i = 0; i < length; i++) {
                 logs.push(docs[i].data() as Log);
             }
