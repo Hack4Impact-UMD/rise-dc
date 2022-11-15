@@ -25,8 +25,8 @@
 }
 
 .logs:hover {
-  background-color: #d3d3d3;
   cursor: pointer;
+  text-decoration: underline;
 }
 
 .log-name {
@@ -54,7 +54,7 @@
 }
 
 .log-view-more:hover {
-  font-size: 16px;
+  text-decoration: underline;
   cursor: pointer;
 }
 

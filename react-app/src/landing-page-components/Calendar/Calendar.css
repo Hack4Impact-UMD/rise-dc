@@ -18,7 +18,7 @@
 }
 
 .calendar-box:hover {
-  border: 1.5px solid;
+  background-color: #CBEBF8;
   cursor: pointer;
 }
 
