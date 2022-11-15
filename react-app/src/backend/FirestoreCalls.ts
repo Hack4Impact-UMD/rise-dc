@@ -27,7 +27,7 @@ export function getStudentWithID(
     })
 }
 
-export function getAllStudents(): 
+export function getAllStudents() :
 Promise<Array<Student>> {
     return new Promise((resolve, reject) => {
         getDocs(collection(db, "Students")).then((snap) => {

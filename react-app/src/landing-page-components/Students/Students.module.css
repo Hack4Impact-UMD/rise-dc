@@ -44,13 +44,16 @@
   margin-right: 1.5rem;
 }
 
-.icon {
-  width: 30px;
+.student:hover {
+  background-color: #CBEBF8;
 }
 
-.icon:hover {
-  width: 33px;
-  margin-right: -3px;
+.student:hover .button {
+  background-color: #CBEBF8;
+}
+
+.icon {
+  width: 30px;
 }
 
 .button {
@@ -75,8 +78,8 @@
   padding-top: 15px;
 }
 
-.viewMore:hover {
-  font-size: 16px;
+.view-more-student:hover {
+  text-decoration: underline;
   cursor: pointer;
 }
 
