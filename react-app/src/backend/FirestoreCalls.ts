@@ -5,6 +5,7 @@ import {db} from "../config/firebase";
 import {Log} from "../types/LogType"
 import { getAuth } from "firebase/auth";
 import { RISEUser } from "../types/UserType";
+import { SubjectHours } from "../ty"
 import app from '../config/firebase'
 
 export function getStudentWithID(
@@ -92,4 +93,8 @@ export function storeLog(log: Log): Promise<void> {
                 return Promise.reject(e)
         })
     });
+}
+
+export function hoursSpent(logs : Array<Log>) : SubjectHours {
+
 }
