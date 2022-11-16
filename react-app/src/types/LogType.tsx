@@ -1,6 +1,6 @@
 export type Log = {
     date: Date,
-    duration_minutes : BigInteger,
+    duration_minutes : number,
     instructor_name : string,
     reason : string,
     subject : string,
