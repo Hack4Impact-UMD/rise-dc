@@ -1,6 +1,5 @@
 import {doc, collection, addDoc, getDoc, query, where, getDocs} from "firebase/firestore"
 import {Student} from "../types/StudentType"
-import {Logs} from "../types/types"
 import {db} from "../config/firebase";
 import {Log} from "../types/LogType"
 import { getAuth } from "firebase/auth";
@@ -71,11 +70,11 @@ export function storeStudent(student: Student): Promise<void> {
     })
 } 
 
-export async function getStudentLogs(student_id : string) : Promise<Array<Logs>> {
+export async function getStudentLogs(student_id : string) : Promise<Array<Log>> {
     const q = query(collection(db, "Logs"), where("student_id", "==", student_id))
     return new Promise((resolve, reject) => {
         getDocs(q).then((querySnapshot) => {
-            return resolve(querySnapshot.docs.map((doc) => doc.data() as Logs))
+            return resolve(querySnapshot.docs.map((doc) => doc.data() as Log))
         }
         ).catch((e) => {
             return reject(e)
@@ -109,4 +108,11 @@ export function getRecentLogs(): Promise<Array<Log>> {
             reject(e);
         })
     })  
+}
+export function averageSessionLength(logs : Array<Log>) : number {
+    let s = 0.0
+    logs.forEach((log) => {
+        s += log.duration_minutes
+    })
+    return s/logs.length
 }
