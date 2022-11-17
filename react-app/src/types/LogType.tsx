@@ -3,7 +3,9 @@ export type Log = {
     duration_minutes : number,
     instructor_name : string,
     reason : string,
-    subject : string,
+    subject : Subject,
     summary : string,
     type : string
 }
+
+export type Subject = "ENGLISH" | "MATH" | "SOCIAL STUDIES" | "HUMANITIES" | "SCIENCE"
