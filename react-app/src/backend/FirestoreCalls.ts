@@ -5,7 +5,7 @@ import {db} from "../config/firebase";
 import {Log} from "../types/LogType"
 import { getAuth } from "firebase/auth";
 import { RISEUser } from "../types/UserType";
-import { SubjectHours } from "../ty"
+import { SubjectHours } from "../types/SubjectHoursType"
 import app from '../config/firebase'
 
 export function getStudentWithID(
@@ -96,5 +96,36 @@ export function storeLog(log: Log): Promise<void> {
 }
 
 export function hoursSpent(logs : Array<Log>) : SubjectHours {
-
-}
+    let hrs = {
+        english_hours : 0,
+        humanities_hours : 0,
+        socialStudies_hours : 0,
+        math_hours : 0,
+        science_hours : 0
+    } as SubjectHours
+    // adding time as minutes
+    logs.forEach((log) => {
+        if(log.subject == "ENGLISH") {
+            hrs.english_hours += log.duration_minutes
+        }
+        else if(log.subject == "MATH") {
+            hrs.math_hours += log.duration_minutes
+        }
+        else if(log.subject == "HUMANITIES") {
+            hrs.humanities_hours += log.duration_minutes
+        }
+        else if(log.subject == "SCIENCE") {
+            hrs.science_hours += log.duration_minutes
+        }
+        else {
+            hrs.socialStudies_hours += log.duration_minutes
+        }
+    })
+    // hours form
+    hrs.english_hours/=60
+    hrs.humanities_hours/=60
+    hrs.math_hours/=60
+    hrs.science_hours/=60
+    hrs.socialStudies_hours/=60
+    return hrs
+}   
