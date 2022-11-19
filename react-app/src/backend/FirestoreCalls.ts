@@ -93,3 +93,27 @@ export function storeLog(log: Log): Promise<void> {
         })
     });
 }
+
+export function countMentorTutor(): Promise<number> {
+    return new Promise((resolve, reject) => {
+        getDocs(collection(db, "Users")).then((snap) => {
+            const users = snap.docs.map(doc =>
+                {
+                    let user : RISEUser = doc.data() as RISEUser
+                    return user
+                })
+            let count = 0;
+            users.forEach((user) => {
+                if(user.type === "MENTOR" || user.type === "TUTOR") {
+                    count++;
+                }
+            })
+            return resolve(count);
+        }).catch((e) => {
+            reject(e);
+        }
+        )
+    })
+}
+
+
