@@ -27,7 +27,7 @@ export function getStudentWithID(
     })
 }
 
-export function getAllStudents(): 
+export function getAllStudents() :
 Promise<Array<Student>> {
     return new Promise((resolve, reject) => {
         getDocs(collection(db, "Students")).then((snap) => {
@@ -43,7 +43,6 @@ Promise<Array<Student>> {
         })
     })  
 }
-    
 export function getCurrentUser(): Promise<RISEUser> {
     return new Promise((resolve, reject) => {
       const user = getAuth(app).currentUser;
