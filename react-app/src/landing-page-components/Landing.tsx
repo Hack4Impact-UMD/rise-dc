@@ -22,7 +22,7 @@ const Landing = () => {
 
   return (
     <div className={styles.landing}>
-      <NavBar title="title"></NavBar>
+      <NavBar title=""></NavBar>
       <Header name={user.name} role={user.type}/>
       <div className={styles.content}>
         <div className={styles.calendar}>
