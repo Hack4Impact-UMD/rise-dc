@@ -15,7 +15,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Landing />} />
           <Route
             path="/landing"
             element={<RequireAuth children={<Landing />} />}

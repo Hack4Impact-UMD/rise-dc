@@ -8,12 +8,22 @@ import Students from "./Students/Students";
 import Calendar from "./Calendar/Calendar";
 import NavBar from "../navbar/Navbar";
 import styles from "./Landing.module.css";
+import { getCurrentUser } from "../backend/FirestoreCalls";
+import { RISEUser } from "../types/UserType";
+
+
 
 const Landing = () => {
+  let user: RISEUser = {} as RISEUser;
+  const getUser = async () => {
+    user = await getCurrentUser();
+  };
+  getUser();
+
   return (
     <div className={styles.landing}>
       <NavBar title="title"></NavBar>
-      <Header />
+      <Header name={user.name} role={user.type}/>
       <div className={styles.content}>
         <div className={styles.calendar}>
           {" "}
@@ -36,3 +46,7 @@ const Landing = () => {
 };
 
 export default Landing;
+
+function setFailureMessage(arg0: string) {
+  throw new Error("Function not implemented.");
+}
