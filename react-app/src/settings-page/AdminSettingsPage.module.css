@@ -72,7 +72,7 @@
   background-color: #ffffff;
   margin-top: 20px;
   margin-bottom: 20px;
-  height: 310px;
+  padding-bottom: 20px;
   width: 620px;
   max-height: 100%;
   max-width: 100%;
@@ -139,6 +139,7 @@ input::placeholder {
 
 .adminForm {
   overflow-y: scroll;
+  overflow: hidden;
   margin-bottom: 20px;
 }
 
