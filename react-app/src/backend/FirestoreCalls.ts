@@ -27,7 +27,7 @@ export function getStudentWithID(
     })
 }
 
-export function getAllStudents(): 
+export function getAllStudents() :
 Promise<Array<Student>> {
     return new Promise((resolve, reject) => {
         getDocs(collection(db, "Students")).then((snap) => {
@@ -92,4 +92,21 @@ export function storeLog(log: Log): Promise<void> {
                 return Promise.reject(e)
         })
     });
+}
+
+export function getRecentLogs(): Promise<Array<Log>> {
+    return new Promise((resolve, reject) => {
+        getDocs(collection(db, "Logs")).then((snap) => {
+            const docs = snap.docs;
+            docs.sort((a, b) => (a.data().date > b.data().date) ? 1 : -1);
+            const logs: Log[] = [];
+            const length = Math.min(5, docs.length);
+            for (let i = 0; i < length; i++) {
+                logs.push(docs[i].data() as Log);
+            }
+            return resolve(logs);
+        }).catch((e) => {
+            reject(e);
+        })
+    })  
 }
