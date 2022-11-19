@@ -7,7 +7,6 @@ admin.initializeApp();
  *
  * Arguments:
  * email: string
- * password: string
  * role: string (Options: "admin", "user")
  */
 exports.createUser = functions.https.onCall((data, context) => {
@@ -35,7 +34,7 @@ exports.createUser = functions.https.onCall((data, context) => {
 
   // Check that arguments exist.
   // TODO: improve data validation
-  if (data.email == null || data.password == null || data.role == null) {
+  if (data.email == null || data.role == null) {
     throw new functions.https.HttpsError(
         "invalid-argument",
         "Missing arguments. Request must include email, password, and role."
@@ -45,7 +44,7 @@ exports.createUser = functions.https.onCall((data, context) => {
   auth
       .createUser({
         email: data.email,
-        password: data.password,
+        password: "defaultpassword",
       })
       .then((userRecord) => {
         auth.setCustomUserClaims(userRecord.uid, {role: data.role});
@@ -105,6 +104,19 @@ exports.createFirstAdmin = functions.https.onRequest((req, res) => {
       })
       .catch((error) => {
         res.json({result: "Operation Failed:" + error});
+      });
+});
+
+exports.getUserRole = functions.https.onRequest((req, res) => {
+  const auth = admin.auth();
+  auth
+      .getUserByEmail(req.email)
+      .then((userRecord) => {
+        const role = userRecord.customClaims["role"];
+        res.json({result: `role for ${req.email} is ${role}`});
+      })
+      .catch((error) => {
+        res.json({result: error});
       });
 });
 
