@@ -11,7 +11,6 @@ const DummyLogin: React.FC<any> = () => {
   const [password, setPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
   // storeLog(Timestamp.fromDate(new Date("December 10, 1815")), 1, "test1", "test2", "test3", "test4", "test5");
-
   const navigate = useNavigate();
   const auth = useAuth();
   const firebaseAuth = getAuth(app);
