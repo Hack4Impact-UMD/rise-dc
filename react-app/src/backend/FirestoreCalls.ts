@@ -1,4 +1,4 @@
-import {doc, collection, addDoc, getDoc, query, where, getDocs} from "firebase/firestore"
+import {doc, collection, addDoc, getDoc, query, where, getDocs, Timestamp} from "firebase/firestore"
 import {Student} from "../types/StudentType"
 import {Logs} from "../types/types"
 import {db} from "../config/firebase";
@@ -92,4 +92,24 @@ export function storeLog(log: Log): Promise<void> {
                 return Promise.reject(e)
         })
     });
+}
+
+export function getLogsTimeframe(start: Date, end: Date): Promise<Array<Log>> {
+    return new Promise((resolve, reject) => {
+        getDocs(collection(db, "Logs")).then((snap) => {
+            const docs = snap.docs;
+            docs.sort((a, b) => (a.data().date > b.data().date) ? 1 : -1);
+            const logs: Log[] = [];
+
+            docs.forEach((doc) => {
+                const log = doc.data() as Log;
+                if (log.date >= start && log.date <= end) {
+                    logs.push(log);
+                }
+            });
+            return resolve(logs);
+        }).catch((e) => {
+            reject(e);
+        })
+    })  
 }
