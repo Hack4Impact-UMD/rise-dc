@@ -110,3 +110,26 @@ export function getRecentLogs(): Promise<Array<Log>> {
         })
     })  
 }
+
+export function sendNewAccountCreatedEmail(email: string, message: string) {
+    const functions = require('firebase-functions');
+    const admin = require('firebase-admin');
+    admin.initializeApp();
+    const mailTransport = require('nodemailer').createTransport({
+        service: 'gmail',
+        auth: {
+            user: functions.config().gmail.email,
+            pass: functions.config().gmail.password,
+        },
+    });
+    const mailOptions = {
+        from: '"RISE" < >',
+        to: email,
+        subject: "Welcome to RISE!",
+        text: message
+    };
+    return mailTransport.sendMail(mailOptions).then(() => {
+        return console.log('New welcome email sent to:', email);
+    }
+    );
+}
