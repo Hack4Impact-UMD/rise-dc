@@ -93,3 +93,18 @@ export function storeLog(log: Log): Promise<void> {
         })
     });
 }
+
+
+
+export function countHISessions(logs: Array<Log>): Promise<number> {
+    return new Promise((resolve, reject) => {
+        let count = 0;
+        logs.forEach((log) => {
+            let minutes = Buffer.from(log.duration_minutes).readUIntBE(0, length);
+            if(minutes >= 30) {
+                count++;
+            }
+        })
+        return resolve(count);
+    })
+}
