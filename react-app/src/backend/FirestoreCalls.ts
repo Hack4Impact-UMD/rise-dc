@@ -1,4 +1,4 @@
-import {doc, collection, addDoc, getDoc, query, where, getDocs} from "firebase/firestore"
+import {doc, collection, addDoc, getDoc, query, where, getDocs, Timestamp} from "firebase/firestore"
 import {Student} from "../types/StudentType"
 import {db} from "../config/firebase";
 import {Log} from "../types/LogType"
@@ -94,12 +94,33 @@ export function storeLog(log: Log): Promise<void> {
     });
 }
 
+export function getLogsTimeframe(start: Date, end: Date): Promise<Array<Log>> {
+    return new Promise((resolve, reject) => {
+        getDocs(collection(db, "Logs")).then((snap) => {
+            const docs = snap.docs;
+            docs.sort((a, b) => (a.data().date > b.data().date) ? 1 : -1);
+            const logs: Log[] = [];
+
+            docs.forEach((doc) => {
+                const log = doc.data() as Log;
+                if (log.date >= start && log.date <= end) {
+                    logs.push(log);
+                }
+            });
+            return resolve(logs);
+        }).catch((e) => {
+            reject(e);
+        })
+    })  
+}
+
 export function getRecentLogs(): Promise<Array<Log>> {
     return new Promise((resolve, reject) => {
         getDocs(collection(db, "Logs")).then((snap) => {
             const docs = snap.docs;
             docs.sort((a, b) => (a.data().date > b.data().date) ? 1 : -1);
             const logs: Log[] = [];
+
             const length = Math.min(5, docs.length);
             for (let i = 0; i < length; i++) {
                 logs.push(docs[i].data() as Log);
@@ -110,6 +131,7 @@ export function getRecentLogs(): Promise<Array<Log>> {
         })
     })  
 }
+
 export function averageSessionLength(logs : Array<Log>) : number {
     let s = 0.0
     logs.forEach((log) => {
@@ -117,6 +139,7 @@ export function averageSessionLength(logs : Array<Log>) : number {
     })
     return s/logs.length
 }
+
 export function hoursSpent(logs : Array<Log>) : SubjectHours {
     let hrs = {
         english_hours : 0,
