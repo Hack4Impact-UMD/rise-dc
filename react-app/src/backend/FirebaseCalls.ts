@@ -1,5 +1,5 @@
 import { AuthError, User } from "@firebase/auth";
-import { signInWithEmailAndPassword, getAuth, updateEmail, updatePassword, sendPasswordResetEmail} from "firebase/auth";
+import { signInWithEmailAndPassword, getAuth, signOut, updateEmail, updatePassword, sendPasswordResetEmail} from "firebase/auth";
 import app from '../config/firebase'
 
 export function authenticateUser(email: string, password: string): Promise<User> {
@@ -13,4 +13,15 @@ export function authenticateUser(email: string, password: string): Promise<User>
           reject(error);
         });
     });
+}
+
+export function logOut() : Promise<void> {
+    return new Promise((resolve, reject) => {
+        const auth = getAuth(app);
+        signOut(auth).then(() => {
+            resolve();
+        }).catch((error) => {
+            reject(error);
+        })
+    })
 }
