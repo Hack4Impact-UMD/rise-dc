@@ -3,7 +3,7 @@
 .navbar {
   display: flex;
   position: absolute;
-  padding: 5vh 2vh 3vh 1vh;
+  padding: 5vh 0vh 3vh 0vh;
   width: 100%;
 }
 
