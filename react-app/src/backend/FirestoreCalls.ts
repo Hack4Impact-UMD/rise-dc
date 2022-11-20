@@ -94,6 +94,20 @@ export function storeLog(log: Log): Promise<void> {
     });
 }
 
+
+
+export function countHISessions(logs: Array<Log>): Promise<number> {
+    return new Promise((resolve, reject) => {
+        let count = 0;
+        logs.forEach((log) => {
+            let minutes = log.duration_minutes;
+            if(minutes >= 30) {
+                count++;
+            }
+        })
+        return resolve(count);
+    })
+}
 export function getLogsTimeframe(start: Date, end: Date): Promise<Array<Log>> {
     return new Promise((resolve, reject) => {
         getDocs(collection(db, "Logs")).then((snap) => {
