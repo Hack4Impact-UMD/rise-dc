@@ -100,7 +100,7 @@ export function countHISessions(logs: Array<Log>): Promise<number> {
     return new Promise((resolve, reject) => {
         let count = 0;
         logs.forEach((log) => {
-            let minutes = Buffer.from(log.duration_minutes).readUIntBE(0, length);
+            let minutes = log.duration_minutes;
             if(minutes >= 30) {
                 count++;
             }
