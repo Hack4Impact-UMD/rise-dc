@@ -1,4 +1,4 @@
-import {doc, collection, addDoc, getDoc, query, where, getDocs} from "firebase/firestore"
+import {doc, collection, addDoc, getDoc, query, where, getDocs, getCountFromServer} from "firebase/firestore"
 import {Student} from "../types/StudentType"
 import {Logs} from "../types/types"
 import {db} from "../config/firebase";
@@ -94,26 +94,33 @@ export function storeLog(log: Log): Promise<void> {
     });
 }
 
-export function countMentorTutor(): Promise<number> {
+export function countMentors(): Promise<number> {
+    const usersRef = collection(db, "Users");
+    const mentorQuery = query(usersRef, where("type", "==", "MENTOR"));
+
     return new Promise((resolve, reject) => {
-        getDocs(collection(db, "Users")).then((snap) => {
-            const users = snap.docs.map(doc =>
-                {
-                    let user : RISEUser = doc.data() as RISEUser
-                    return user
-                })
-            let count = 0;
-            users.forEach((user) => {
-                if(user.type === "MENTOR" || user.type === "TUTOR") {
-                    count++;
-                }
-            })
-            return resolve(count);
-        }).catch((e) => {
-            reject(e);
-        }
-        )
-    })
+        getCountFromServer(mentorQuery)
+        .then((snapshot) => {
+            resolve(snapshot.data().count);
+        })
+        .catch((error) => {
+            reject(error);
+        });
+    });
 }
 
+export function countTutors(): Promise<number> {
+    const usersRef = collection(db, "Users")
+    const mentorQuery = query(usersRef, where("type", "==", "TUTOR"))
+
+    return new Promise((resolve, reject) => {
+        getCountFromServer(mentorQuery)
+        .then((snapshot) => {
+            resolve(snapshot.data().count);
+        })
+        .catch((error) => {
+            reject(error);
+        });
+    }
+}
 
