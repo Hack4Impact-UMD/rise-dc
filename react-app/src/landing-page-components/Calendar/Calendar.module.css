@@ -17,8 +17,8 @@
   padding-right: 0.25rem;
 }
 
-.calendar:hover {
-  border: 1.5px solid;
+.calendar-box:hover {
+  background-color: #CBEBF8;
   cursor: pointer;
 }
 

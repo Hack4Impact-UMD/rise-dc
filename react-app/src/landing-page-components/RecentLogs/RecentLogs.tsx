@@ -30,9 +30,6 @@ const RecentLogs = ({ props }: any) => {
         </div>
         <img src={Arrow} alt="Arrow" className={styles.arrow} />
       </button>
-      <a className={styles.viewMore} href={props}>
-        View More
-      </a>
     </div>
   );
 };
