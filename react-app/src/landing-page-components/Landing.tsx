@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { getAuth } from "firebase/auth";
 import Header from "./Header/Header";
 import RecentLogs from "./RecentLogs/RecentLogs";
@@ -14,16 +14,19 @@ import { RISEUser } from "../types/UserType";
 
 
 const Landing = () => {
-  let user: RISEUser = {} as RISEUser;
-  const getUser = async () => {
-    user = await getCurrentUser();
-  };
-  getUser();
+  
+  const [user, setUser] = useState<RISEUser>();
+
+  useEffect(() => {
+    getCurrentUser().then((user) => {
+      setUser(user);
+    }).catch((e) => console.log(e));
+  }, [])
 
   return (
     <div className={styles.landing}>
       <NavBar title=""></NavBar>
-      <Header name={user.name} role={user.type}/>
+      <Header name={user?.name || ""} role={user?.type || ""}/>
       <div className={styles.content}>
         <div className={styles.calendar}>
           {" "}
