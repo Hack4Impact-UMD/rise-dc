@@ -7,13 +7,13 @@ export default function SettingsForm() {
   return (
     <div className={styles.form}>
       <h4 className={styles.profile}>Profile</h4>
-      {ResetEmailForm()}
-      {ResetPasswordForm()}
+      {ResetEmailForm(false)}
+      {ResetPasswordForm(false)}
     </div>
   );
 }
 
-function ResetEmailForm() {
+function ResetEmailForm(error: boolean) {
   const [value, setValue] = useState("");
 
   function handleTextAreaChange(event: any) {
@@ -37,6 +37,7 @@ function ResetEmailForm() {
           placeholder="Enter email address"
           value={value}
           onChange={handleTextAreaChange}
+          style={error ? { borderColor: "red" } : {}}
         />
         <ResetButton />
       </div>
@@ -45,7 +46,7 @@ function ResetEmailForm() {
 }
 
 // TODO: improve error messaging
-function ResetPasswordForm() {
+function ResetPasswordForm(error: boolean) {
   //TODO: update this state handling to match AdminSettingsPage account
   // creation.
   const [currPass, setCurrPass] = useState("");
@@ -84,6 +85,7 @@ function ResetPasswordForm() {
         placeholder="Enter current password"
         value={currPass}
         onChange={handleCurrPassChange}
+        style={error ? { borderColor: "red" } : {}}
       />
       <input
         className={styles.input}
@@ -91,6 +93,7 @@ function ResetPasswordForm() {
         placeholder="Enter new password"
         value={newPass}
         onChange={handleNewPassChange}
+        style={error ? { borderColor: "red" } : {}}
       />
       <div className={styles.buttonContainer}>
         <input
@@ -99,6 +102,7 @@ function ResetPasswordForm() {
           placeholder="Confirm new password"
           value={confirmNewPass}
           onChange={handleConfirmNewPassChange}
+          style={error ? { borderColor: "red" } : {}}
         />
         <ResetButton />
       </div>

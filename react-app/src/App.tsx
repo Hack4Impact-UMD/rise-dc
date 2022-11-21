@@ -27,7 +27,7 @@ function App() {
           />
           <Route
             path="/settings"
-            element={<RequireAdminAuth children={<AdminSettingsPage />} />}
+            element={<RequireAuth children={<AdminSettingsPage />} />}
           />
         </Routes>
       </BrowserRouter>

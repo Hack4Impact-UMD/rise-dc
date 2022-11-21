@@ -13,6 +13,7 @@ interface TextFieldProps {
   isDisabled?: boolean;
   onChange: (val: string) => void;
   onSubmit?: () => void;
+  error: boolean;
 }
 
 const LoginTextField: React.FC<TextFieldProps> = ({
@@ -21,6 +22,7 @@ const LoginTextField: React.FC<TextFieldProps> = ({
   isDisabled,
   onChange,
   onSubmit = () => {},
+  error,
 }) => {
   return (
     <div className={styles.container}>
@@ -34,6 +36,7 @@ const LoginTextField: React.FC<TextFieldProps> = ({
             onSubmit();
           }
         }}
+        style={error ? { borderColor: "red" } : {}}
       />
     </div>
   );
