@@ -6,4 +6,5 @@ export type Log = {
     subject : string,
     summary : string,
     type : string
+    student_id : string
 }

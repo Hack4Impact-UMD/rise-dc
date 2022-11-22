@@ -1,4 +1,4 @@
-import {doc, collection, addDoc, getDoc, query, where, getDocs} from "firebase/firestore"
+import {doc, collection, addDoc, getDoc, query, where, getDocs, QuerySnapshot} from "firebase/firestore"
 import {Student} from "../types/StudentType"
 import {Logs} from "../types/types"
 import {db} from "../config/firebase";
@@ -109,4 +109,17 @@ export function getRecentLogs(): Promise<Array<Log>> {
             reject(e);
         })
     })  
+}
+
+export function getLogsByTimeframe(s : Student, sd : Date, ed : Date) : Promise<Array<Log>> {
+    const filterStudent = query(collection(db, "Logs"), where("student_id", "==", s.id))
+    const filterStartDate = query(filterStudent, where("date", ">=", sd))
+    const filterEndDate = query(filterStartDate, where("date", "<=", ed))
+    return new Promise((resolve, reject) => {
+        getDocs(filterEndDate).then((querySnapshot) => {
+            return resolve(querySnapshot.docs.map((doc) => doc.data() as Log))
+        }).catch((e) => {
+            return Promise.reject(e)
+        })
+    })
 }
