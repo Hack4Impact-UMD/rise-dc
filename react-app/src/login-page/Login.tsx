@@ -13,6 +13,10 @@ const LoginPage: React.FC<any> = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [failureMessage, setFailureMessage] = useState<string>("");
+  const [error, setError] = useState<{ email: boolean; password: boolean }>({
+    email: false,
+    password: false,
+  });
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const navigate = useNavigate();
@@ -28,16 +32,18 @@ const LoginPage: React.FC<any> = () => {
           setFailureMessage(
             "Account does not exist. Make sure your email is correct."
           );
+          setError({ email: true, password: false });
         } else if (code === "auth/wrong-password") {
           setFailureMessage("Incorrect Password");
+          setError({ email: false, password: true });
         } else if (code === "auth/too-many-requests") {
           setFailureMessage(
             "Access to this account has been temporarily disabled due to many failed login attempts. You can reset your password or try again later."
           );
+          setError({ email: true, password: true });
         } else {
-          setFailureMessage(
-            "Make sure your email is correct. If that does not work, please try again later."
-          );
+          setFailureMessage("Incorrect email or password");
+          setError({ email: true, password: true });
         }
       });
   };
@@ -53,27 +59,33 @@ const LoginPage: React.FC<any> = () => {
     <div className={styles.container}>
       <div className={styles.card}>
         <img className={styles.logo} src={logo} />
+        <p className={styles.error}>{failureMessage}</p>
         <div className={styles.content}>
           <TextField
             header="Email"
             isDisabled={isLoading}
             fieldType={TextFieldTypes.email}
-            onChange={(val) => setEmail(val)}
+            onChange={(val) => {
+              setEmail(val);
+              setError({ ...error, email: false });
+            }}
             onSubmit={login}
-            error={failureMessage !== ""}
+            error={error.email}
           />
           <TextField
             header="Password"
             isDisabled={isLoading}
             fieldType={TextFieldTypes.password}
-            onChange={(val) => setPassword(val)}
+            onChange={(val) => {
+              setPassword(val);
+              setError({ ...error, password: false });
+            }}
             onSubmit={login}
-            error={failureMessage !== ""}
+            error={error.password}
           />
           <a href="" className={styles.forgot}>
             Forgot Password?
           </a>
-          <p className={styles.error}>{failureMessage}</p>
         </div>
 
         <Button text="Login" isDisabled={isLoading} handleClick={login} />

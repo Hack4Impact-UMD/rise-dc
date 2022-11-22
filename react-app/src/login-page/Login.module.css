@@ -37,7 +37,7 @@
   text-align: center;
   font-family: "Libre Franklin";
   font-size: 0.8rem;
-  margin-top: 10px;
+  margin: 10px 0 15px 0;
 }
 
 .forgot {
@@ -59,9 +59,13 @@
   margin: 25px 0;
 }
 
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 600px) {
   .container {
-    justify-content: normal;
+    justify-content: center;
+  }
+  .card {
+    width: 60vw;
+    padding: 0;
   }
 }
 
@@ -69,6 +73,9 @@
   .container {
     align-items: normal;
     padding: 20px 0;
+  }
+  .card {
+    padding: 20px 10px;
   }
   .error {
     font-size: 0.7rem;
