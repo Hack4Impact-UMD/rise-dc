@@ -3,7 +3,6 @@ import app from "../config/firebase";
 import { getAuth, signInWithEmailAndPassword, AuthError } from "firebase/auth";
 import { useAuth } from "../auth/AuthProvider";
 import { useNavigate } from "react-router-dom";
-//
 import { Timestamp } from "firebase/firestore";
 import storeLog from "../session-logs/store-log";
 const DummyLogin: React.FC<any> = () => {

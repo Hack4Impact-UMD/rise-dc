@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.5.2",
     "@types/node": "^16.11.62",
+    "dayjs": "^1.11.6",
     "firebase": "^9.10.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

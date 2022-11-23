@@ -1,0 +1,25 @@
+.collapse {
+  width: 200px;
+  height: 40px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 3rem 1rem 3rem;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+  border-radius: 15px;
+  border-style: none;
+  background-color: #a0b9dc;
+  font-family: "Libre Franklin";
+  font-size: 0.9rem;
+}
+.collapse:hover {
+  background-color: #cbebf8;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 800px) {
+  .collapse {
+    height: 35px;
+  }
+}
