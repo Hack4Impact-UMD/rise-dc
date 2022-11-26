@@ -18,7 +18,7 @@ export const LoginButton: React.FC<ButtonProps> = ({
       disabled={isDisabled}
       onClick={handleClick}
     >
-      {text}
+      {isDisabled ? <div className={styles.spinner}></div> : text}
     </button>
   );
 };

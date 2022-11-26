@@ -2,15 +2,17 @@
   width: 31vh;
   min-width: 180px;
   height: 2vh;
-  border: 1.4px lightgrey solid;
-  outline: none;
   padding: 0.53rem 0 0.53rem 1.6vh;
   margin: 5px 0;
+  border: 1.4px lightgrey solid;
   border-radius: 1.4rem;
+  outline: none;
   font-size: 0.76rem;
+  font-family: "Libre Franklin";
 }
 
 .header {
+  font-family: "Libre Franklin";
   font-size: 0.8rem;
   margin-left: 1.6vh;
 }

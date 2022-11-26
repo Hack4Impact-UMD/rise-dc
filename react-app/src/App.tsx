@@ -15,7 +15,7 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<RequireAuth children={<Landing />} />} />
+          <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route
             path="/landing"

@@ -7,44 +7,43 @@ import Button from "./Button/Button";
 import logo from "./assets/rise-dc-logo.png";
 import styles from "./Login.module.css";
 import { AuthError } from "@firebase/auth";
-import { classicNameResolver } from "typescript";
+import ForgotPassword from "./ForgotPasswordModal/ForgotPassword";
 
 const LoginPage: React.FC<any> = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [failureMessage, setFailureMessage] = useState<string>("");
-  const [error, setError] = useState<{ email: boolean; password: boolean }>({
-    email: false,
-    password: false,
-  });
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [openForgotModal, setOpenForgotModal] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
   const login = () => {
     authenticateUser(email, password)
       .then(() => {
-        navigate("/landing");
+        setTimeout(() => {
+          setIsLoading(false);
+          navigate("/landing");
+        }, 300);
       })
       .catch((error) => {
-        let code = (error as AuthError).code;
-        if (code === "auth/user-not-found") {
-          setFailureMessage(
-            "Account does not exist. Make sure your email is correct."
-          );
-          setError({ email: true, password: false });
-        } else if (code === "auth/wrong-password") {
-          setFailureMessage("Incorrect Password");
-          setError({ email: false, password: true });
-        } else if (code === "auth/too-many-requests") {
-          setFailureMessage(
-            "Access to this account has been temporarily disabled due to many failed login attempts. You can reset your password or try again later."
-          );
-          setError({ email: true, password: true });
-        } else {
-          setFailureMessage("Incorrect email or password");
-          setError({ email: true, password: true });
-        }
+        setTimeout(() => {
+          let code = (error as AuthError).code;
+          if (code === "auth/user-not-found") {
+            setFailureMessage(
+              "Account does not exist. Make sure your email is correct."
+            );
+          } else if (code === "auth/wrong-password") {
+            setFailureMessage("Incorrect Password");
+          } else if (code === "auth/too-many-requests") {
+            setFailureMessage(
+              "Access to this account has been temporarily disabled due to many failed login attempts. You can reset your password or try again later."
+            );
+          } else {
+            setFailureMessage("Incorrect email or password");
+          }
+          setIsLoading(false);
+        }, 300);
       });
   };
 
@@ -67,10 +66,9 @@ const LoginPage: React.FC<any> = () => {
             fieldType={TextFieldTypes.email}
             onChange={(val) => {
               setEmail(val);
-              setError({ ...error, email: false });
             }}
             onSubmit={login}
-            error={error.email}
+            error={failureMessage != ""}
           />
           <TextField
             header="Password"
@@ -78,17 +76,30 @@ const LoginPage: React.FC<any> = () => {
             fieldType={TextFieldTypes.password}
             onChange={(val) => {
               setPassword(val);
-              setError({ ...error, password: false });
             }}
             onSubmit={login}
-            error={error.password}
+            error={failureMessage != ""}
           />
-          <a href="" className={styles.forgot}>
+          <button
+            onClick={() => setOpenForgotModal(!openForgotModal)}
+            className={styles.forgot}
+          >
             Forgot Password?
-          </a>
+          </button>
+          <ForgotPassword
+            open={openForgotModal}
+            onClose={() => setOpenForgotModal(!openForgotModal)}
+          />
         </div>
 
-        <Button text="Login" isDisabled={isLoading} handleClick={login} />
+        <Button
+          text="Login"
+          isDisabled={isLoading}
+          handleClick={() => {
+            setIsLoading(true);
+            login();
+          }}
+        />
       </div>
     </div>
   );
