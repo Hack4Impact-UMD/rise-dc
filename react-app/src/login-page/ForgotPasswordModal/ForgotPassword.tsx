@@ -1,13 +1,13 @@
-import styles from "./ForgotPassword.module.css";
+import { useState } from "react";
 import Modal from "../../ModalWrapper/Modal";
 import TextField, { TextFieldTypes } from "../TextField/TextField";
-import { useState } from "react";
 import { sendResetEmail } from "../../backend/FirebaseCalls";
 import { AuthError } from "firebase/auth";
+import styles from "./ForgotPassword.module.css";
 
 type forgotModalType = {
   open: boolean;
-  onClose: React.MouseEventHandler<HTMLButtonElement>;
+  onClose: any;
 };
 
 const ForgotPassword = ({ open, onClose }: forgotModalType) => {
@@ -16,9 +16,9 @@ const ForgotPassword = ({ open, onClose }: forgotModalType) => {
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const handlePasswordReset = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handlePasswordReset = () => {
     if (submitted) {
-      handleOnClose(e);
+      handleOnClose();
     } else {
       sendResetEmail(email)
         .then(() => {
@@ -45,8 +45,8 @@ const ForgotPassword = ({ open, onClose }: forgotModalType) => {
     }
   };
 
-  const handleOnClose = (e: React.MouseEvent<HTMLButtonElement>) => {
-    onClose(e);
+  const handleOnClose = () => {
+    onClose();
     setSubmitted(false);
     setErrorEmail("");
     setLoading(false);
@@ -55,7 +55,7 @@ const ForgotPassword = ({ open, onClose }: forgotModalType) => {
   return (
     <Modal
       open={open}
-      onClose={(e: React.MouseEvent<HTMLButtonElement>) => handleOnClose(e)}
+      onClose={(e: React.MouseEvent<HTMLButtonElement>) => handleOnClose()}
     >
       <>
         <div className={styles.content}>
@@ -66,14 +66,22 @@ const ForgotPassword = ({ open, onClose }: forgotModalType) => {
           ) : (
             <>
               <p className={styles.error}>{errorEmail ? errorEmail : ""}</p>
-              <TextField
-                header="Email"
-                fieldType={TextFieldTypes.email}
-                onChange={(val) => {
-                  setEmail(val);
+              <form
+                onSubmit={(event) => {
+                  event.preventDefault();
+                  setLoading(true);
+                  handlePasswordReset();
                 }}
-                error={errorEmail != ""}
-              />
+              >
+                <TextField
+                  header="Email"
+                  fieldType={TextFieldTypes.email}
+                  onChange={(val) => {
+                    setEmail(val);
+                  }}
+                  error={errorEmail != ""}
+                />
+              </form>
             </>
           )}
         </div>
@@ -83,7 +91,7 @@ const ForgotPassword = ({ open, onClose }: forgotModalType) => {
               className={styles.resetButton}
               onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                 setLoading(true);
-                handlePasswordReset(e);
+                handlePasswordReset();
               }}
               disabled={loading}
             >

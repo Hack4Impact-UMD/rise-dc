@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Button from "./Button/Button";
+import ForgotPassword from "./ForgotPasswordModal/ForgotPassword";
+import TextField, { TextFieldTypes } from "./TextField/TextField";
 import { authenticateUser } from "../backend/FirebaseCalls";
 import { logOut } from "../backend/FirebaseCalls";
-import TextField, { TextFieldTypes } from "./TextField/TextField";
-import Button from "./Button/Button";
+import { AuthError } from "@firebase/auth";
 import logo from "./assets/rise-dc-logo.png";
 import styles from "./Login.module.css";
-import { AuthError } from "@firebase/auth";
-import ForgotPassword from "./ForgotPasswordModal/ForgotPassword";
 
 const LoginPage: React.FC<any> = () => {
   const [email, setEmail] = useState<string>("");
@@ -60,26 +60,33 @@ const LoginPage: React.FC<any> = () => {
         <img className={styles.logo} src={logo} />
         <p className={styles.error}>{failureMessage}</p>
         <div className={styles.content}>
-          <TextField
-            header="Email"
-            isDisabled={isLoading}
-            fieldType={TextFieldTypes.email}
-            onChange={(val) => {
-              setEmail(val);
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+              setIsLoading(true);
+              login();
             }}
-            onSubmit={login}
-            error={failureMessage != ""}
-          />
-          <TextField
-            header="Password"
-            isDisabled={isLoading}
-            fieldType={TextFieldTypes.password}
-            onChange={(val) => {
-              setPassword(val);
-            }}
-            onSubmit={login}
-            error={failureMessage != ""}
-          />
+          >
+            <TextField
+              header="Email"
+              isDisabled={isLoading}
+              fieldType={TextFieldTypes.email}
+              onChange={(val) => {
+                setEmail(val);
+              }}
+              error={failureMessage != ""}
+            />
+            <TextField
+              header="Password"
+              isDisabled={isLoading}
+              fieldType={TextFieldTypes.password}
+              onChange={(val) => {
+                setPassword(val);
+              }}
+              error={failureMessage != ""}
+            />
+            <button style={{ display: "none" }}></button>
+          </form>
           <button
             onClick={() => setOpenForgotModal(!openForgotModal)}
             className={styles.forgot}
