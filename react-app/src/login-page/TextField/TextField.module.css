@@ -1,16 +1,16 @@
 .container input {
   width: 31vh;
+  min-width: 180px;
   height: 2vh;
-  border: 0.2vh lightgrey solid;
+  border: 1.4px lightgrey solid;
   outline: none;
-
-  padding: 1.3vh 1.3vh;
-  margin-top: 0.8vh;
+  padding: 0.53rem 0 0.53rem 1.6vh;
+  margin: 5px 0;
   border-radius: 1.4rem;
-  font-size: 1.7vh;
+  font-size: 0.76rem;
 }
 
 .header {
-  font-size: 1.8vh;
-  margin-left: 1.2vh;
+  font-size: 0.8rem;
+  margin-left: 1.6vh;
 }
