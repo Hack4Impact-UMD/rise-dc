@@ -8,6 +8,8 @@ export type Log = {
     subject : Subject,
     summary : string,
     type : string
+    student_id : string
 }
 
 export type Subject = "ENGLISH" | "MATH" | "SOCIAL STUDIES" | "HUMANITIES" | "SCIENCE"
+

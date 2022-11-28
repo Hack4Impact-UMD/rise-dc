@@ -174,6 +174,19 @@ export function getRecentLogs(): Promise<Array<Log>> {
     })  
 }
 
+export function getLogsByTimeframe(s : Student, sd : Date, ed : Date) : Promise<Array<Log>> {
+    const filterStudent = query(collection(db, "Logs"), where("student_id", "==", s.id))
+    const filterStartDate = query(filterStudent, where("date", ">=", sd))
+    const filterEndDate = query(filterStartDate, where("date", "<=", ed))
+    return new Promise((resolve, reject) => {
+        getDocs(filterEndDate).then((querySnapshot) => {
+            return resolve(querySnapshot.docs.map((doc) => doc.data() as Log))
+        }).catch((e) => {
+            return Promise.reject(e)
+        })
+    })
+}
+
 export function logsToWeeks(): Promise<Array<any>> {
     return new Promise((resolve, reject) => {
         getDocs(collection(db, "Logs")).then((snap) => {
