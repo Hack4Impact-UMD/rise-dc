@@ -1,15 +1,22 @@
 .loginBtn {
   width: 34vh;
-  height: 5vh;
+  min-width: 190px;
+  height: 35px;
   border: none;
   color: black;
-  font-size: 1.8vh;
+  font-size: 0.8rem;
   background-color: #a0b9dc;
-  margin-top: 20px;
+  margin: 20px 0;
   border-radius: 1.6rem;
 }
 
 .loginBtn:hover {
   background-color: rgb(203, 235, 248);
   cursor: pointer;
+}
+
+@media screen and (max-height: 500px) {
+  .loginBtn {
+    padding: 8px 0;
+  }
 }
