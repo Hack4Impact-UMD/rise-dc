@@ -1,4 +1,4 @@
-import {doc, collection, addDoc, getDoc, query, where, getDocs, Timestamp, getCountFromServer} from "firebase/firestore"
+import {doc, collection, addDoc, getDoc, query, where, getDocs, Timestamp} from "firebase/firestore"
 import {Student} from "../types/StudentType"
 import {db} from "../config/firebase";
 import {Log} from "../types/LogType"
@@ -99,8 +99,8 @@ export function countMentors(): Promise<number> {
     const mentorQuery = query(usersRef, where("type", "==", "MENTOR"));
 
     return new Promise((resolve, reject) => {
-        getCountFromServer(mentorQuery)
-        .then((snapshot) => {
+        getDocs(mentorQuery)
+        .then((snapshot:any) => {
             resolve(snapshot.data().count);
         })
         .catch((error) => {
@@ -114,15 +114,15 @@ export function countTutors(): Promise<number> {
     const mentorQuery = query(usersRef, where("type", "==", "TUTOR"))
 
     return new Promise((resolve, reject) => {
-        getCountFromServer(mentorQuery)
-        .then((snapshot) => {
+        getDocs(mentorQuery)
+        .then((snapshot:any) => {
             resolve(snapshot.data().count);
         })
         .catch((error) => {
             reject(error);
         });
     }
-}
+)}
 
 export function countHISessions(logs: Array<Log>): Promise<number> {
     return new Promise((resolve, reject) => {

@@ -1,4 +1,4 @@
-import Modal from "../Modal";
+import Modal from "../../../ModalWrapper/Modal";
 import styles from "./SaveModal.module.css";
 
 type saveModalPropsType = {
@@ -8,7 +8,6 @@ type saveModalPropsType = {
 
 const SaveModal = ({ open, onClose }: saveModalPropsType) => {
   const handleSaveLog = () => {};
-  console.log(styles);
   return (
     <Modal open={open} onClose={onClose}>
       <>

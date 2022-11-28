@@ -1,4 +1,4 @@
-import Modal from "../Modal";
+import Modal from "../../../ModalWrapper/Modal";
 import styles from "./CancelModal.module.css";
 
 type cancelModalPropsType = {
