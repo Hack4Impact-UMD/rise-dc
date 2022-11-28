@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./TextField.module.css";
 
 export enum TextFieldTypes {
@@ -30,7 +30,9 @@ const LoginTextField: React.FC<TextFieldProps> = ({
       <input
         disabled={isDisabled}
         type={fieldType}
-        onChange={({ target: { value } }) => onChange(value)}
+        onChange={({ target: { value } }) => {
+          onChange(value);
+        }}
         onKeyPress={(e) => {
           if (e.code === "Enter" || e.key === "Enter") {
             onSubmit();
