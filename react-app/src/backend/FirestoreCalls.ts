@@ -1,4 +1,4 @@
-import {doc, collection, addDoc, getDoc, query, where, getDocs, Timestamp, getCountFromServer} from "firebase/firestore"
+import {doc, collection, addDoc, getDoc, query, where, getDocs} from "firebase/firestore"
 import {Student} from "../types/StudentType"
 import {db} from "../config/firebase";
 import {Log} from "../types/LogType"
@@ -99,11 +99,11 @@ export function countMentors(): Promise<number> {
     const mentorQuery = query(usersRef, where("type", "==", "MENTOR"));
 
     return new Promise((resolve, reject) => {
-        getCountFromServer(mentorQuery)
-        .then((snapshot) => {
+        getDocs(mentorQuery)
+        .then((snapshot:any) => {
             resolve(snapshot.data().count);
         })
-        .catch((error) => {
+        .catch((error:any) => {
             reject(error);
         });
     });
@@ -114,14 +114,14 @@ export function countTutors(): Promise<number> {
     const mentorQuery = query(usersRef, where("type", "==", "TUTOR"))
 
     return new Promise((resolve, reject) => {
-        getCountFromServer(mentorQuery)
-        .then((snapshot) => {
+        getDocs(mentorQuery)
+        .then((snapshot:any) => {
             resolve(snapshot.data().count);
         })
-        .catch((error) => {
+        .catch((error:any) => {
             reject(error);
         });
-    }
+    })
 }
 
 export function countHISessions(logs: Array<Log>): Promise<number> {
@@ -167,6 +167,40 @@ export function getRecentLogs(): Promise<Array<Log>> {
             for (let i = 0; i < length; i++) {
                 logs.push(docs[i].data() as Log);
             }
+            return resolve(logs);
+        }).catch((e) => {
+            reject(e);
+        })
+    })  
+}
+
+export function logsToWeeks(): Promise<Array<any>> {
+    return new Promise((resolve, reject) => {
+        getDocs(collection(db, "Logs")).then((snap) => {
+            const docs = snap.docs;
+            docs.sort((a, b) => (a.data().date > b.data().date) ? 1 : -1);
+            const logs: any[] = [];
+
+            docs.forEach((doc) => {
+                const date = doc.data().date.toDate();
+                /* The closest Monday to the log date is found. So weeks are from Monday - Sunday*/
+                const officialDate = new Date(date);
+                const dateDay = officialDate.getDay();
+                const diff = officialDate.getDate() - dateDay + (dateDay == 0 ? -6:1); 
+                const mondayDate = new Date(officialDate.setDate(diff));
+                const month = mondayDate.getUTCMonth() + 1; //months from 1-12
+                const day = mondayDate.getUTCDate();
+                const year = mondayDate.getUTCFullYear();
+                const newDate = year + "/" + month + "/" + day;
+
+                if (logs.indexOf(newDate) == -1) {
+                    /* 
+                        Each log was posted on a certain week. The Monday in that week is found, and the 
+                        logs array contains those dates in a YYYY/MM/DD format.
+                    */
+                    logs.push(newDate)
+                }
+            });
             return resolve(logs);
         }).catch((e) => {
             reject(e);
