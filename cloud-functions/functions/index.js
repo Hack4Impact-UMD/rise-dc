@@ -52,6 +52,46 @@ exports.createUser = functions.https.onCall((data, context) => {
 });
 
 /*
+ * Deletes the given user
+ *
+ * Arguments:
+ * uid: string
+ */
+exports.deleteUser = functions.https.onCall((data, context) => {
+  const auth = admin.auth();
+
+  // Check if current user is authenticated.
+  if (context.auth.uid == null) {
+    throw new functions.https.HttpsError(
+        "unauthenticated",
+        "failed to authenticate request. ID token is missing or invalid."
+    );
+  }
+
+  // Check that current user is an admin.
+  auth
+      .getUser(context.auth.uid)
+      .then((userRecord) => {
+        if (userRecord.customClaims["role"] != "admin") {
+          throw new functions.https.HttpsError(
+              "permission-denied",
+              "Permission denied. Only admins can delete users."
+          );
+        }
+      });
+
+  auth.deleteUser(data.uid)
+      .then(() => {
+        functions.logger.log(`Deleted user with uid: ${data.uid}`);
+        return;
+      })
+      .catch((error) => {
+        functions.logger.error(error);
+        return error;
+      });
+});
+
+/*
 Takes argument of form {uid: string, role: string}
 Sets the role of user with the given uid to the given role
 */
