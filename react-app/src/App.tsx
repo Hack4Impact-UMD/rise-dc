@@ -9,6 +9,8 @@ import { AuthProvider } from "./auth/AuthProvider";
 import styles from "./App.module.css";
 import StudentProfile from "./student-profile/StudentProfile";
 import { logsToWeeks } from "./backend/FirestoreCalls";
+import Session from "./session-log-components/Session"
+import SearchPage from "./search-page/SearchPage";
 
 function App() {
   const s = styles;
@@ -30,6 +32,22 @@ function App() {
           <Route
             path="/settings"
             element={<RequireAdminAuth children={<AdminSettingsPage />} />}
+          />
+          <Route
+            path="/log"
+            element={<RequireAdminAuth children={<Session />} />}
+          />
+          <Route
+            path="/students"
+            element={<RequireAdminAuth children={<StudentProfile />} />}
+          />
+          <Route
+            path="/search"
+            element={<RequireAuth children={<SearchPage/>}/>}
+          />
+          <Route 
+            path="*"
+            element={<p>404 Page not found</p>}
           />
         </Routes>
       </BrowserRouter>
