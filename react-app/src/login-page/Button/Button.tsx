@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Button.module.css";
 
 interface ButtonProps {
@@ -13,13 +13,16 @@ export const LoginButton: React.FC<ButtonProps> = ({
   handleClick,
 }) => {
   return (
-    <button
-      className={styles.loginBtn}
-      disabled={isDisabled}
-      onClick={handleClick}
+    <form
+      onSubmit={(event) => {
+        event.preventDefault();
+        handleClick();
+      }}
     >
-      {text}
-    </button>
+      <button className={styles.loginBtn} disabled={isDisabled}>
+        {isDisabled ? <div className={styles.spinner}></div> : text}
+      </button>
+    </form>
   );
 };
 

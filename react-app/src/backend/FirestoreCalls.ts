@@ -1,9 +1,11 @@
-import {doc, collection, addDoc, getDoc, DocumentData, FirestoreError, DocumentSnapshot, DocumentReference, getDocFromCache, setDoc, getDocs} from "firebase/firestore"
-import { resolve } from "path";
+import {doc, collection, addDoc, getDoc, query, where, getDocs} from "firebase/firestore"
+import {Student} from "../types/StudentType"
 import {db} from "../config/firebase";
-import Students from "../landing-page-components/Students/Students";
-import {Student, Grades} from "../types/StudentType"
-import { Log } from "../types/LogType";
+import {Log} from "../types/LogType"
+import { getAuth } from "firebase/auth";
+import { RISEUser } from "../types/UserType";
+import { SubjectHours } from "../types/SubjectHoursType"
+import app from '../config/firebase'
 
 export function getStudentWithID(
     id : string
@@ -25,8 +27,8 @@ export function getStudentWithID(
     })
 }
 
-export function getAllLogs(
-): Promise<Log[]> {
+export function getAllStudents() :
+Promise<Array<Student>> {
     return new Promise((resolve, reject) => {
         getDocs(collection(db, "Logs")).then((snap) => {
             const logs = snap.docs.map(doc =>
@@ -37,6 +39,23 @@ export function getAllLogs(
         }).catch((e) => {
             reject(e);
         })
+    })  
+}
+export function getCurrentUser(): Promise<RISEUser> {
+    return new Promise((resolve, reject) => {
+      const user = getAuth(app).currentUser;
+      const usersRef = collection(db, "Users", )
+      if (user) {
+        getDocs(query(usersRef, where("firebase_id", "==", user.uid))).then((docs) => {
+            docs.forEach((doc) => {
+                return resolve(doc.data() as RISEUser);
+            });
+        }).catch((e) => {
+            return reject(e);
+        })
+      } else {
+        return reject(new Error("Error retrieving user"));
+      }
     })
 }
 
@@ -46,6 +65,18 @@ export function addStudent(student : Student) : Promise<void> {
             return resolve();
         }).catch(() => {
             return reject();
+        })
+    })
+} 
+
+export async function getStudentLogs(student_id : string) : Promise<Array<Log>> {
+    const q = query(collection(db, "Logs"), where("student_id", "==", student_id))
+    return new Promise((resolve, reject) => {
+        getDocs(q).then((querySnapshot) => {
+            return resolve(querySnapshot.docs.map((doc) => doc.data() as Log))
+        }
+        ).catch((e) => {
+            return reject(e)
         })
     })
 }
@@ -59,3 +90,174 @@ export function addLog(log : Log) : Promise<void> {
         })
     })
 }
+
+export function countMentors(): Promise<number> {
+    const usersRef = collection(db, "Users");
+    const mentorQuery = query(usersRef, where("type", "==", "MENTOR"));
+
+    return new Promise((resolve, reject) => {
+        getDocs(mentorQuery)
+        .then((snapshot:any) => {
+            resolve(snapshot.data().count);
+        })
+        .catch((error:any) => {
+            reject(error);
+        });
+    });
+}
+
+export function countTutors(): Promise<number> {
+    const usersRef = collection(db, "Users")
+    const mentorQuery = query(usersRef, where("type", "==", "TUTOR"))
+
+    return new Promise((resolve, reject) => {
+        getDocs(mentorQuery)
+        .then((snapshot:any) => {
+            resolve(snapshot.data().count);
+        })
+        .catch((error:any) => {
+            reject(error);
+        });
+    })
+}
+
+export function countHISessions(logs: Array<Log>): Promise<number> {
+    return new Promise((resolve, reject) => {
+        let count = 0;
+        logs.forEach((log) => {
+            let minutes = log.duration_minutes;
+            if(minutes >= 30) {
+                count++;
+            }
+        })
+        return resolve(count);
+    })
+}
+export function getLogsTimeframe(start: Date, end: Date): Promise<Array<Log>> {
+    return new Promise((resolve, reject) => {
+        getDocs(collection(db, "Logs")).then((snap) => {
+            const docs = snap.docs;
+            docs.sort((a, b) => (a.data().date > b.data().date) ? 1 : -1);
+            const logs: Log[] = [];
+
+            docs.forEach((doc) => {
+                const log = doc.data() as Log;
+                if (log.date >= start && log.date <= end) {
+                    logs.push(log);
+                }
+            });
+            return resolve(logs);
+        }).catch((e) => {
+            reject(e);
+        })
+    })  
+}
+
+export function getRecentLogs(): Promise<Array<Log>> {
+    return new Promise((resolve, reject) => {
+        getDocs(collection(db, "Logs")).then((snap) => {
+            const docs = snap.docs;
+            docs.sort((a, b) => (a.data().date > b.data().date) ? 1 : -1);
+            const logs: Log[] = [];
+
+            const length = Math.min(5, docs.length);
+            for (let i = 0; i < length; i++) {
+                logs.push(docs[i].data() as Log);
+            }
+            return resolve(logs);
+        }).catch((e) => {
+            reject(e);
+        })
+    })  
+}
+
+export function getLogsByTimeframe(s : Student, sd : Date, ed : Date) : Promise<Array<Log>> {
+    const filterStudent = query(collection(db, "Logs"), where("student_id", "==", s.id))
+    const filterStartDate = query(filterStudent, where("date", ">=", sd))
+    const filterEndDate = query(filterStartDate, where("date", "<=", ed))
+    return new Promise((resolve, reject) => {
+        getDocs(filterEndDate).then((querySnapshot) => {
+            return resolve(querySnapshot.docs.map((doc) => doc.data() as Log))
+        }).catch((e) => {
+            return Promise.reject(e)
+        })
+    })
+}
+
+export function logsToWeeks(): Promise<Array<any>> {
+    return new Promise((resolve, reject) => {
+        getDocs(collection(db, "Logs")).then((snap) => {
+            const docs = snap.docs;
+            docs.sort((a, b) => (a.data().date > b.data().date) ? 1 : -1);
+            const logs: any[] = [];
+
+            docs.forEach((doc) => {
+                const date = doc.data().date.toDate();
+                /* The closest Monday to the log date is found. So weeks are from Monday - Sunday*/
+                const officialDate = new Date(date);
+                const dateDay = officialDate.getDay();
+                const diff = officialDate.getDate() - dateDay + (dateDay == 0 ? -6:1); 
+                const mondayDate = new Date(officialDate.setDate(diff));
+                const month = mondayDate.getUTCMonth() + 1; //months from 1-12
+                const day = mondayDate.getUTCDate();
+                const year = mondayDate.getUTCFullYear();
+                const newDate = year + "/" + month + "/" + day;
+
+                if (logs.indexOf(newDate) == -1) {
+                    /* 
+                        Each log was posted on a certain week. The Monday in that week is found, and the 
+                        logs array contains those dates in a YYYY/MM/DD format.
+                    */
+                    logs.push(newDate)
+                }
+            });
+            return resolve(logs);
+        }).catch((e) => {
+            reject(e);
+        })
+    })  
+}
+
+export function averageSessionLength(logs : Array<Log>) : number {
+    let s = 0.0
+    logs.forEach((log) => {
+        s += log.duration_minutes
+    })
+    return s/logs.length
+}
+
+export function hoursSpent(logs : Array<Log>) : SubjectHours {
+    let hrs = {
+        english_hours : 0,
+        humanities_hours : 0,
+        socialStudies_hours : 0,
+        math_hours : 0,
+        science_hours : 0
+    } as SubjectHours
+    // adding time as minutes
+    logs.forEach((log) => {
+        if(log.subject == "ENGLISH") {
+            hrs.english_hours += log.duration_minutes
+        }
+        else if(log.subject == "MATH") {
+            hrs.math_hours += log.duration_minutes
+        }
+        else if(log.subject == "HUMANITIES") {
+            hrs.humanities_hours += log.duration_minutes
+        }
+        else if(log.subject == "SCIENCE") {
+            hrs.science_hours += log.duration_minutes
+        }
+        else {
+            hrs.socialStudies_hours += log.duration_minutes
+        }
+    })
+    // hours form
+    hrs.english_hours/=60
+    hrs.humanities_hours/=60
+    hrs.math_hours/=60
+    hrs.science_hours/=60
+    hrs.socialStudies_hours/=60
+    return hrs
+}   
+

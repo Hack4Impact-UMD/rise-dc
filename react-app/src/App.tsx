@@ -7,18 +7,25 @@ import Landing from "./landing-page-components/Landing";
 import AdminSettingsPage from "./settings-page/AdminSettingsPage";
 import { AuthProvider } from "./auth/AuthProvider";
 import styles from "./App.module.css";
+import StudentProfile from "./student-profile/StudentProfile";
+import { logsToWeeks } from "./backend/FirestoreCalls";
 
 function App() {
   const s = styles;
+  console.log(logsToWeeks().then((result) => console.log(result)));
   return (
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/" element={<RequireAuth children={<Landing />} />} />
           <Route path="/login" element={<Login />} />
           <Route
             path="/landing"
             element={<RequireAuth children={<Landing />} />}
+          />
+          <Route
+            path="/profile"
+            element={<RequireAuth children={<StudentProfile />} />}
           />
           <Route
             path="/settings"
