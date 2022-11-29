@@ -3,7 +3,6 @@ export type Log = {
     duration_minutes : number,
     instructor_name : string,
     reason : string,
-    student_id : string,
     creator_id : string,
     subject : Subject,
     summary : string,
