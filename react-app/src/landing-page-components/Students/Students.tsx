@@ -1,8 +1,13 @@
 import person from "./person.svg";
 import notepad from "./notepad.svg";
 import styles from "./Students.module.css";
+import {Role} from "../../types/UserType"
 
-const Students = ({ props }: any) => {
+type Props = {
+  userType: Role | undefined
+}
+
+const Students = (props: Props) => {
   const handleClickPlus = () => {
     console.log("+ icon");
   };
@@ -46,7 +51,7 @@ const Students = ({ props }: any) => {
           </button>
         </div>
       </div>
-      <a className={styles.viewMore} href={props}>
+      <a className={styles.viewMore} href={"/students"}>
         View More
       </a>
     </div>

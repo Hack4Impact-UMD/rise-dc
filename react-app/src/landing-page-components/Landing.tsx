@@ -42,7 +42,7 @@ const Landing = () => {
         <div className={styles.logsRow}>
           <RecentLogs />
         </div>
-        <Students />
+        <Students userType={user?.type}/>
       </div>
     </div>
   );
