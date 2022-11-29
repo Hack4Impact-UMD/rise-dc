@@ -58,6 +58,16 @@ const ForgotPassword = ({ open, onClose }: forgotModalType) => {
       onClose={(e: React.MouseEvent<HTMLButtonElement>) => handleOnClose()}
     >
       <>
+        <div className={styles.header}>
+          <button
+            className={styles.close}
+            onClick={() => {
+              handleOnClose();
+            }}
+          >
+            &#x2715;
+          </button>
+        </div>
         <div className={styles.content}>
           {submitted ? (
             <div className={styles.submit}>
