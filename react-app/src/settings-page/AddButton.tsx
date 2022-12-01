@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import "./AdminSettingsPage.css"
 
-export default function ResetButton() {
+export default function AddButton() {
     return (
-        <button className = "reset-button">Add</button>
+        <div>
+            <button className = "reset-button">Add</button>
+        </div>
         );
     }

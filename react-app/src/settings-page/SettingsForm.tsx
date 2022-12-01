@@ -1,7 +1,7 @@
 import React from 'react';
 import "./AdminSettingsPage.css"
-import ResetButton from './ResetButton';
 import FormInput from './FormInput';
+import ResetButton from './ResetButton';
 
 export default function SettingsForm() {
     return (

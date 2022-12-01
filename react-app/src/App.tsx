@@ -10,22 +10,9 @@ import { AuthProvider } from "./auth/AuthProvider";
 
 function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/login" element={<Login />} />
-          <Route
-            path="/landing"
-            element={<RequireAuth children={<Landing />} />}
-          />
-          <Route
-            path="/settings"
-            element={<RequireAdminAuth children={<AdminSettingsPage />} />}
-          />
-        </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+    <div>
+         <AdminSettingsPage/>
+    </div>
   );
 }
 
