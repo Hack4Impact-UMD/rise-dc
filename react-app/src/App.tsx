@@ -26,7 +26,7 @@ function App() {
             element={<RequireAuth children={<Landing />} />}
           />
           <Route
-            path="/profile"
+            path="/profile/:id"
             element={<RequireAuth children={<StudentProfile />} />}
           />
           <Route
@@ -36,10 +36,6 @@ function App() {
           <Route
             path="/log"
             element={<RequireAdminAuth children={<Session />} />}
-          />
-          <Route
-            path="/students"
-            element={<RequireAdminAuth children={<StudentProfile />} />}
           />
           <Route
             path="/search"

@@ -76,9 +76,10 @@
   font-size: 15px;
   text-decoration: none;
   padding-top: 15px;
+  padding-bottom: 15px;
 }
 
-.view-more-student:hover {
+.viewMore:hover {
   text-decoration: underline;
   cursor: pointer;
 }

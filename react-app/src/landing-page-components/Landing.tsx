@@ -8,18 +8,34 @@ import Students from "./Students/Students";
 import Calendar from "./Calendar/Calendar";
 import NavBar from "../navbar/Navbar";
 import styles from "./Landing.module.css";
-import { getCurrentUser } from "../backend/FirestoreCalls";
+import { getCurrentUser, getRecentLogsByCreator, getRecentLogs, getStudentsAlphabetically } from "../backend/FirestoreCalls";
 import { RISEUser } from "../types/UserType";
-
-
+import {Log} from "../types/LogType"
+import { Student } from "../types/StudentType";
 
 const Landing = () => {
   
   const [user, setUser] = useState<RISEUser>();
+  const [recentLogs, setRecentLogs] = useState<Log[]>([]);
+  const [students, setStudents] = useState<Student[]>([]);
 
   useEffect(() => {
     getCurrentUser().then((user) => {
       setUser(user);
+      if(user.type == "ADMIN") {
+        getRecentLogs().then((logs) => {
+          setRecentLogs(logs);
+        }).catch((e) => console.log(e))
+      } else {
+        if (user.id) {
+          getRecentLogs().then((logs) => {
+            setRecentLogs(logs)
+          }).catch((e) => console.log(e))
+        }
+      }
+      getStudentsAlphabetically().then((students) => {
+        setStudents(students)
+      }).catch((e) => console.log(e))
     }).catch((e) => console.log(e));
   }, [])
 
@@ -40,9 +56,9 @@ const Landing = () => {
         </div>
         <Hours />
         <div className={styles.logsRow}>
-          <RecentLogs />
+          <RecentLogs logs={recentLogs}/>
         </div>
-        <Students />
+        <Students students={students} allStudentsLink=""/>
       </div>
     </div>
   );
