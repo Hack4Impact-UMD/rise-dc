@@ -102,8 +102,8 @@ export function countMentors(): Promise<number> {
 
     return new Promise((resolve, reject) => {
         getDocs(mentorQuery)
-        .then((snapshot:any) => {
-            resolve(snapshot.data().count);
+        .then((snap) => {
+            resolve(snap.size);
         })
         .catch((error:any) => {
             reject(error);
@@ -117,8 +117,8 @@ export function countTutors(): Promise<number> {
 
     return new Promise((resolve, reject) => {
         getDocs(mentorQuery)
-        .then((snapshot:any) => {
-            resolve(snapshot.data().count);
+        .then((snap) => {
+            resolve(snap.size);
         })
         .catch((error:any) => {
             reject(error);
