@@ -8,7 +8,7 @@ import Students from "./Students/Students";
 import Calendar from "./Calendar/Calendar";
 import NavBar from "../navbar/Navbar";
 import styles from "./Landing.module.css";
-import { getCurrentUser, getRecentLogsByCreator, getRecentLogs, getStudentsAlphabetically } from "../backend/FirestoreCalls";
+import { getCurrentUser, getRecentLogsByCreator, getRecentLogs, getStudentsAlphabetically, countTutors, countMentors } from "../backend/FirestoreCalls";
 import { RISEUser } from "../types/UserType";
 import {Log} from "../types/LogType"
 import { Student } from "../types/StudentType";
@@ -18,6 +18,8 @@ const Landing = () => {
   const [user, setUser] = useState<RISEUser>();
   const [recentLogs, setRecentLogs] = useState<Log[]>([]);
   const [students, setStudents] = useState<Student[]>([]);
+  const [numTutors, setNumTutors] = useState<number>(0);
+  const [numMentors, setNumMentors] = useState<number>(0);
 
   useEffect(() => {
     getCurrentUser().then((user) => {
@@ -36,6 +38,8 @@ const Landing = () => {
       getStudentsAlphabetically().then((students) => {
         setStudents(students)
       }).catch((e) => console.log(e))
+      countTutors().then(num => {setNumTutors(num)}).catch((e) => console.log(e))
+      countMentors().then(num => {setNumMentors(num)}).catch((e) => console.log(e))
     }).catch((e) => console.log(e));
   }, [])
 
@@ -51,8 +55,8 @@ const Landing = () => {
         <div className={styles.statistics}>
           <Statistics title="Sessions Conducted" value={50} />
           <Statistics title="Students Participating" value={50} />
-          <Statistics title="Mentors Participating" value={50} />
-          <Statistics title="Tutors Participating" value={50} />
+          <Statistics title="Mentors Participating" value={numMentors} />
+          <Statistics title="Tutors Participating" value={numTutors} />
         </div>
         <Hours />
         <div className={styles.logsRow}>
