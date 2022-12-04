@@ -367,3 +367,11 @@ export function uploadStudentFile(file: File, studentId: string): Promise<void> 
         });
     })
 }
+
+export function getNumberStudents(): Promise<number> {
+    return new Promise((resolve, reject) => {
+        getDocs(collection(db, "Students")).then((snap) => {
+            return snap.size
+        })
+    })
+}
