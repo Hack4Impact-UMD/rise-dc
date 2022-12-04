@@ -8,23 +8,23 @@
 }
 
 .body {
-  height: 10vh;
+  height: 100%;
   background-color: #d7ecd3;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   flex: 1 1 100%;
   overflow: auto;
 }
 
 .container {
+  min-height: 100vh;
   display: flex;
   flex-flow: column;
 }
 
 .header {
-  height: 14vh;
+  height: 150px;
   background-color: #ffffff;
 }
 
@@ -48,18 +48,15 @@
 .settingsForm {
   width: 620px;
   height: 310px;
-  max-height: 100%;
-  max-width: 100%;
-  margin: 1.5rem 1.5rem 0 1.5rem;
+  margin: 3rem 1.5rem 1.5rem 1.5rem;
   padding: 0.7rem;
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
-  overflow: auto;
   background-color: #ffffff;
   border-radius: 30px;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
     rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  overflow-x: auto;
 }
 
 .formSecond {
@@ -70,11 +67,10 @@
   margin: 1.5rem;
   padding: 0.7rem 0.7rem 2.25rem 0.7rem;
   width: 620px;
-  overflow-y: scroll;
+  overflow-y: auto;
   flex-grow: 1;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
     rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
-  overflow: hidden;
   border-radius: 30px;
 }
 
@@ -152,6 +148,7 @@ input::placeholder {
   background-color: #a0b9dc;
   font-weight: 100;
   cursor: pointer;
+  text-align: center;
 }
 
 .button:hover {
@@ -161,4 +158,26 @@ input::placeholder {
 
 .invalidInput {
   border: 1px solid red;
+}
+
+@media screen and (max-width: 800px) {
+  .settingsForm {
+    width: 450px;
+  }
+  .formSecond {
+    width: 450px;
+  }
+  .input {
+    padding-right: 100px;
+  }
+  .button {
+    width: 100px;
+    padding: 0.32rem 0;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .body {
+    align-items: start;
+  }
 }

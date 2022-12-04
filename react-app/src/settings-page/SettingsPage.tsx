@@ -11,8 +11,8 @@ export default function AdminSettingsPage() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}></div>{" "}
-      {/*<NavBar title="Settings"></NavBar>*/}
+      <div className={styles.header}></div>
+      {/* <NavBar title="Settings"></NavBar> */}
       <div className={styles.body}>
         <SettingsForm />
         {authContext?.token?.claims.role === "admin" ? (

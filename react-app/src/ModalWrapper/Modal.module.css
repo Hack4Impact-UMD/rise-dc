@@ -25,3 +25,9 @@
   border-radius: 16px;
   box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.04);
 }
+
+@media screen and (max-width: 500px) {
+  .modal {
+    width: 300px;
+  }
+}

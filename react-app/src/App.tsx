@@ -25,10 +25,6 @@ function App() {
             path="/settings"
             element={<RequireAuth children={<SettingsPage />} />}
           />
-          <Route
-            path="*"
-            element={<RequireAuth children={<div> Invalid URL </div>} />}
-          />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

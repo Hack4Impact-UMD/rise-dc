@@ -90,6 +90,7 @@
   color: #2c3e50;
   font-size: 0.8rem;
   font-weight: 500;
+
   transition: all 0.25s ease;
   cursor: pointer;
 }
@@ -97,4 +98,13 @@
 .cancelButton:hover {
   box-shadow: 0 10px 20px -10px rgba(211, 211, 211, 0.6);
   transform: translateY(-5px);
+}
+
+@media screen and (max-width: 500px) {
+  .resetButton {
+    padding: 9px 20px;
+  }
+  .cancelButton {
+    padding: 9px 20px;
+  }
 }
