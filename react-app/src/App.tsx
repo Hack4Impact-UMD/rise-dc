@@ -9,6 +9,7 @@ import StudentProfile from "./student-profile/StudentProfile";
 import { logsToWeeks } from "./backend/FirestoreCalls";
 import Session from "./session-log-components/Session";
 import SearchPage from "./search-page/SearchPage";
+import InvalidPage from "./InvalidPage/InvalidPage";
 
 function App() {
   return (
@@ -36,6 +37,10 @@ function App() {
           <Route
             path="/search"
             element={<RequireAuth children={<SearchPage />} />}
+          />
+          <Route
+            path="*"
+            element={<RequireAuth children={<InvalidPage />} />}
           />
           <Route path="*" element={<p>404 Page not found</p>} />
         </Routes>
