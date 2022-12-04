@@ -4,6 +4,7 @@ export type Student = {
     email: string,
     grade_level: string,
     grades: Grades,
+    files: string[],
     guardian_email: string,
     guardian_name: string,
     guardian_phone: string,

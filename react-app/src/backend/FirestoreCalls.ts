@@ -1,10 +1,13 @@
-import {doc, collection, addDoc, getDoc, query, where, getDocs, orderBy, limit, updateDoc} from "firebase/firestore"
+import {doc, collection, addDoc, getDoc, query, where, getDocs, updateDoc, arrayUnion, orderBy, limit} from "firebase/firestore"
+import {ref} from "firebase/storage"
+import { getStorage, uploadBytes } from "firebase/storage";
 import {Student} from "../types/StudentType"
 import {db} from "../config/firebase";
 import {Log} from "../types/LogType"
 import { getAuth } from "firebase/auth";
 import { RISEUser } from "../types/UserType";
 import { SubjectHours } from "../types/SubjectHoursType"
+import randomstring from "randomstring"
 import app from '../config/firebase'
 
 export function getStudentWithID(
@@ -102,8 +105,8 @@ export function countMentors(): Promise<number> {
 
     return new Promise((resolve, reject) => {
         getDocs(mentorQuery)
-        .then((snapshot:any) => {
-            resolve(snapshot.data().count);
+        .then((snap) => {
+            resolve(snap.size);
         })
         .catch((error:any) => {
             reject(error);
@@ -117,8 +120,8 @@ export function countTutors(): Promise<number> {
 
     return new Promise((resolve, reject) => {
         getDocs(mentorQuery)
-        .then((snapshot:any) => {
-            resolve(snapshot.data().count);
+        .then((snap) => {
+            resolve(snap.size);
         })
         .catch((error:any) => {
             reject(error);
@@ -344,5 +347,23 @@ export function hoursSpent(logs : Array<Log>) : SubjectHours {
     hrs.science_hours/=60
     hrs.socialStudies_hours/=60
     return hrs
-}   
+}
 
+export function uploadStudentFile(file: File, studentId: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+        const storage = getStorage(app);
+        const name = randomstring.generate(20);
+        const storageRef = ref(storage, name);
+        uploadBytes(storageRef, file).then((snapshot) => {
+            updateDoc(doc(db, "Students", studentId), {
+                files: arrayUnion(name)
+            }).then(() => {
+                return resolve();
+            }).catch((e) => {
+                return reject(e);
+            })
+        }).catch((e) => {
+            return reject(e);
+        });
+    })
+}
