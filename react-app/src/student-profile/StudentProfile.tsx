@@ -7,11 +7,12 @@ import GradeInformation from "./GradeInformation/GradeInformation";
 import Forms from "./Forms/Forms";
 import { calculateBackoffMillis } from "@firebase/util";
 import { TypeFlags } from "typescript";
+import NavBar from "../navbar/Navbar";
 
 const StudentProfile = () => {
   return (
     <div className={styles.profile}>
-      <Header title="Alice Lee" />
+      <div className={styles.header}>{<NavBar title="Alice Lee"></NavBar>}</div>
       <div className={styles.profileContent}>
         <ContactInformation
           address="House"

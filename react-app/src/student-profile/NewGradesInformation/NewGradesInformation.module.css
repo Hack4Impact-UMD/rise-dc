@@ -1,0 +1,113 @@
+.gradeInfo {
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    margin: 1.5rem 0 2rem 0;
+    padding: 1rem 4rem 1rem 2rem;
+    background-color: #a0b9dc;
+    box-shadow: 10px 10px 10px rgb(0 0 0 / 0.2);
+    border-radius: 20px;
+  }
+  
+  .title {
+    font-family: "Fjalla One";
+    font-weight: 500;
+    padding: 2rem 0 1rem 0;
+  }
+  
+  .topLine {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .edit {
+    font-size: 0.9rem;
+    font-family: "Libre Franklin";
+    background: none;
+    border: none;
+  }
+  
+  .edit:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  
+  .editButtons {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+  
+  .container {
+    display: flex;
+    flex-direction: column;
+    margin: 1rem 0 4rem 0;
+    padding: 2rem 0 0rem 2rem;
+    background-color: white;
+    border-radius: 15px;
+  }
+  
+  .containerLines {
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    padding-bottom: 10px;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #d3d3d3;
+  }
+  
+  .lineLabel {
+    width: 33%;
+    padding: 4px 50px 4px 0;
+    color: #666666;
+    font-family: "Libre Franklin";
+    font-size: 0.8rem;
+  }
+  
+  .informationText {
+    font-size: 0.9rem;
+    font-weight: 300;
+    color: black;
+    opacity: 1;
+    background: none;
+    border: 1px solid transparent;
+    border-radius: 20px;
+    padding: 4px 0;
+    font-family: "Libre Franklin";
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .informationEdit {
+    border: 1px solid;
+    background-color: #ebebeb;
+  }
+  
+  .gradeLabels {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+  
+  .reason {
+    width: 100%;
+    opacity: 1;
+    color: black;
+    padding: 8px 0;
+    margin-left: 3px;
+    border: 1px solid #666666;
+    border-radius: 5px;
+    text-align: center;
+  }
+  
+  .selectOption {
+    font-family: "Libre Franklin";
+    font-size: 0.9rem;
+    text-align: center;
+  }
+  
