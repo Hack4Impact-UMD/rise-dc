@@ -9,8 +9,9 @@ import { AuthProvider } from "./auth/AuthProvider";
 import styles from "./App.module.css";
 import StudentProfile from "./student-profile/StudentProfile";
 import { logsToWeeks } from "./backend/FirestoreCalls";
-import Session from "./session-log-components/Session"
+import Session from "./session-log-components/Session";
 import SearchPage from "./search-page/SearchPage";
+import InvalidPage from "./InvalidPage/InvalidPage";
 
 function App() {
   const s = styles;
@@ -39,11 +40,11 @@ function App() {
           />
           <Route
             path="/search"
-            element={<RequireAuth children={<SearchPage/>}/>}
+            element={<RequireAuth children={<SearchPage />} />}
           />
-          <Route 
+          <Route
             path="*"
-            element={<p>404 Page not found</p>}
+            element={<RequireAuth children={<InvalidPage />} />}
           />
         </Routes>
       </BrowserRouter>
