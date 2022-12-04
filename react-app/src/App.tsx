@@ -1,10 +1,14 @@
 import { BrowserRouter, Routes, Route, redirect } from "react-router-dom";
 import RequireAuth from "./auth/RequireAuth";
+import RequireAdminAuth from "./auth/RequireAdminAuth";
 import Login from "./login-page/Login";
 import Landing from "./landing-page-components/Landing";
 import SettingsPage from "./settings-page/SettingsPage";
 import { AuthProvider } from "./auth/AuthProvider";
 import StudentProfile from "./student-profile/StudentProfile";
+import { logsToWeeks } from "./backend/FirestoreCalls";
+import Session from "./session-log-components/Session";
+import SearchPage from "./search-page/SearchPage";
 
 function App() {
   return (
@@ -18,13 +22,22 @@ function App() {
             element={<RequireAuth children={<Landing />} />}
           />
           <Route
-            path="/profile"
+            path="/profile/:id"
             element={<RequireAuth children={<StudentProfile />} />}
           />
           <Route
             path="/settings"
             element={<RequireAuth children={<SettingsPage />} />}
           />
+          <Route
+            path="/log"
+            element={<RequireAdminAuth children={<Session />} />}
+          />
+          <Route
+            path="/search"
+            element={<RequireAuth children={<SearchPage />} />}
+          />
+          <Route path="*" element={<p>404 Page not found</p>} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

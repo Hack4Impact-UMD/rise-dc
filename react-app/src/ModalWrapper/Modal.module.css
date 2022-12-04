@@ -26,8 +26,14 @@
   box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.04);
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 600px) {
   .modal {
     width: 300px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .modal {
+    width: 250px;
   }
 }

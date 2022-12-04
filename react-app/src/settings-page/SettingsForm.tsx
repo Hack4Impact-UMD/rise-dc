@@ -9,13 +9,13 @@ export default function SettingsForm() {
   return (
     <div className={styles.settingsForm}>
       <h4 className={styles.profile}>Profile</h4>
-      {ResetEmailForm()}
-      {ResetPasswordForm()}
+      {ResetEmailForm(false)}
+      {ResetPasswordForm(false)}
     </div>
   );
 }
 
-function ResetEmailForm() {
+function ResetEmailForm(error: boolean) {
   const [value, setValue] = useState("");
   const [emailModal, setEmailModal] = useState<boolean>(false);
   const [emailBlank, setEmailBlank] = useState<boolean>(false);
@@ -66,7 +66,7 @@ function ResetEmailForm() {
 }
 
 // TODO: improve error messaging
-function ResetPasswordForm() {
+function ResetPasswordForm(error: boolean) {
   //TODO: update this state handling to match AdminSettingsPage account
   // creation.
   const initialPasswordValues = {

@@ -9,7 +9,7 @@ export default function SearchPage() {
         <div className={styles.body}>
             <div className={styles.greenBackground}>
                 <div className={styles.whiteBackground}>
-"                   <div className={styles.displayHorizontal}>
+                   <div className={styles.displayHorizontal}>
                         <input className={styles.searchBar} name="email" placeholder="Search"/>
                         <button className={styles.elementButton}>New Student</button>
                     </div>
