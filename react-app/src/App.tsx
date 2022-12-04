@@ -1,12 +1,10 @@
-import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, redirect } from "react-router-dom";
 import RequireAuth from "./auth/RequireAuth";
-import Login from "./login-page/Login";
 import RequireAdminAuth from "./auth/RequireAdminAuth";
+import Login from "./login-page/Login";
 import Landing from "./landing-page-components/Landing";
-import AdminSettingsPage from "./settings-page/AdminSettingsPage";
+import SettingsPage from "./settings-page/SettingsPage";
 import { AuthProvider } from "./auth/AuthProvider";
-import styles from "./App.module.css";
 import StudentProfile from "./student-profile/StudentProfile";
 import { logsToWeeks } from "./backend/FirestoreCalls";
 import Session from "./session-log-components/Session";
@@ -14,8 +12,6 @@ import SearchPage from "./search-page/SearchPage";
 import InvalidPage from "./InvalidPage/InvalidPage";
 
 function App() {
-  const s = styles;
-  console.log(logsToWeeks().then((result) => console.log(result)));
   return (
     <AuthProvider>
       <BrowserRouter>
@@ -32,7 +28,7 @@ function App() {
           />
           <Route
             path="/settings"
-            element={<RequireAdminAuth children={<AdminSettingsPage />} />}
+            element={<RequireAuth children={<SettingsPage />} />}
           />
           <Route
             path="/log"
@@ -46,6 +42,7 @@ function App() {
             path="*"
             element={<RequireAuth children={<InvalidPage />} />}
           />
+          <Route path="*" element={<p>404 Page not found</p>} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
