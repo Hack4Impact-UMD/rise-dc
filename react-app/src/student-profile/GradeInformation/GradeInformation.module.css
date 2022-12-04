@@ -34,6 +34,20 @@
   text-decoration: underline;
 }
 
+.cancel {
+  font-size: 0.9rem;
+  font-family: "Libre Franklin";
+  background: none;
+  border: none;
+  color: red;
+  margin: 5px;
+}
+
+.cancel:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
 .editButtons {
   display: flex;
   flex-direction: row;
