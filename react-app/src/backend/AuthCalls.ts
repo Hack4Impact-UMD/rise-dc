@@ -1,4 +1,4 @@
-import { getAuth, updateEmail, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
+import { getAuth, updateEmail, updatePassword, reauthenticateWithCredential, EmailAuthProvider, AuthError } from "firebase/auth";
 import app from "../config/firebase";
 import functions from "../config/firebase";
 
@@ -14,20 +14,29 @@ TODO: make error messages work
 Parameters:
 Email: the new email
 */
-export function updateUserEmail(email: string):string {
+export async function updateUserEmail(email: string):Promise<String> {
   const auth = getAuth(app);
   const user = auth.currentUser;
   var status = "Unknown Error Occured";
 
   if (user != null) {
-      updateEmail(user, email)
+      const currEmail = user.email;
+      await updateEmail(user, email)
       .then(() => {
-          status = "Changed current account's email from {user.email} to {email}";
+          status = `Changed current account's email from ${currEmail} to ${email}`;
       })
       .catch((error) => {
-        status = "Recieved error: {error}";
-        console.error(error);
+        const code = (error as AuthError).code;
+        if (code === "auth/invalid-email") {
+          status = "Invalid email entered"
+        } else if (code === "auth/requires-recent-login") {
+          status = "Session expired. Please sign in again."
+        } else {
+          status = `Recieved error: ${code}`;
+          console.error(code);
+        }
       });
+
   } else {
       status = "Session expired. Please sign in again.";
   }
@@ -41,26 +50,40 @@ Shouldn't face the re-authentication issue because password is provided to re-au
 
 TODO: make error messages change properly.
  */
-export function updateUserPassword(newPassword: string, oldPassword: string):string {
+export async function updateUserPassword(newPassword: string, oldPassword: string):Promise<String> {
   const auth = getAuth(app);
   const user = auth.currentUser;
   var status = "Unknown Error";
 
   if (user != null) {
       const credential = EmailAuthProvider.credential(user.email!, oldPassword);
-      reauthenticateWithCredential(user, credential)
-        .then(() => {
-          updatePassword(user, newPassword)
+      await reauthenticateWithCredential(user, credential)
+        .then(async () => {
+          await updatePassword(user, newPassword)
           .then(() => {
-              console.log("updated password");
               status = "Successfully updated password";
           })
           .catch((error) => {
-            console.error(error);
+            const code = (error as AuthError).code;
+            if (code === "auth/weak-password") {
+              status = "New password should be at least 6 characters"
+            } else {
+              status = `Recieved error: ${code}`;
+              console.error(code);
+            }
           });
         })
         .catch((error) => {
-          console.error(error);
+          const code = (error as AuthError).code;
+          if (code === "auth/wrong-password") {
+            status = "Incorrect Password"
+          } else if (code === "auth/too-many-request") {
+            status = "Access to this account has been temporarily disabled due to many failed \
+                      login attempts or due to too many failed password resets. Please try again later"
+          } else {
+            status = `Recieved error: ${code}`;
+            console.error(code);
+          }
         });
   } else {
       status = "Session expired. Please sign in again.";
