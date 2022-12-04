@@ -10,6 +10,7 @@
     "@types/node": "^16.11.62",
     "dayjs": "^1.11.6",
     "firebase": "^9.10.0",
+    "randomstring": "^1.2.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.6.0",
@@ -43,6 +44,7 @@
     ]
   },
   "devDependencies": {
+    "@types/randomstring": "^1.1.8",
     "@types/react": "^18.0.21",
     "@types/react-dom": "^18.0.6"
   }
