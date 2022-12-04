@@ -367,3 +367,16 @@ export function uploadStudentFile(file: File, studentId: string): Promise<void> 
         });
     })
 }
+
+export function getTotalHours(): Promise<number> {
+    return new Promise((resolve, reject) => {
+        getDocs(collection(db, "Logs")).then((snap) => {
+            const logs = snap.docs.map((doc) => doc.data() as Log)
+            let count = 0
+            logs.forEach((log) => {
+                count += log.duration_minutes
+            })
+            return count/=60
+        })
+    })
+}
