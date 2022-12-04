@@ -1,34 +1,31 @@
 @import url("https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Fjalla+One&family=Gothic+A1:wght@300;400&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Libre+Franklin&display=swap");
+
 * {
   margin: 0px;
   padding: 0px;
 }
-.container {
-  display: flex;
-  flex-flow: column;
-}
-
-.header {
-  height: 14vh;
-  background-color: #ffffff;
-}
 
 .body {
-  height: 10vh;
+  height: 100%;
   background-color: #d7ecd3;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   flex: 1 1 100%;
   overflow: auto;
 }
 
-.background {
-  height: 86vh;
-  background-color: #d7ecd3;
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-flow: column;
+}
+
+.header {
+  height: 150px;
+  background-color: #ffffff;
 }
 
 .rise-dc-img {
@@ -48,22 +45,18 @@
   margin-left: 190px;
 }
 
-.form {
+.settingsForm {
+  width: 620px;
+  height: 310px;
+  margin: 3rem 1.5rem 1.5rem 1.5rem;
+  padding: 0.7rem;
   display: flex;
   flex-direction: column;
-  position: relative;
   background-color: #ffffff;
-  margin-top: 25px;
-  height: 310px;
-  width: 620px;
-  max-height: 100%;
-  max-width: 100%;
-  overflow-y: scroll;
-  flex-grow: 1;
+  border-radius: 30px;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
     rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
-  overflow: hidden;
-  border-radius: 30px;
+  overflow-x: auto;
 }
 
 .formSecond {
@@ -71,17 +64,13 @@
   flex-direction: column;
   position: relative;
   background-color: #ffffff;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  padding-bottom: 20px;
+  margin: 1.5rem;
+  padding: 0.7rem 0.7rem 2.25rem 0.7rem;
   width: 620px;
-  max-height: 100%;
-  max-width: 100%;
-  overflow-y: scroll;
+  overflow-y: auto;
   flex-grow: 1;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
     rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
-  overflow: hidden;
   border-radius: 30px;
 }
 
@@ -96,7 +85,7 @@
   display: block;
   margin-top: 30px;
   margin-left: 20px;
-  margin-bottom: 4px;
+  margin-bottom: 0.2rem;
   font-size: 13px;
   color: #000000;
   font-weight: 100;
@@ -137,23 +126,21 @@ input::placeholder {
 .buttonContainer {
   display: flex;
   flex-direction: row;
+  margin-bottom: 0.5rem;
 }
 
 .adminForm {
   overflow-y: scroll;
   overflow: hidden;
-  margin-bottom: 20px;
 }
 
-.resetButton {
+.button {
+  width: 125px;
   display: block;
   margin-left: 20px;
   color: #afaeae;
   font-family: "Libre Franklin", sans-serif;
-  padding-right: 40px;
-  padding-left: 40px;
-  padding-top: 5px;
-  padding-bottom: 5px;
+  padding: 0.32rem 2.5rem;
   border-radius: 20px;
   border: none;
   margin-top: 10px;
@@ -161,9 +148,36 @@ input::placeholder {
   background-color: #a0b9dc;
   font-weight: 100;
   cursor: pointer;
+  text-align: center;
 }
 
-.resetButton:hover {
+.button:hover {
   background-color: #d0ecfc;
-  transition: all 0.3s ease;
+  border: none;
+}
+
+.invalidInput {
+  border: 1px solid red;
+}
+
+@media screen and (max-width: 800px) {
+  .settingsForm {
+    width: 450px;
+  }
+  .formSecond {
+    width: 450px;
+  }
+  .input {
+    padding-right: 100px;
+  }
+  .button {
+    width: 100px;
+    padding: 0.32rem 0;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .body {
+    align-items: start;
+  }
 }

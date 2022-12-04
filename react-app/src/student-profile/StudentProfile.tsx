@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect} from "react";
 import Header from "./Header/Header";
 import ContactInformation from "./ContactInformation/ContactInformation";
 import styles from "./StudentProfile.module.css";
@@ -8,28 +8,38 @@ import Forms from "./Forms/Forms";
 import { calculateBackoffMillis } from "@firebase/util";
 import { TypeFlags } from "typescript";
 import NavBar from "../navbar/Navbar";
+import { useParams } from "react-router-dom";
+import { getStudentWithID } from "../backend/FirestoreCalls";
+import { Student } from "../types/StudentType";
+
 
 const StudentProfile = () => {
+  
+  const studentId = useParams().id;
+  const [student, setStudent] = useState<Student>();
+
+  useEffect(() => {
+    if(studentId) {
+      getStudentWithID(studentId).then((student) => {
+        setStudent({...student, id:studentId})
+        console.log(student)
+      }).catch((e) => console.log(e))
+    }
+  }, [])
+
   return (
     <div className={styles.profile}>
       <div className={styles.header}>{<NavBar title="Alice Lee"></NavBar>}</div>
       <div className={styles.profileContent}>
         <ContactInformation
-          address="House"
-          email="email"
-          phoneNumber="123"
-          highSchool="High School"
-          grade="11"
+          student={student}
         />
         <GuardianInformation
-          name="first name"
-          address="House"
-          email="email"
-          phoneNumber="123"
+          student={student}
         />
         <div className={styles.gradesAndForms}>
-          <GradeInformation />
-          <Forms />
+          {student ? <GradeInformation student={student}/> : ""}
+          <Forms student={student}/>
         </div>
       </div>
     </div>

@@ -1,10 +1,13 @@
-import {doc, collection, addDoc, getDoc, query, where, getDocs, orderBy, limit} from "firebase/firestore"
+import {doc, collection, addDoc, getDoc, query, where, getDocs, updateDoc, arrayUnion, orderBy, limit} from "firebase/firestore"
+import {ref} from "firebase/storage"
+import { getStorage, uploadBytes } from "firebase/storage";
 import {Student} from "../types/StudentType"
 import {db} from "../config/firebase";
 import {Log} from "../types/LogType"
 import { getAuth } from "firebase/auth";
 import { RISEUser } from "../types/UserType";
 import { SubjectHours } from "../types/SubjectHoursType"
+import randomstring from "randomstring"
 import app from '../config/firebase'
 
 export function getStudentWithID(
@@ -123,6 +126,40 @@ export function countTutors(): Promise<number> {
         .catch((error:any) => {
             reject(error);
         });
+    })
+}
+
+export function updateStudent(student: Student): Promise<void> {
+    return new Promise((resolve, reject) => {
+        if (student.id) {
+        const ref = doc(db, "Students", student.id);
+        updateDoc(ref, {
+            address: student.address,
+            email: student.email,
+            grade_level: student.grade_level,
+            grades: {
+              english_before: student.grades.english_before,
+              english_after: student.grades.english_after,
+              humanities_before: student.grades.humanities_before,
+              humanities_after: student.grades.humanities_after,
+              socialStudies_before: student.grades.socialStudies_before,
+              socialStudies_after: student.grades.socialStudies_after,
+              math_before: student.grades.math_before,
+              math_after: student.grades.math_after,
+              science_before: student.grades.science_before,
+              science_after: student.grades.science_after
+            },
+            guardian_email: student.guardian_email,
+            guardian_name: student.guardian_name,
+            guardian_phone: student.guardian_phone,
+            high_school: student.high_school,
+            name: student.name,
+            phone_number: student.phone_number,
+            reading_level: student.reading_level
+          }).then(() => {
+            return resolve()
+        }).catch((e) => {return reject(e)})
+        } else {return reject("student missing id")}
     })
 }
 
@@ -310,5 +347,23 @@ export function hoursSpent(logs : Array<Log>) : SubjectHours {
     hrs.science_hours/=60
     hrs.socialStudies_hours/=60
     return hrs
-}   
+}
 
+export function uploadStudentFile(file: File, studentId: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+        const storage = getStorage(app);
+        const name = randomstring.generate(20);
+        const storageRef = ref(storage, name);
+        uploadBytes(storageRef, file).then((snapshot) => {
+            updateDoc(doc(db, "Students", studentId), {
+                files: arrayUnion(name)
+            }).then(() => {
+                return resolve();
+            }).catch((e) => {
+                return reject(e);
+            })
+        }).catch((e) => {
+            return reject(e);
+        });
+    })
+}

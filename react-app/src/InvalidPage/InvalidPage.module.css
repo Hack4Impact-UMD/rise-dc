@@ -1,0 +1,33 @@
+.container {
+  background: url("./invalid-page-background.png") no-repeat center center fixed;
+  background-color: rgb(215, 235, 211);
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  height: 100vh;
+  justify-content: center;
+  overflow: auto;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 100px;
+}
+
+.numbers {
+  font-family: "Fjalla One";
+  color: white;
+  font-size: 150px;
+  text-shadow: 5px 5px #a9a9a9;
+}
+
+.page {
+  margin-top: 10px;
+  font-family: "Libre Franklin";
+  color: white;
+  font-size: 1.5rem;
+  letter-spacing: -1px;
+}
