@@ -6,7 +6,7 @@ export type Log = {
     creator_id : string,
     subject : Subject,
     summary : string,
-    type : string
+    type : "MENTOR" | "TUTOR"
     student_id : string
 }
 

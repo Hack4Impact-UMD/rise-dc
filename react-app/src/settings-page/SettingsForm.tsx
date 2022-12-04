@@ -1,11 +1,13 @@
 import { useState } from "react";
-import styles from "./AdminSettingsPage.module.css";
-import ResetButton from "./ResetButton";
-import { updateUserEmail, updateUserPassword } from "../backend/AuthCalls";
+import styles from "./SettingsPage.module.css";
+import Button from "./Button";
+import { updateUserPassword } from "../backend/AuthCalls";
+import ConfirmModal from "./Modals/ConfirmModal/ConfirmModal";
 
 export default function SettingsForm() {
+  const [passwordModal, setPasswordModal] = useState<boolean>(false);
   return (
-    <div className={styles.form}>
+    <div className={styles.settingsForm}>
       <h4 className={styles.profile}>Profile</h4>
       {ResetEmailForm(false)}
       {ResetPasswordForm(false)}
@@ -15,33 +17,51 @@ export default function SettingsForm() {
 
 function ResetEmailForm(error: boolean) {
   const [value, setValue] = useState("");
+  const [emailModal, setEmailModal] = useState<boolean>(false);
+  const [emailBlank, setEmailBlank] = useState<boolean>(false);
 
   function handleTextAreaChange(event: any) {
     setValue(event.target.value);
+    setEmailBlank(false);
   }
 
-  function handleSubmit(e: any) {
+  async function handleSubmit(e: any) {
     e.preventDefault();
-    const result = updateUserEmail(value);
-    setValue(result);
+    value.trim().length === 0 ? setEmailBlank(true) : setEmailModal(true);
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label className={styles.resetEmail}>
-        <b>Reset Email</b>
-      </label>
-      <div className={styles.buttonContainer}>
-        <input
-          className={styles.input}
-          placeholder="Enter email address"
-          value={value}
-          onChange={handleTextAreaChange}
-          style={error ? { borderColor: "red" } : {}}
-        />
-        <ResetButton />
-      </div>
-    </form>
+    <>
+      <ConfirmModal
+        open={emailModal}
+        onClose={() => setEmailModal(false)}
+        email={value}
+        resetFunction={() => setValue("")}
+      />
+      <form onSubmit={handleSubmit}>
+        <label className={styles.resetEmail}>
+          <b>Reset Email</b>
+        </label>
+        <div className={styles.buttonContainer}>
+          <input
+            className={`${styles.input} ${
+              emailBlank ? styles.invalidInput : ""
+            }`}
+            placeholder="Enter email address"
+            value={value}
+            onChange={handleTextAreaChange}
+          />
+          <Button
+            text="Reset"
+            onClick={() => {
+              value.trim().length === 0
+                ? setEmailBlank(true)
+                : setEmailModal(true);
+            }}
+          />
+        </div>
+      </form>
+    </>
   );
 }
 
@@ -49,63 +69,100 @@ function ResetEmailForm(error: boolean) {
 function ResetPasswordForm(error: boolean) {
   //TODO: update this state handling to match AdminSettingsPage account
   // creation.
-  const [currPass, setCurrPass] = useState("");
-  const [newPass, setNewPass] = useState("");
-  const [confirmNewPass, setConfirmNewPass] = useState("");
+  const initialPasswordValues = {
+    currPass: "",
+    newPass: "",
+    confirmNewPass: "",
+  };
+
+  const blankPasswordValues = {
+    currPass: false,
+    newPass: false,
+    confirmNewPass: false,
+  };
+
+  const [passwordState, setPasswordState] = useState(initialPasswordValues);
+  const [blankPasswordState, setBlankPasswordState] =
+    useState(blankPasswordValues);
+
+  const [passwordModal, setPasswordModal] = useState<boolean>(false);
 
   function handleCurrPassChange(event: any) {
-    setCurrPass(event.target.value);
+    setPasswordState({ ...passwordState, currPass: event.target.value });
+    setBlankPasswordState({ ...blankPasswordState, currPass: false });
   }
 
   function handleNewPassChange(event: any) {
-    setNewPass(event.target.value);
+    setPasswordState({ ...passwordState, newPass: event.target.value });
+    setBlankPasswordState({ ...blankPasswordState, newPass: false });
   }
 
   function handleConfirmNewPassChange(event: any) {
-    setConfirmNewPass(event.target.value);
+    setPasswordState({ ...passwordState, confirmNewPass: event.target.value });
+    setBlankPasswordState({ ...blankPasswordState, confirmNewPass: false });
   }
 
-  function handleSubmit(e: any) {
-    e.preventDefault();
-    var result;
-    if (newPass == confirmNewPass) {
-      result = updateUserPassword(newPass, currPass);
+  async function handleSubmit(e: any) {
+    e?.preventDefault();
+    if (passwordState.currPass.trim().length === 0) {
+      setBlankPasswordState({ ...blankPasswordState, currPass: true });
+    } else if (passwordState.newPass.trim().length === 0) {
+      setBlankPasswordState({ ...blankPasswordState, newPass: true });
+    } else if (passwordState.confirmNewPass.trim().length === 0) {
+      setBlankPasswordState({ ...blankPasswordState, confirmNewPass: true });
+    } else {
+      setPasswordModal(true);
     }
-    console.log(result);
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label className={styles.resetPassword}>
-        <b>Reset Password</b>
-      </label>
-      <input
-        className={styles.input}
-        type="password"
-        placeholder="Enter current password"
-        value={currPass}
-        onChange={handleCurrPassChange}
-        style={error ? { borderColor: "red" } : {}}
+    <>
+      <ConfirmModal
+        open={passwordModal}
+        onClose={() => setPasswordModal(false)}
+        passwordState={passwordState}
+        resetFunction={() => setPasswordState(initialPasswordValues)}
       />
-      <input
-        className={styles.input}
-        type="password"
-        placeholder="Enter new password"
-        value={newPass}
-        onChange={handleNewPassChange}
-        style={error ? { borderColor: "red" } : {}}
-      />
-      <div className={styles.buttonContainer}>
+      <form onSubmit={handleSubmit}>
+        <label className={styles.resetPassword}>
+          <b>Reset Password</b>
+        </label>
         <input
-          className={styles.input}
+          className={`${styles.input} ${
+            blankPasswordState.currPass ? styles.invalidInput : ""
+          }`}
           type="password"
-          placeholder="Confirm new password"
-          value={confirmNewPass}
-          onChange={handleConfirmNewPassChange}
-          style={error ? { borderColor: "red" } : {}}
+          placeholder="Enter current password"
+          value={passwordState.currPass}
+          onChange={handleCurrPassChange}
         />
-        <ResetButton />
-      </div>
-    </form>
+        <input
+          className={`${styles.input} ${
+            blankPasswordState.newPass ? styles.invalidInput : ""
+          }`}
+          type="password"
+          placeholder="Enter new password"
+          value={passwordState.newPass}
+          onChange={handleNewPassChange}
+        />
+        <div className={styles.buttonContainer}>
+          <input
+            className={`${styles.input} ${
+              blankPasswordState.confirmNewPass ? styles.invalidInput : ""
+            }`}
+            type="password"
+            placeholder="Confirm new password"
+            value={passwordState.confirmNewPass}
+            onChange={handleConfirmNewPassChange}
+          />
+          <Button
+            text="Reset"
+            onClick={() => {
+              handleSubmit(null);
+            }}
+          />
+        </div>
+      </form>
+    </>
   );
 }

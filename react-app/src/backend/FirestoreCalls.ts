@@ -1,4 +1,4 @@
-import {doc, collection, addDoc, getDoc, query, where, getDocs} from "firebase/firestore"
+import {doc, collection, addDoc, getDoc, query, where, getDocs, orderBy, limit} from "firebase/firestore"
 import {Student} from "../types/StudentType"
 import {db} from "../config/firebase";
 import {Log} from "../types/LogType"
@@ -50,7 +50,9 @@ export function getCurrentUser(): Promise<RISEUser> {
       if (user) {
         getDocs(query(usersRef, where("firebase_id", "==", user.uid))).then((docs) => {
             docs.forEach((doc) => {
-                return resolve(doc.data() as RISEUser);
+                let data = doc.data() as RISEUser
+                data.id = doc.id
+                return resolve(data);
             });
         }).catch((e) => {
             return reject(e);
@@ -100,8 +102,8 @@ export function countMentors(): Promise<number> {
 
     return new Promise((resolve, reject) => {
         getDocs(mentorQuery)
-        .then((snapshot:any) => {
-            resolve(snapshot.data().count);
+        .then((snap) => {
+            resolve(snap.size);
         })
         .catch((error:any) => {
             reject(error);
@@ -115,8 +117,8 @@ export function countTutors(): Promise<number> {
 
     return new Promise((resolve, reject) => {
         getDocs(mentorQuery)
-        .then((snapshot:any) => {
-            resolve(snapshot.data().count);
+        .then((snap) => {
+            resolve(snap.size);
         })
         .catch((error:any) => {
             reject(error);
@@ -158,15 +160,61 @@ export function getLogsTimeframe(start: Date, end: Date): Promise<Array<Log>> {
 
 export function getRecentLogs(): Promise<Array<Log>> {
     return new Promise((resolve, reject) => {
-        getDocs(collection(db, "Logs")).then((snap) => {
+        const logsRef = collection(db, "Logs")
+        const logsQuery = query(logsRef, orderBy("date"), limit(5));
+
+        getDocs(logsQuery).then((snap) => {
             const docs = snap.docs;
-            docs.sort((a, b) => (a.data().date > b.data().date) ? 1 : -1);
             const logs: Log[] = [];
 
             const length = Math.min(5, docs.length);
             for (let i = 0; i < length; i++) {
                 logs.push(docs[i].data() as Log);
             }
+            return resolve(logs);
+        }).catch((e) => {
+            reject(e);
+        })
+    })  
+}
+
+export function getStudentsAlphabetically(): Promise<Array<Student>> {
+    return new Promise((resolve, reject) => {
+        const studentsRef = collection(db, "Students")
+        const studentsQuery = query(studentsRef, orderBy("name"), limit(5));
+
+        getDocs(studentsQuery).then((snap) => {
+            const docs = snap.docs;
+            const students: Student[] = [];
+
+            const length = Math.min(5, docs.length);
+            for (let i = 0; i < length; i++) {
+                let s = docs[i].data() as Student
+                s.id = docs[i].id
+                students.push(s);
+            }
+            console.log(students);
+            return resolve(students);
+        }).catch((e) => {
+            reject(e);
+        })
+    })  
+}
+
+export function getRecentLogsByCreator(creatorId: string): Promise<Array<Log>> {
+    return new Promise((resolve, reject) => {
+        const logsRef = collection(db, "Logs")
+        const logsQuery = query(logsRef, where("creator_id", "==", creatorId));
+
+        getDocs(logsQuery).then((snap) => {
+            const docs = snap.docs;
+            const logs: Log[] = [];
+
+            const length = Math.min(5, docs.length);
+            for (let i = 0; i < length; i++) {
+                logs.push(docs[i].data() as Log);
+            }
+
             return resolve(logs);
         }).catch((e) => {
             reject(e);

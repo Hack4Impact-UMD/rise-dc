@@ -50,7 +50,7 @@ const NavBar = (props: Title) => {
           />
         </svg>
       </NavLink>
-      <NavLink className={styles.nav} to="/students" end>
+      <NavLink className={styles.nav} to="/search" end>
         <svg
           className={styles.icon}
           width="52"

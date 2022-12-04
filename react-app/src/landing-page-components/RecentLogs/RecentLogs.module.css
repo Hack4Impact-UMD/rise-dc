@@ -1,11 +1,13 @@
 .container {
   width: 100%;
-  height: 300px;
+  height: 50%;
   background-color: white;
   border-radius: 30px;
   box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+  overflow: visible;
   padding: 1.5rem 1.5rem 0 1.5rem;
   margin: 2rem 1rem 0 0;
+  min-height: 300px;
 }
 
 .title {
@@ -22,6 +24,8 @@
   background-color: white;
   border: none;
   background: none;
+  margin-top: 5%;
+  margin-bottom: 5%;
 }
 
 .logs:hover {
