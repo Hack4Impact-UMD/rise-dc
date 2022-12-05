@@ -1,29 +1,50 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./GuardianInformation.module.css";
+import { Student } from "../../types/StudentType";
+import { updateStudent } from "../../backend/FirestoreCalls";
 
-type GuardianInformationProp = {
-  name: string;
-  address: string;
-  email: string;
-  phoneNumber: string;
-};
+interface Prop {
+  student: Student | undefined
+}
 
-const GuardianInformation = ({
-  name,
-  address,
-  email,
-  phoneNumber,
-}: GuardianInformationProp) => {
+const GuardianInformation = ({student}: Prop) => {
+  const blankStudent = {
+    address: "",
+    email: "",
+    grade_level: "",
+    grades: {
+      english_before: "",
+      english_after: "",
+      humanities_before: "",
+      humanities_after: "",
+      socialStudies_before: "",
+      socialStudies_after: "",
+      math_before: "",
+      math_after: "",
+      science_before: "",
+      science_after: ""
+    },
+    guardian_email: "",
+    guardian_name: "",
+    guardian_phone: "",
+    high_school: "",
+    name: "",
+    phone_number: "",
+    reading_level: ""
+  }
   const [edit, setEdit] = useState<boolean>(false);
+  const [data, setData] = useState<Student>(student || blankStudent);
 
-  const [information, setInformation] = useState<GuardianInformationProp>({
-    name,
-    address,
-    email,
-    phoneNumber,
-  });
+  useEffect(() => {
+    setData(student || blankStudent)
+  }, [student])
+
+  const saveStudent = () => {
+    updateStudent(data);
+  }
 
   const handleEdit = (event: React.MouseEvent<HTMLElement>) => {
+    if (edit) saveStudent();
     setEdit(!edit);
   };
 
@@ -35,6 +56,12 @@ const GuardianInformation = ({
           <button className={styles.edit} onClick={handleEdit}>
             {edit ? "Save" : "Edit"}
           </button>
+          {edit ?
+          <button className={styles.cancel} onClick={() => {setData(student || blankStudent); setEdit(false)}}>
+            Cancel
+          </button>
+          : ""
+          }
         </div>
       </div>
       <div className={styles.container}>
@@ -48,9 +75,9 @@ const GuardianInformation = ({
                 : styles.informationText
             }
             disabled={!edit}
-            value={information.name}
+            value={data.guardian_name}
             onChange={(e) =>
-              setInformation({ ...information, name: e.target.value })
+              {setData({...data, guardian_name: e.target.value})}
             }
             placeholder="Enter new name here"
           ></input>
@@ -65,9 +92,9 @@ const GuardianInformation = ({
                 : styles.informationText
             }
             disabled={!edit}
-            value={information.address}
+            value={data.address}
             onChange={(e) =>
-              setInformation({ ...information, address: e.target.value })
+              {setData({...data, address: e.target.value})}
             }
             placeholder="Enter new address here"
           ></input>
@@ -82,9 +109,9 @@ const GuardianInformation = ({
                 : styles.informationText
             }
             disabled={!edit}
-            value={information.email}
+            value={data.guardian_email}
             onChange={(e) =>
-              setInformation({ ...information, email: e.target.value })
+              {setData({...data, guardian_email: e.target.value})}
             }
             placeholder="Enter new email here"
           ></input>
@@ -99,9 +126,9 @@ const GuardianInformation = ({
                 : styles.informationText
             }
             disabled={!edit}
-            value={information.phoneNumber}
+            value={data.guardian_phone}
             onChange={(e) =>
-              setInformation({ ...information, phoneNumber: e.target.value })
+              {setData({...data, guardian_phone: e.target.value})}
             }
             placeholder="Enter new phone number here"
           ></input>

@@ -1,8 +1,13 @@
 import { useState } from "react";
 import styles from "./Forms.module.css";
 import symbol from "./fileUpload.svg";
+import {Student} from "../../types/StudentType"
 
-const Forms = () => {
+interface Prop {
+  student: Student | undefined
+}
+
+const Forms = ({student}: Prop) => {
   const [edit, setEdit] = useState<boolean>(false);
 
   const [files, setFiles] = useState<any[]>([]);
@@ -19,6 +24,12 @@ const Forms = () => {
           <button className={styles.edit} onClick={handleEdit}>
             {edit ? "Save" : "Edit"}
           </button>
+          {edit ?
+          <button className={styles.cancel} onClick={() => {setEdit(false)}}>
+            Cancel
+          </button>
+          : ""
+          }
         </div>
       </div>
       <div className={styles.container}>
