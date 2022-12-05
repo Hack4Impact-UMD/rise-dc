@@ -41,20 +41,24 @@ function AccountCreationForm(error: string) {
     event.preventDefault();
     var role: string = "";
     var email: string = "";
+    var userName: string = "";
 
     if (event.nativeEvent.submitter.name == "submitAdmin") {
       role = "admin";
       email = state.adminEmail;
+      userName = state.adminName;
     } else if (event.nativeEvent.submitter.name == "submitMentor") {
       role = "mentor";
       email = state.mentorEmail;
+      userName = state.mentorName;
     } else if (event.nativeEvent.submitter.name == "submitTutor") {
       role = "tutor";
       email = state.tutorEmail;
+      userName = state.tutorName;
     }
 
-    if (role && email) {
-      createUser(email, role);
+    if (role && email && userName) {
+      createUser(email, userName, role);
     }
   }
 

@@ -6,11 +6,11 @@ import { getAuth, sendPasswordResetEmail } from "@firebase/auth";
 /*
  * Creates a user and sends a password reset email to that user.
  */
-export function createUser(newEmail: string, newRole: string) {
+export function createUser(newEmail: string, newName: string, newRole: string) {
     const createUserCloudFunction = httpsCallable(functions, "createUser");
     const auth = getAuth(app);
 
-    createUserCloudFunction({email: newEmail, role: newRole})
+    createUserCloudFunction({email: newEmail, name: newName, role: newRole})
         .then(() => {
             sendPasswordResetEmail(auth, newEmail);
         })
