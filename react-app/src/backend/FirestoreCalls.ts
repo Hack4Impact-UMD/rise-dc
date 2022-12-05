@@ -367,3 +367,33 @@ export function uploadStudentFile(file: File, studentId: string): Promise<void> 
         });
     })
 }
+
+export function countHIWeeks(logs : Array<Log>) : number {
+    let count = 0
+    logs.sort((a, b) => (a.date > b.date) ? 1 : -1);
+    if(logs.length == 0) {
+        return 0;
+    }
+    let thirty = true;
+    let ninety = 0;
+    let date = logs[0].date;
+    let date1 = date;
+    logs.forEach((log) => {
+        const date = log.date;
+        const same = sameWeek(date, date1);
+        if(!same) {
+            thirty = true;
+            ninety = 0;
+        }
+        if(log.duration_minutes < 30) {
+            thirty = false;
+        }
+        ninety += log.duration_minutes;
+        if(thirty && ninety >= 90) {
+            count++;
+        }
+        date1 = date;
+
+    })
+    return count;
+}
