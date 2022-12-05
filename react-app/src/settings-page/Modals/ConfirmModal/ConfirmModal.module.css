@@ -77,9 +77,8 @@
 }
 
 .resetButton:hover {
-  box-shadow: 0 10px 20px -10px rgba(160, 185, 220, 0.6);
-  transform: translateY(-5px);
-  background: #a0b9dc;
+  background: #cbebf8;
+  border: 2px solid #cbebf8;
 }
 
 .cancelButton {
@@ -99,8 +98,7 @@
 }
 
 .cancelButton:hover {
-  box-shadow: 0 10px 20px -10px rgba(211, 211, 211, 0.6);
-  transform: translateY(-5px);
+  border: 2px solid #cbebf8;
 }
 
 @media screen and (max-width: 600px) {
