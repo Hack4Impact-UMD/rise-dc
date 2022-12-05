@@ -39,10 +39,11 @@ Promise<Array<Student>> {
                 })
             return resolve(students);
         }).catch((e) => {
-            reject(e);
+            return reject(e);
         })
     })  
 }
+
 export function getCurrentUser(): Promise<RISEUser> {
     return new Promise((resolve, reject) => {
       const user = getAuth(app).currentUser;
