@@ -367,3 +367,12 @@ export function uploadStudentFile(file: File, studentId: string): Promise<void> 
         });
     })
 }
+
+export async function getAllLogs(): Promise<Array<Log>> {
+    const querySnapshot = await getDocs(collection(db, "Logs"));
+    return querySnapshot.docs.map((doc) => doc.data() as Log);
+}
+
+export async function numberOfLogs(): Promise<number> {
+    return (await getAllLogs).length;
+}
