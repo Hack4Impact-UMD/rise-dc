@@ -9,14 +9,14 @@ admin.initializeApp();
  * email: string
  * role: string (Options: "admin", "user")
  */
-exports.createUser = functions.https.onCall((data, context) => {
+exports.createUser = functions.https.onCall(async (data, context) => {
   const auth = admin.auth();
 
   // Check if current user is authenticated.
   if (context.auth.uid == null) {
     throw new functions.https.HttpsError(
         "unauthenticated",
-        "failed to authenticate request. ID token is missing or invalid."
+        "failed to authenticate request. ID token is missing or invalid.",
     );
   }
 
@@ -27,7 +27,7 @@ exports.createUser = functions.https.onCall((data, context) => {
         if (userRecord.customClaims["role"] != "admin") {
           throw new functions.https.HttpsError(
               "permission-denied",
-              "Permission denied. Only admins can create new users."
+              "Permission denied. Only admins can create new users.",
           );
         }
       });
@@ -37,18 +37,17 @@ exports.createUser = functions.https.onCall((data, context) => {
   if (data.email == null || data.role == null) {
     throw new functions.https.HttpsError(
         "invalid-argument",
-        "Missing arguments. Request must include email, password, and role."
+        "Missing arguments. Request must include email, password, and role.",
     );
   }
 
-  auth
-      .createUser({
-        email: data.email,
-        password: "defaultpassword",
-      })
-      .then((userRecord) => {
-        auth.setCustomUserClaims(userRecord.uid, {role: data.role});
-      });
+  try {
+    const userRecord = await auth.createUser(
+        {email: data.email, password: "defaultpassword"});
+    auth.setCustomUserClaims(userRecord.uid, {role: data.role});
+  } catch (error) {
+    throw new functions.https.HttpsError("unknown", `${error}`);
+  }
 });
 
 /*
@@ -69,20 +68,20 @@ exports.setUserRole = functions.https.onCall((data, context) => {
           } else {
             throw new functions.https.HttpsError(
                 "permission-denied",
-                "Only an admin user can change roles"
+                "Only an admin user can change roles",
             );
           }
         } else {
           throw new functions.https.HttpsError(
               "invalid-argument",
-              "Must provide a uid and role"
+              "Must provide a uid and role",
           );
         }
       })
       .catch((error) => {
         throw new functions.https.HttpsError(
             "permission-denied",
-            "Failed to authenticate: " + error
+            "Failed to authenticate: " + error,
         );
       });
 });
