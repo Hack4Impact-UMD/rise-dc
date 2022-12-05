@@ -12,6 +12,9 @@ const SaveModal = ({ open, onClose }: saveModalPropsType) => {
     <Modal open={open} onClose={onClose}>
       <>
         <div className={styles.header}>
+          <button className={styles.close} onClick={onClose}>
+            &#x2715;
+          </button>
           <div className={styles.heading}> New Session Log Confirmation </div>
         </div>
         <div className={styles.content}>
