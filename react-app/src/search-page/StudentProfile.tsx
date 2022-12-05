@@ -1,6 +1,6 @@
 import person from './assets/person.svg'
 import notepad from './assets/notepad.svg'
-import './Students.css'
+import styles from "./Students.module.css"
 
 const Students = ({props}: any) => {
     const handleClickPlus = () => {
@@ -12,75 +12,17 @@ const Students = ({props}: any) => {
 
     return (
         <div>
-            <div className = "student-profile">
-                <h1 className = "student-name"> Alice Lee</h1>
-                <div className = "icons">
-                    <button onClick = {handleClickSettings} className = "button">
-                        <img src = {notepad} className = "icon" alt = "Notepad Icon" />
+            <div className={styles.student}>
+                <h1 className={styles.studentName}> Alice Lee</h1>
+                <div className ={styles.icons}>
+                    <button onClick = {handleClickSettings} className={styles.button}>
+                        <img src = {notepad} className ={styles.icon} alt = "Notepad Icon" />
                     </button>
-                    <button onClick = {handleClickPlus} className = "button">
-                        <img src = {person} className = "icon" alt = "Person Icon" />
-                    </button>
-                </div>
-            </div>
-            <div className = "student-profile">
-                <h1 className = "student-name"> Bobby Clark </h1>
-                <div className = "icons">
-                    <button onClick = {handleClickSettings} className = "button">
-                        <img src = {notepad} className = "icon" alt = "Notepad Icon" />
-                    </button>
-                    <button onClick = {handleClickPlus} className = "button">
-                        <img src = {person} className = "icon" alt = "Person Icon" />
+                    <button onClick = {handleClickPlus} className ={styles.button}>
+                        <img src = {person} className ={styles.icon} alt = "Person Icon" />
                     </button>
                 </div>
             </div>
-            <div className = "student-profile">
-                <h1 className = "student-name"> Eve Smith</h1>
-                <div className = "icons">
-                    <button onClick = {handleClickSettings} className = "button">
-                        <img src = {notepad} className = "icon" alt = "Notepad Icon" />
-                    </button>
-                    <button onClick = {handleClickPlus} className = "button">
-                        <img src = {person} className = "icon" alt = "Person Icon" />
-                    </button>
-                </div>
-            </div>
-            <div className = "student-profile">
-                <h1 className = "student-name"> Alice Lee</h1>
-                <div className = "icons">
-                    <button onClick = {handleClickSettings} className = "button">
-                        <img src = {notepad} className = "icon" alt = "Notepad Icon" />
-                    </button>
-                    <button onClick = {handleClickPlus} className = "button">
-                        <img src = {person} className = "icon" alt = "Person Icon" />
-                    </button>
-                </div>
-            </div>
-            <div className = "student-profile">
-                <h1 className = "student-name"> Alice Lee</h1>
-                <div className = "icons">
-                    <button onClick = {handleClickSettings} className = "button">
-                        <img src = {notepad} className = "icon" alt = "Notepad Icon" />
-                    </button>
-                    <button onClick = {handleClickPlus} className = "button">
-                        <img src = {person} className = "icon" alt = "Person Icon" />
-                    </button>
-                </div>
-            </div>  
-            <div className = "student-profile">
-                <h1 className = "student-name"> Alice Lee</h1>
-                <div className = "icons">
-                    <button onClick = {handleClickSettings} className = "button">
-                        <img src = {notepad} className = "icon" alt = "Notepad Icon" />
-                    </button>
-                    <button onClick = {handleClickPlus} className = "button">
-                        <img src = {person} className = "icon" alt = "Person Icon" />
-                    </button>
-                </div>
-            </div>
-            <a className = "view-more-student" href = {props}>
-                View More 
-            </a>
         </div>
     )
 }

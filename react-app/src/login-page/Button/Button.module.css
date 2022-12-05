@@ -1,15 +1,45 @@
 .loginBtn {
   width: 34vh;
-  height: 5vh;
-  border: none;
-  color: black;
-  font-size: 1.8vh;
+  min-width: 190px;
+  height: 35px;
+
   background-color: #a0b9dc;
-  margin-top: 20px;
+  color: black;
+  font-size: 0.8rem;
+  font-family: "Libre Franklin";
+
+  margin: 20px 0;
   border-radius: 1.6rem;
+  border: none;
 }
 
 .loginBtn:hover {
   background-color: rgb(203, 235, 248);
   cursor: pointer;
+}
+
+.spinner:before {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  margin-top: -10px;
+  margin-left: -10px;
+  border-radius: 50%;
+  border-top: 2px solid #07d;
+  border-right: 2px solid transparent;
+  animation: spinner 0.6s linear infinite;
+}
+
+@keyframes spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media screen and (max-height: 500px) {
+  .loginBtn {
+    padding: 8px 0;
+  }
 }

@@ -155,7 +155,7 @@ input::placeholder {
   padding-top: 5px;
   padding-bottom: 5px;
   border-radius: 20px;
-  border: 1px solid #a0b9dc;
+  border: none;
   margin-top: 10px;
   color: black;
   background-color: #a0b9dc;
@@ -166,5 +166,4 @@ input::placeholder {
 .resetButton:hover {
   background-color: #d0ecfc;
   transition: all 0.3s ease;
-  border: none;
 }
