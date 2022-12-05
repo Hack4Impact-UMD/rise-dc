@@ -43,7 +43,7 @@
 .heading {
   width: 200px;
   margin: 0;
-  padding: 20px 0 10px 0;
+  padding: 20px 0 5px 0;
   color: #2c3e50;
   font-family: "Fjalla One";
   font-weight: 900;
@@ -52,8 +52,8 @@
 }
 
 .paragraph {
-  width: 200px;
-  margin-bottom: 0.5rem;
+  width: 250px;
+  margin-bottom: 0.7rem;
   color: #2c3e50;
   font-size: 14px;
   text-align: center;
@@ -62,16 +62,18 @@
 
 .resetButton {
   width: 35%;
+  height: 35px;
   margin: 0;
-  padding: 9px 40px;
+  padding: 9px 20px;
   background: #a0b9dc;
-  border: 4px solid #a0b9dc;
+  border: 2px solid #a0b9dc;
   border-radius: 25px;
   color: black;
   font-size: 0.8rem;
   font-weight: 500;
   transition: all 0.25s ease;
   cursor: pointer;
+  text-align: center;
 }
 
 .resetButton:hover {
@@ -82,10 +84,11 @@
 
 .cancelButton {
   width: 35%;
+  height: 35px;
   margin: 0;
-  padding: 9px 40px;
+  padding: 9px 20px;
   background: #fcfcfc;
-  border: 4px solid #a0b9dc;
+  border: 2px solid #a0b9dc;
   border-radius: 25px;
   color: #2c3e50;
   font-size: 0.8rem;
@@ -100,11 +103,8 @@
   transform: translateY(-5px);
 }
 
-@media screen and (max-width: 500px) {
-  .resetButton {
-    padding: 9px 20px;
-  }
-  .cancelButton {
-    padding: 9px 20px;
+@media screen and (max-width: 600px) {
+  .loginButton {
+    font-size: 10px;
   }
 }
