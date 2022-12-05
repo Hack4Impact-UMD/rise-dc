@@ -5,7 +5,6 @@ import { updateUserPassword } from "../backend/AuthCalls";
 import ConfirmModal from "./Modals/ConfirmModal/ConfirmModal";
 
 export default function SettingsForm() {
-  const [passwordModal, setPasswordModal] = useState<boolean>(false);
   return (
     <div className={styles.settingsForm}>
       <h4 className={styles.profile}>Profile</h4>
