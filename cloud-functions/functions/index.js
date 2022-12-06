@@ -1,6 +1,7 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 admin.initializeApp();
+const db = admin.firestore();
 
 /*
  * Creates a new user
@@ -16,7 +17,7 @@ exports.createUser = functions.https.onCall((data, context) => {
   if (context.auth.uid == null) {
     throw new functions.https.HttpsError(
         "unauthenticated",
-        "failed to authenticate request. ID token is missing or invalid."
+        "failed to authenticate request. ID token is missing or invalid.",
     );
   }
 
@@ -27,7 +28,7 @@ exports.createUser = functions.https.onCall((data, context) => {
         if (userRecord.customClaims["role"] != "admin") {
           throw new functions.https.HttpsError(
               "permission-denied",
-              "Permission denied. Only admins can create new users."
+              "Permission denied. Only admins can create new users.",
           );
         }
       });
@@ -37,7 +38,7 @@ exports.createUser = functions.https.onCall((data, context) => {
   if (data.email == null || data.role == null) {
     throw new functions.https.HttpsError(
         "invalid-argument",
-        "Missing arguments. Request must include email, password, and role."
+        "Missing arguments. Request must include email, password, and role.",
     );
   }
 
@@ -57,38 +58,39 @@ exports.createUser = functions.https.onCall((data, context) => {
  * Arguments:
  * uid: string
  */
-exports.deleteUser = functions.https.onCall((data, context) => {
+exports.deleteUser = functions.https.onCall(async (data, context) => {
   const auth = admin.auth();
 
   // Check if current user is authenticated.
   if (context.auth.uid == null) {
     throw new functions.https.HttpsError(
         "unauthenticated",
-        "failed to authenticate request. ID token is missing or invalid."
+        "failed to authenticate request. ID token is missing or invalid.",
     );
   }
 
   // Check that current user is an admin.
-  auth
-      .getUser(context.auth.uid)
-      .then((userRecord) => {
-        if (userRecord.customClaims["role"] != "admin") {
-          throw new functions.https.HttpsError(
-              "permission-denied",
-              "Permission denied. Only admins can delete users."
-          );
-        }
-      });
+  const userRecord = await auth.getUser(context.auth.uid);
+  if (userRecord.customClaims["role"] != "admin") {
+      throw new functions.https.HttpsError(
+          "permission-denied",
+          "Permission denied. Only admins can delete users.",
+      );
+  }
 
-  auth.deleteUser(data.uid)
-      .then(() => {
-        functions.logger.log(`Deleted user with uid: ${data.uid}`);
-        return;
-      })
-      .catch((error) => {
-        functions.logger.error(error);
-        return error;
-      });
+  try {
+    await auth.deleteUser(data.uid);
+    functions.logger.log(`Deleting user with uid: ${data.uid}`);
+    return db.collection("Users").where("firebase_id", "==", data.uid).get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((documentSnapshot) => {
+            documentSnapshot.ref.delete();
+          });
+        });
+  } catch (error) {
+    functions.logger.error(error);
+    throw new functions.https.HttpsError("unknown", `${error}`);
+  }
 });
 
 /*
@@ -109,20 +111,20 @@ exports.setUserRole = functions.https.onCall((data, context) => {
           } else {
             throw new functions.https.HttpsError(
                 "permission-denied",
-                "Only an admin user can change roles"
+                "Only an admin user can change roles",
             );
           }
         } else {
           throw new functions.https.HttpsError(
               "invalid-argument",
-              "Must provide a uid and role"
+              "Must provide a uid and role",
           );
         }
       })
       .catch((error) => {
         throw new functions.https.HttpsError(
             "permission-denied",
-            "Failed to authenticate: " + error
+            "Failed to authenticate: " + error,
         );
       });
 });
