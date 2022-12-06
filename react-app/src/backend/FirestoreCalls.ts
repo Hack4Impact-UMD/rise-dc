@@ -367,3 +367,14 @@ export function uploadStudentFile(file: File, studentId: string): Promise<void> 
         });
     })
 }
+
+export function totalSessions(student: Student): Promise<number> {
+    return new Promise((resolve, reject) => {
+        const studentQuery = query(collection(db, "Logs"), where("student_id", "==", student.id))
+        getDocs(studentQuery).then((querySnapshot) => {
+            return resolve(querySnapshot.docs.map((doc) => doc.data() as Log).length)
+        }).catch((e) => {
+            return Promise.reject(e)
+        })
+    })
+}
