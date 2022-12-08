@@ -1,134 +1,138 @@
-@import url('https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap');
-*{
-    margin: 0px;
-    padding: 0px;
+* {
+  margin: 0px;
+  padding: 0px;
 }
-.container{
+
+.container {
+  min-height: 100vh;
   display: flex;
-  flex-flow: column;
+  flex-direction: column;
 }
 
-.header{
-    height: 14vh;
-    background-color: #FFFFFF;
+.body {
+  min-height: calc(100vh - 7.2rem);
+  background-color: #d7ecd3;
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items: center;
+  overflow: auto;
 }
 
-.body{
-    height: 10vh;
-    background-color: #D7ECD3;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    flex: 1 1 100%;
-    overflow: auto;
- }
+.elementButton {
+  height: 34px;
+  padding: 5px 25px 5px 50px;
+  margin: 2rem 1.5rem 0 1rem;
+  background: url("./assets/Add.svg") no-repeat right;
+  background-size: 17px;
+  background-position: 15%;
+  background-color: #a0b9dc;
 
- .greenBackground{
-    height: 86vh;
-    background-color: #D7ECD3; 
+  border: 1px transparent;
+  border-radius: 25px;
+  font-family: "Libre Franklin", sans-serif;
+  cursor: pointer;
 }
 
-.whiteBackground{
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    background-color: #FFFFFF;
-    margin-top: 25px;
-    height: 75vh;
-    width: 620px;
-    max-height: 100%;
-    max-width: 100%;
-    overflow-y: scroll;
-    flex-grow: 1;
-    border: 1px solid #C4C4C4;
-    box-shadow: 7px 7px 6px rgba(0, 0, 0, 0.25);
-    border-radius: 15px;
+.elementButton:hover {
+  background-color: #d0ecfc;
+  transition: all 0.3s ease;
+}
+
+.failureMessage {
+  padding-top: 20%;
+  margin: 0 25%;
+  align-self: center;
+  text-align: center;
+
+  font-size: 0.9rem;
+  font-family: "Libre Franklin";
+  word-break: break-all;
+}
+
+.header {
+  height: 7.2rem;
+  background-color: #ffffff;
 }
 
 .searchBar {
-    background: url('./assets/Search.svg') no-repeat right;
-    background-size: 22px;
-    background-position: 97%;
-    display: block;
-    margin-left: 30px;
-    margin-right: 20px;
-    color: #afaeae;
-    font-family: 'Libre Franklin', sans-serif;
-    padding-right: 200px;
-    padding-left: 20px;
-    padding-top: 8px;
-    padding-bottom: 8px;
-    border-radius: 12px;
-    border: 1px solid #F2F2F2;
-    margin-top: 10px;
-    color: black;
-    background-color: #F2F2F2;
+  margin: 2rem 0 0 1.5rem;
+  padding: 8px 150px 8px 20px;
+  background: url("./assets/Search.svg") no-repeat right;
+  background-size: 17px;
+  background-position: 97%;
+  background-color: #f2f2f2;
+  border: 1px solid #f2f2f2;
+  border-radius: 25px;
+  font-family: "Libre Franklin", sans-serif;
+  color: black;
 }
 
-.elementButton{
-    background: url('./assets/Add.svg') no-repeat right;
-    background-size: 18px;
-    background-position: 6%;
-    display: block;
-    margin-left: 40px;
-    color: #afaeae;
-    font-family: 'Libre Franklin', sans-serif;
-    padding-right: 30px;
-    padding-left: 28px;
-    padding-top: 6px;
-    padding-bottom: 6px;
-    border-radius: 13px;
-    border: 1px solid #A0B9DC;
-    margin-top: 10px;
-    color: black;
-    background-color: #A0B9DC;
-    font-weight: 400;
-    cursor: pointer;
+.spinner {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  margin-top: -10px;
+  margin-left: -10px;
+  border-radius: 50%;
+  border-top: 2px solid #07d;
+  border-right: 2px solid transparent;
+  animation: spinner 0.6s linear infinite;
 }
 
-.element-button:hover{
-    background-color:#D0ECFC;
-    transition: all .3s ease;
-    border: none;
+@keyframes spinner {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-.displayHorizontal{
-    display: flex;
-    flex-direction: row;
+.topLine {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 2rem;
 }
 
-.student-profile{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    height: 66px;
-    margin-left: 30px;
-    margin-right: 30px;
-    margin-top: 12px;
-    margin-bottom: 2px;
-    color: black;
-    font-family: 'Libre Franklin', sans-serif;
-    border-radius: 10px;
-    border: 1px solid #A0B9DC;
-    color: black;
-    background-color: #A0B9DC;
+.whiteBackground {
+  width: 620px;
+  height: 70vh;
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+
+  border: 1px solid #c4c4c4;
+  border-radius: 15px;
+  box-shadow: 7px 7px 6px rgba(0, 0, 0, 0.25);
+  background-color: #ffffff;
 }
 
-.student-name{
-    margin-left: 25px;
-    font-family: 'Fjalla One', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 18px;
-    line-height: 40px;
-    display: flex;
-    align-items: center;
-    letter-spacing: 0.02em;
+@media screen and (max-width: 700px) {
+  .searchBar {
+    padding-right: 50px;
+  }
+  .whiteBackground {
+    width: 450px;
+  }
 }
 
-.add-button-img{
-    height: 2.3vh;
-    width: auto;
-    float: left;
+@media screen and (max-width: 500px) {
+  .whiteBackground {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+}
+
+@media screen and (max-height: 650px) {
+  .whiteBackground {
+    height: 60vh;
+  }
+}
+
+@media screen and (max-height: 450px) {
+  .whiteBackground {
+    height: 50vh;
+  }
 }

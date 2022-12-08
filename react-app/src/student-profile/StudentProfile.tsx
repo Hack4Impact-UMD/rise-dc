@@ -7,9 +7,11 @@ import GradeInformation from "./GradeInformation/GradeInformation";
 import Forms from "./Forms/Forms";
 import { calculateBackoffMillis } from "@firebase/util";
 import { TypeFlags } from "typescript";
+import NavBar from "../navbar/Navbar";
 import { useParams } from "react-router-dom";
 import { getStudentWithID } from "../backend/FirestoreCalls";
 import { Student } from "../types/StudentType";
+
 
 const StudentProfile = () => {
   
@@ -27,7 +29,7 @@ const StudentProfile = () => {
 
   return (
     <div className={styles.profile}>
-      <Header title={student?.name || ""} />
+      <div className={styles.header}>{<NavBar title="Alice Lee"></NavBar>}</div>
       <div className={styles.profileContent}>
         <ContactInformation
           student={student}
