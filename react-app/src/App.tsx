@@ -9,6 +9,7 @@ import StudentProfile from "./student-profile/StudentProfile";
 import Session from "./session-log-components/Session";
 import SearchPage from "./search-page/SearchPage";
 import InvalidPage from "./InvalidPage/InvalidPage";
+import StudentCreation from "./student-profile/StudentCreation";
 
 function App() {
   return (
@@ -36,6 +37,10 @@ function App() {
           <Route
             path="/search"
             element={<RequireAuth children={<SearchPage />} />}
+          />
+          <Route
+            path="/createstudent"
+            element={<RequireAuth children={<StudentCreation />} />}
           />
           <Route
             path="*"
