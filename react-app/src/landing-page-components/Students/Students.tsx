@@ -6,10 +6,9 @@ import { useNavigate } from "react-router-dom";
 
 interface Props {
   students: Student[]
-  allStudentsLink: string
 }
 
-const Students = ({students, allStudentsLink}: Props) => {
+const Students = ({students}: Props) => {
   const navigate = useNavigate();
   const handleClickProfile = (student: Student) => {
     navigate(`/profile/${student.id}`)
@@ -35,7 +34,7 @@ const Students = ({students, allStudentsLink}: Props) => {
         </div>
       </div>
       ))}
-      <a className={styles.viewMore} href={allStudentsLink}>
+      <a className={styles.viewMore} href="/search">
         View More
       </a>
       </>

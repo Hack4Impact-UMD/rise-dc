@@ -3,7 +3,7 @@ import { createUser } from "../backend/CloudFunctionsCalls";
 import styles from "./SettingsPage.module.css";
 import SettingsForm from "./SettingsForm";
 import Button from "./Button";
-import NavBar from "../navbar/Navbar";
+import Navbar from "../navbar/Navbar";
 import { useAuth } from "../auth/AuthProvider";
 
 export default function AdminSettingsPage() {
@@ -11,8 +11,9 @@ export default function AdminSettingsPage() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}></div>
-      {/* <NavBar title="Settings"></NavBar> */}
+      <div className={styles.header}>
+        <Navbar title="Settings" />
+      </div>
       <div className={styles.body}>
         <SettingsForm />
         {authContext?.token?.claims.role === "admin" ? (
@@ -50,11 +51,11 @@ function AccountCreationForm() {
     event.preventDefault();
 
     if (role.toLowerCase().includes("admin")) {
-      createUser(state.adminEmail, "admin");
+      createUser(state.adminEmail, state.adminName, "admin");
     } else if (role.toLowerCase().includes("tutor")) {
-      createUser(state.adminEmail, "tutor");
+      createUser(state.tutorEmail, state.tutorName, "tutor");
     } else if (role.toLowerCase().includes("mentor")) {
-      createUser(state.adminEmail, "mentor");
+      createUser(state.mentorEmail, state.mentorName, "mentor");
     }
   }
 

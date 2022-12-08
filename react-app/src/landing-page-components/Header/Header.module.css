@@ -27,6 +27,7 @@
 .text {
   font-weight: 600;
   margin-top: 0.5rem;
+  padding: 0.3rem;
 }
 
 .role {
