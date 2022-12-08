@@ -54,7 +54,9 @@ export function getCurrentUser(): Promise<RISEUser> {
       if (user) {
         getDocs(query(usersRef, where("firebase_id", "==", user.uid))).then((docs) => {
             docs.forEach((doc) => {
-                return resolve(doc.data() as RISEUser);
+                const u = doc.data() as RISEUser;
+                u.id = doc.id;
+                return resolve(u);
             });
         }).catch((e) => {
             return reject(e);
@@ -433,12 +435,19 @@ export function totalSessions(student: Student): Promise<number> {
 }
 
 export async function getAllLogs(): Promise<Array<Log>> {
-    const querySnapshot = await getDocs(collection(db, "Logs"));
-    return querySnapshot.docs.map((doc) => doc.data() as Log);
+    return new Promise((resolve, reject) => {
+        getDocs(collection(db, "Logs")).then((snap) => {
+            return resolve(snap.docs.map((doc) => doc.data() as Log))
+        }).catch((e) => reject(e))
+    })
 }
 
 export async function numberOfLogs(): Promise<number> {
-    return (await getAllLogs).length;
+    return new Promise((resolve, reject) => {
+        getAllLogs().then((logs) => {
+            return resolve(logs.length)
+        }).catch((e) => reject(e))
+    })
 }
 
 export function countHIWeeks(logs : Array<Log>) : number {
@@ -479,16 +488,16 @@ export function getTotalHours(): Promise<number> {
             logs.forEach((log) => {
                 count += log.duration_minutes
             })
-            return count/=60
-        })
+            return resolve(count/=60);
+        }).catch((e) => reject(e))
     })
 }
 
 export function getNumberStudents(): Promise<number> {
     return new Promise((resolve, reject) => {
         getDocs(collection(db, "Students")).then((snap) => {
-            return snap.size
-        })
+            return resolve(snap.size);
+        }).catch((e) => reject(e));
     })
 }
 
