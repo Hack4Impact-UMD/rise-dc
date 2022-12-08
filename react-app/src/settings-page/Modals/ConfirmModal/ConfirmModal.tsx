@@ -1,5 +1,6 @@
 import { EmailAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { AuthProvider } from "../../../auth/AuthProvider";
 import {
   updateUserEmail,
@@ -29,12 +30,13 @@ const ConfirmModal = ({
   resetFunction,
 }: confirmModalPropsType) => {
   const [submit, setSubmitted] = useState<[String, String]>(["", ""]);
+  const navigate = useNavigate();
   const handleConfirm = async () => {
     if (passwordState == undefined) {
       const definedEmail: string = email != undefined ? email : "";
       const result = await updateUserEmail(definedEmail);
       if (result.includes("Changed current account's email from")) {
-        setSubmitted(["Email Reset!", result]);
+        setSubmitted(["Email Reset!", `${result}. Please log back in.`]);
       } else {
         setSubmitted(["Error!", result]);
       }
@@ -47,7 +49,7 @@ const ConfirmModal = ({
           passwordState.currPass
         );
         if (result.includes("Successfully updated password")) {
-          setSubmitted(["Password Reset!", result]);
+          setSubmitted(["Password Reset!", `${result}. Please log back in.`]);
         } else {
           setSubmitted(["Error!", result]);
         }
@@ -55,26 +57,32 @@ const ConfirmModal = ({
     }
   };
 
+  const handleOnClose = () => {
+    if (submit[0].includes("Reset")) {
+      resetFunction();
+      navigate("../login");
+    }
+    onClose();
+    setSubmitted(["", ""]);
+  };
+
   return (
-    <Modal open={open} onClose={onClose}>
+    <Modal open={open} onClose={handleOnClose}>
       <>
         <div className={styles.header}>
-          <button
-            className={styles.close}
-            onClick={() => {
-              if (submit[0] != "") {
-                resetFunction();
-              }
-              onClose();
-              setSubmitted(["", ""]);
-            }}
-          >
+          <button className={styles.close} onClick={handleOnClose}>
             &#x2715;
           </button>
           <div className={styles.heading}>
             {" "}
             {submit[0] != "" ? (
-              <p style={submit[0].includes("Error") ? { color: "red" } : {}}>
+              <p
+                style={
+                  submit[0].includes("Error")
+                    ? { color: "red", paddingBottom: "10px" }
+                    : {}
+                }
+              >
                 {submit[0]}
               </p>
             ) : (
@@ -87,10 +95,25 @@ const ConfirmModal = ({
             {submit[0] != ""
               ? submit[1]
               : `Are you sure you want to reset your
-                ${passwordState == undefined ? "email" : "password"}`}
+                ${passwordState == undefined ? "email" : "password"}?`}
           </p>
         </div>
-        {submit[0] == "" ? (
+        {submit[0].includes("Error") ? (
+          <></>
+        ) : submit[0].includes("Reset") ? (
+          <div className={styles.actions}>
+            <div className={styles.container}>
+              <button
+                className={`${styles.resetButton} ${styles.loginButton}`}
+                onClick={() => {
+                  handleOnClose();
+                }}
+              >
+                Back to Login
+              </button>
+            </div>
+          </div>
+        ) : (
           <div className={styles.actions}>
             <div className={styles.container}>
               <button
@@ -104,19 +127,14 @@ const ConfirmModal = ({
               <button
                 className={styles.cancelButton}
                 onClick={() => {
-                  if (submit[0] != "") {
-                    resetFunction();
-                  }
-                  onClose();
-                  setSubmitted(["", ""]);
+                  handleOnClose();
+                  resetFunction();
                 }}
               >
                 Cancel
               </button>
             </div>
           </div>
-        ) : (
-          <> </>
         )}
       </>
     </Modal>

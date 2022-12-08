@@ -31,9 +31,10 @@ export async function updateUserEmail(email: string):Promise<String> {
           status = "Invalid email entered"
         } else if (code === "auth/requires-recent-login") {
           status = "Session expired. Please sign in again."
+        } else if (code === "auth/email-already-in-use") {
+          status = "Email already in use. Please use another one"
         } else {
           status = `Recieved error: ${code}`;
-          console.error(code);
         }
       });
 

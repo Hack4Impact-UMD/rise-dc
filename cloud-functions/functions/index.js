@@ -1,22 +1,24 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 admin.initializeApp();
+const db = admin.firestore();
 
 /*
  * Creates a new user
  *
  * Arguments:
  * email: string
+ * name: string
  * role: string (Options: "admin", "user")
  */
-exports.createUser = functions.https.onCall((data, context) => {
+exports.createUser = functions.https.onCall(async (data, context) => {
   const auth = admin.auth();
 
   // Check if current user is authenticated.
   if (context.auth.uid == null) {
     throw new functions.https.HttpsError(
         "unauthenticated",
-        "failed to authenticate request. ID token is missing or invalid."
+        "failed to authenticate request. ID token is missing or invalid.",
     );
   }
 
@@ -27,28 +29,74 @@ exports.createUser = functions.https.onCall((data, context) => {
         if (userRecord.customClaims["role"] != "admin") {
           throw new functions.https.HttpsError(
               "permission-denied",
-              "Permission denied. Only admins can create new users."
+              "Permission denied. Only admins can create new users.",
           );
         }
       });
 
   // Check that arguments exist.
   // TODO: improve data validation
-  if (data.email == null || data.role == null) {
+  if (data.email == null || data.role == null || data.name == null) {
     throw new functions.https.HttpsError(
         "invalid-argument",
-        "Missing arguments. Request must include email, password, and role."
+        "Missing arguments. Request must include email, name, and role.",
     );
   }
 
-  auth
-      .createUser({
-        email: data.email,
-        password: "defaultpassword",
-      })
-      .then((userRecord) => {
-        auth.setCustomUserClaims(userRecord.uid, {role: data.role});
-      });
+  try {
+    const userRecord = await auth.createUser(
+        {email: data.email, password: "defaultpassword"});
+
+    auth.setCustomUserClaims(userRecord.uid, {role: data.role});
+    db.collection("Users").add(
+        {firebase_id: userRecord.uid,
+          name: data.name,
+          type: data.role.toUpperCase()});
+    return;
+  } catch (error) {
+    throw new functions.https.HttpsError("unknown", `${error}`);
+  }
+});
+
+/*
+ * Deletes the given user
+ *
+ * Arguments:
+ * uid: string
+ */
+exports.deleteUser = functions.https.onCall(async (data, context) => {
+  const auth = admin.auth();
+
+  // Check if current user is authenticated.
+  if (context.auth.uid == null) {
+    throw new functions.https.HttpsError(
+        "unauthenticated",
+        "failed to authenticate request. ID token is missing or invalid.",
+    );
+  }
+
+  // Check that current user is an admin.
+  const userRecord = await auth.getUser(context.auth.uid);
+  if (userRecord.customClaims["role"] != "admin") {
+      throw new functions.https.HttpsError(
+          "permission-denied",
+          "Permission denied. Only admins can delete users.",
+      );
+  }
+
+  try {
+    await auth.deleteUser(data.uid);
+    functions.logger.log(`Deleting user with uid: ${data.uid}`);
+    return db.collection("Users").where("firebase_id", "==", data.uid).get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((documentSnapshot) => {
+            documentSnapshot.ref.delete();
+          });
+        });
+  } catch (error) {
+    functions.logger.error(error);
+    throw new functions.https.HttpsError("unknown", `${error}`);
+  }
 });
 
 /*
@@ -69,20 +117,20 @@ exports.setUserRole = functions.https.onCall((data, context) => {
           } else {
             throw new functions.https.HttpsError(
                 "permission-denied",
-                "Only an admin user can change roles"
+                "Only an admin user can change roles",
             );
           }
         } else {
           throw new functions.https.HttpsError(
               "invalid-argument",
-              "Must provide a uid and role"
+              "Must provide a uid and role",
           );
         }
       })
       .catch((error) => {
         throw new functions.https.HttpsError(
             "permission-denied",
-            "Failed to authenticate: " + error
+            "Failed to authenticate: " + error,
         );
       });
 });

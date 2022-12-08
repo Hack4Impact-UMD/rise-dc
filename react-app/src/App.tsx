@@ -6,7 +6,6 @@ import Landing from "./landing-page-components/Landing";
 import SettingsPage from "./settings-page/SettingsPage";
 import { AuthProvider } from "./auth/AuthProvider";
 import StudentProfile from "./student-profile/StudentProfile";
-import { logsToWeeks } from "./backend/FirestoreCalls";
 import Session from "./session-log-components/Session";
 import SearchPage from "./search-page/SearchPage";
 import InvalidPage from "./InvalidPage/InvalidPage";
