@@ -32,7 +32,7 @@ function App() {
           />
           <Route
             path="/log"
-            element={<RequireAdminAuth children={<Session />} />}
+            element={<RequireAuth children={<Session />} />}
           />
           <Route
             path="/search"
