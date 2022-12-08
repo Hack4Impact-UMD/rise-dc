@@ -12,4 +12,12 @@ export function createUser(newEmail: string, newRole: string) {
         });
 }
 
+export function deleteUser(userUid: string) {
+    const deleteUserCloudFunction = httpsCallable(functions, "deleteUser");
+    deleteUserCloudFunction({uid: userUid})
+        .catch((error) => {
+            console.log(error);
+        });
+}
+
 export default {};
