@@ -4,11 +4,11 @@ import { Student } from "../../types/StudentType";
 import { updateStudent } from "../../backend/FirestoreCalls";
 
 interface Prop {
-  student: Student | undefined
+  student: Student | undefined;
 }
 
-const GuardianInformation = ({student}: Prop) => {
-  const blankStudent = {
+const GuardianInformation = ({ student }: Prop) => {
+  const blankStudent: Student = {
     address: "",
     email: "",
     grade_level: "",
@@ -22,7 +22,7 @@ const GuardianInformation = ({student}: Prop) => {
       math_before: "",
       math_after: "",
       science_before: "",
-      science_after: ""
+      science_after: "",
     },
     guardian_email: "",
     guardian_name: "",
@@ -30,18 +30,19 @@ const GuardianInformation = ({student}: Prop) => {
     high_school: "",
     name: "",
     phone_number: "",
-    reading_level: ""
-  }
+    reading_level: "",
+    files: [],
+  };
   const [edit, setEdit] = useState<boolean>(false);
   const [data, setData] = useState<Student>(student || blankStudent);
 
   useEffect(() => {
-    setData(student || blankStudent)
-  }, [student])
+    setData(student || blankStudent);
+  }, [student]);
 
   const saveStudent = () => {
     updateStudent(data);
-  }
+  };
 
   const handleEdit = (event: React.MouseEvent<HTMLElement>) => {
     if (edit) saveStudent();
@@ -56,12 +57,19 @@ const GuardianInformation = ({student}: Prop) => {
           <button className={styles.edit} onClick={handleEdit}>
             {edit ? "Save" : "Edit"}
           </button>
-          {edit ?
-          <button className={styles.cancel} onClick={() => {setData(student || blankStudent); setEdit(false)}}>
-            Cancel
-          </button>
-          : ""
-          }
+          {edit ? (
+            <button
+              className={styles.cancel}
+              onClick={() => {
+                setData(student || blankStudent);
+                setEdit(false);
+              }}
+            >
+              Cancel
+            </button>
+          ) : (
+            ""
+          )}
         </div>
       </div>
       <div className={styles.container}>
@@ -76,9 +84,9 @@ const GuardianInformation = ({student}: Prop) => {
             }
             disabled={!edit}
             value={data.guardian_name}
-            onChange={(e) =>
-              {setData({...data, guardian_name: e.target.value})}
-            }
+            onChange={(e) => {
+              setData({ ...data, guardian_name: e.target.value });
+            }}
             placeholder="Enter new name here"
           ></input>
         </div>
@@ -93,9 +101,9 @@ const GuardianInformation = ({student}: Prop) => {
             }
             disabled={!edit}
             value={data.address}
-            onChange={(e) =>
-              {setData({...data, address: e.target.value})}
-            }
+            onChange={(e) => {
+              setData({ ...data, address: e.target.value });
+            }}
             placeholder="Enter new address here"
           ></input>
         </div>
@@ -110,9 +118,9 @@ const GuardianInformation = ({student}: Prop) => {
             }
             disabled={!edit}
             value={data.guardian_email}
-            onChange={(e) =>
-              {setData({...data, guardian_email: e.target.value})}
-            }
+            onChange={(e) => {
+              setData({ ...data, guardian_email: e.target.value });
+            }}
             placeholder="Enter new email here"
           ></input>
         </div>
@@ -127,9 +135,9 @@ const GuardianInformation = ({student}: Prop) => {
             }
             disabled={!edit}
             value={data.guardian_phone}
-            onChange={(e) =>
-              {setData({...data, guardian_phone: e.target.value})}
-            }
+            onChange={(e) => {
+              setData({ ...data, guardian_phone: e.target.value });
+            }}
             placeholder="Enter new phone number here"
           ></input>
         </div>

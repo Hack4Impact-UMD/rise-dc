@@ -62,7 +62,6 @@
 .formSecond {
   display: flex;
   flex-direction: column;
-  position: relative;
   background-color: #ffffff;
   margin: 1.5rem;
   padding: 0.7rem 0.7rem 2.25rem 0.7rem;
