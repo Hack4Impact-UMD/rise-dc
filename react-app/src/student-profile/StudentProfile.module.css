@@ -3,6 +3,11 @@
   font-family: "Fjalla One";
 }
 
+.header {
+  height: 14vh;
+  background-color: #ffffff;
+}
+
 .profileContent {
   width: 100%;
   min-height: calc(100vh - 50px - 5rem);

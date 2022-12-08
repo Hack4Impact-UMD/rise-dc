@@ -1,13 +1,8 @@
 import { useState } from "react";
-import styles from "./Forms.module.css";
+import styles from "./NewForms.module.css";
 import symbol from "./fileUpload.svg";
-import {Student} from "../../types/StudentType"
 
-interface Prop {
-  student: Student | undefined
-}
-
-const Forms = ({student}: Prop) => {
+const NewForms = () => {
   const [edit, setEdit] = useState<boolean>(false);
 
   const [files, setFiles] = useState<any[]>([]);
@@ -20,17 +15,6 @@ const Forms = ({student}: Prop) => {
     <div className={styles.studentSession}>
       <div className={styles.topLine}>
         <h2 className={styles.title}>Forms</h2>
-        <div className={styles.editButtons}>
-          <button className={styles.edit} onClick={handleEdit}>
-            {edit ? "Save" : "Edit"}
-          </button>
-          {edit ?
-          <button className={styles.cancel} onClick={() => {setEdit(false)}}>
-            Cancel
-          </button>
-          : ""
-          }
-        </div>
       </div>
       <div className={styles.container}>
         <div className={`${styles.containerLines} ${styles.uploadLine}`}>
@@ -40,7 +24,6 @@ const Forms = ({student}: Prop) => {
             onChange={(e: any) => setFiles([...files, e!.target!.files[0]])}
             hidden
           />
-          {edit ? (
             <label htmlFor="upload" className={styles.edit}>
               Upload{" "}
               <img
@@ -49,9 +32,6 @@ const Forms = ({student}: Prop) => {
                 className={styles.uploadImage}
               ></img>
             </label>
-          ) : (
-            <></>
-          )}
         </div>
         {files.map((file) => {
           return (
@@ -65,4 +45,4 @@ const Forms = ({student}: Prop) => {
   );
 };
 
-export default Forms;
+export default NewForms;

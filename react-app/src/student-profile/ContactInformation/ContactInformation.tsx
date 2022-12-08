@@ -1,32 +1,50 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./ContactInformation.module.css";
+import {Student} from "../../types/StudentType"
+import { updateStudent } from "../../backend/FirestoreCalls";
 
-type ContactInformationProp = {
-  address: string;
-  email: string;
-  phoneNumber: string;
-  highSchool: string;
-  grade: string;
-};
+interface Props {
+  student: Student | undefined
+}
 
-const ContactInformation = ({
-  address,
-  email,
-  phoneNumber,
-  highSchool,
-  grade,
-}: ContactInformationProp) => {
+const ContactInformation = ({student}: Props) => {
+  const blankStudent = {
+    address: "",
+    email: "",
+    grade_level: "",
+    grades: {
+      english_before: "",
+      english_after: "",
+      humanities_before: "",
+      humanities_after: "",
+      socialStudies_before: "",
+      socialStudies_after: "",
+      math_before: "",
+      math_after: "",
+      science_before: "",
+      science_after: ""
+    },
+    guardian_email: "",
+    guardian_name: "",
+    guardian_phone: "",
+    high_school: "",
+    name: "",
+    phone_number: "",
+    reading_level: ""
+  }
   const [edit, setEdit] = useState<boolean>(false);
+  const [data, setData] = useState<Student>(blankStudent);
 
-  const [information, setInformation] = useState<ContactInformationProp>({
-    address,
-    email,
-    phoneNumber,
-    highSchool,
-    grade,
-  });
+  useEffect(() => {
+    setData(student || blankStudent)
+  }, [student])
+
+  const saveStudent = () => {
+    updateStudent(data);
+  }
 
   const handleEdit = (event: React.MouseEvent<HTMLElement>) => {
+    if (edit) saveStudent();
     setEdit(!edit);
   };
 
@@ -38,6 +56,12 @@ const ContactInformation = ({
           <button className={styles.edit} onClick={handleEdit}>
             {edit ? "Save" : "Edit"}
           </button>
+          {edit ?
+          <button className={styles.cancel} onClick={() => {setData(student || blankStudent); setEdit(false)}}>
+            Cancel
+          </button>
+          : ""
+          }
         </div>
       </div>
       <div className={styles.container}>
@@ -51,9 +75,9 @@ const ContactInformation = ({
                 : styles.informationText
             }
             disabled={!edit}
-            value={information.address}
+            value={data.address}
             onChange={(e) =>
-              setInformation({ ...information, address: e.target.value })
+              {setData({...data, address: e.target.value})}
             }
             placeholder="Enter new address here"
           ></input>
@@ -68,9 +92,8 @@ const ContactInformation = ({
                 : styles.informationText
             }
             disabled={!edit}
-            value={information.email}
-            onChange={(e) =>
-              setInformation({ ...information, email: e.target.value })
+            value={data.email}
+            onChange={(e) =>{setData({...data, email: e.target.value})}
             }
             placeholder="Enter new email here"
           ></input>
@@ -85,9 +108,9 @@ const ContactInformation = ({
                 : styles.informationText
             }
             disabled={!edit}
-            value={information.phoneNumber}
+            value={data.phone_number}
             onChange={(e) =>
-              setInformation({ ...information, phoneNumber: e.target.value })
+              {setData({...data, phone_number: e.target.value})}
             }
             placeholder="Enter new phone number here"
           ></input>
@@ -102,9 +125,9 @@ const ContactInformation = ({
                 : styles.informationText
             }
             disabled={!edit}
-            value={information.highSchool}
+            value={data.high_school}
             onChange={(e) =>
-              setInformation({ ...information, highSchool: e.target.value })
+              {setData({...data, high_school: e.target.value})}
             }
             placeholder="Enter new high school here"
           ></input>
@@ -119,9 +142,9 @@ const ContactInformation = ({
                 : styles.informationText
             }
             disabled={!edit}
-            value={information.grade}
+            value={data.grade_level}
             onChange={(e) =>
-              setInformation({ ...information, grade: e.target.value })
+              {setData({...data, grade_level: e.target.value})}
             }
             placeholder="Enter new grade level here"
           ></input>

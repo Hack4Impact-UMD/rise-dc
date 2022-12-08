@@ -9,6 +9,20 @@
   border-radius: 20px;
 }
 
+.cancel {
+  font-size: 0.9rem;
+  font-family: "Libre Franklin";
+  background: none;
+  border: none;
+  color: red;
+  margin: 5px;
+}
+
+.cancel:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
 .title {
   font-family: "Fjalla One";
   font-weight: 500;
