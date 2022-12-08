@@ -420,6 +420,14 @@ export function uploadStudentFile(file: File, studentId: string): Promise<void> 
     })
 }
 
+export function getNumberStudents(): Promise<number> {
+    return new Promise((resolve, reject) => {
+        getDocs(collection(db, "Students")).then((snap) => {
+            return snap.size
+        })
+    })
+}
+
 export function splitStudents(students : Array<Student>) : Array<Array<Student>> {
     let s = [[],[]] as Array<Array<Student>>
     students.forEach((student) => {
