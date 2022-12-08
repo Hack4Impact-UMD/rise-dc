@@ -199,7 +199,7 @@ export function getLogsTimeframe(start: Date, end: Date): Promise<Array<Log>> {
 export function getRecentLogs(): Promise<Array<Log>> {
     return new Promise((resolve, reject) => {
         const logsRef = collection(db, "Logs")
-        const logsQuery = query(logsRef, orderBy("date"), limit(5));
+        const logsQuery = query(logsRef, orderBy("date", "desc"), limit(5));
 
         getDocs(logsQuery).then((snap) => {
             const docs = snap.docs;
@@ -209,6 +209,7 @@ export function getRecentLogs(): Promise<Array<Log>> {
             for (let i = 0; i < length; i++) {
                 logs.push(docs[i].data() as Log);
             }
+            console.log(logs)
             return resolve(logs);
         }).catch((e) => {
             reject(e);
