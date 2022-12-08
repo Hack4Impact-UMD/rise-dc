@@ -1,6 +1,6 @@
 import { useState } from "react";
 import AddSession from "./AddSession/AddSession";
-import Header from "./Header/Header";
+import Navbar from "../navbar/Navbar";
 import StudentSession from "./StudentSession/StudentSession";
 import CollapseButton from "./CollapseButton/CollapseButton";
 import styles from "./Session.module.css";
@@ -11,7 +11,9 @@ const Session = () => {
 
   return (
     <div className={styles.session}>
-      <Header title="Alice Lee" />
+      <div className={styles.header}>
+        <Navbar title="Settings" />
+      </div>
       <div className={styles.sessionContent}>
         <div className={styles.sessionButtons}>
           <CollapseButton collapse={collapse} setCollapse={setCollapse} />
