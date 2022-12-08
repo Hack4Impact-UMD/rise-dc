@@ -12,7 +12,7 @@ const Session = () => {
   return (
     <div className={styles.session}>
       <div className={styles.header}>
-        <Navbar title="Settings" />
+        <Navbar title="Session Logs" />
       </div>
       <div className={styles.sessionContent}>
         <div className={styles.sessionButtons}>
