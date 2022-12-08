@@ -30,7 +30,7 @@ export function getStudentWithID(
     })
 }
 
-export function getAllStudents() :
+export function getAllStudents(): 
 Promise<Array<Student>> {
     return new Promise((resolve, reject) => {
         getDocs(collection(db, "Students")).then((snap) => {
@@ -53,9 +53,7 @@ export function getCurrentUser(): Promise<RISEUser> {
       if (user) {
         getDocs(query(usersRef, where("firebase_id", "==", user.uid))).then((docs) => {
             docs.forEach((doc) => {
-                let data = doc.data() as RISEUser
-                data.id = doc.id
-                return resolve(data);
+                return resolve(doc.data() as RISEUser);
             });
         }).catch((e) => {
             return reject(e);
@@ -349,6 +347,59 @@ export function hoursSpent(logs : Array<Log>) : SubjectHours {
     return hrs
 }
 
+// returns true if the two dates are in the same week
+function sameWeek(date : Date, date1 : Date) : boolean {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const day = date.getDate();
+    const year1 = date1.getFullYear();
+    const month1 = date1.getMonth();
+    const day1 = date1.getDate();
+    if(year != year1) {
+        return false;
+    }
+    if(month != month1) {
+        return false;
+    }
+    if(day - day1 > 7) {
+        return false;
+    }
+    return true;
+}
+
+export async function receivedHITutoring(logs : Promise<Array<Log>>) : Promise<boolean> {
+    return new Promise((resolve, reject) => {
+        logs.then((logs) => {
+            logs.sort((a, b) => (a.date > b.date) ? 1 : -1);
+            if (logs.length == 0) {
+                return resolve(false);
+            }
+            let thirty = true;
+            let ninety = 0;
+            let date = logs[0].date;
+            let date1 = date;
+            logs.forEach((l) => {
+                const date = l.date;
+                const same = sameWeek(date, date1);
+                if(!same) {
+                    thirty = true;
+                    ninety = 0;
+                }
+                if(l.duration_minutes < 30) {
+                    thirty = false;
+                }
+                ninety += l.duration_minutes;
+                if(thirty && ninety >= 90) {
+                    return true;
+                }
+                date1 = date;
+            })
+            return resolve(false);
+        }).catch((e) => {
+            return Promise.reject(e)
+        })
+    })
+}
 export function uploadStudentFile(file: File, studentId: string): Promise<void> {
     return new Promise((resolve, reject) => {
         const storage = getStorage(app);
@@ -366,4 +417,21 @@ export function uploadStudentFile(file: File, studentId: string): Promise<void> 
             return reject(e);
         });
     })
+}
+
+export function splitStudents(students : Array<Student>) : Array<Array<Student>> {
+    let s = [[],[]] as Array<Array<Student>>
+    students.forEach((student) => {
+        const stud: string = student.id !== undefined ? student.id : "";
+        const p = getStudentLogs(stud!);
+        receivedHITutoring(p).then((r) => {
+            if(r) {
+                s[0].push(student)
+            }
+            else {
+                s[1].push(student)
+            }
+        })
+    })
+    return s;
 }
