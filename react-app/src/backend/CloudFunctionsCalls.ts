@@ -1,20 +1,19 @@
+import app from "../config/firebase";
 import { functions } from "../config/firebase";
 import { httpsCallable } from "firebase/functions";
+import { getAuth, sendPasswordResetEmail } from "@firebase/auth";
 
-export function createUser(newEmail: string, newRole: string) {
+/*
+ * Creates a user and sends a password reset email to that user.
+ */
+export function createUser(newEmail: string, newName: string, newRole: string) {
     const createUserCloudFunction = httpsCallable(functions, "createUser");
-    createUserCloudFunction({email: newEmail, role: newRole})
-        .then( () => {
-            console.log("success")
-        })
-        .catch((error) => {
-            console.log(error);
-        });
-}
+    const auth = getAuth(app);
 
-export function deleteUser(userUid: string) {
-    const deleteUserCloudFunction = httpsCallable(functions, "deleteUser");
-    deleteUserCloudFunction({uid: userUid})
+    createUserCloudFunction({email: newEmail, name: newName, role: newRole})
+        .then(() => {
+            sendPasswordResetEmail(auth, newEmail);
+        })
         .catch((error) => {
             console.log(error);
         });

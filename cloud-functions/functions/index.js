@@ -8,9 +8,10 @@ const db = admin.firestore();
  *
  * Arguments:
  * email: string
+ * name: string
  * role: string (Options: "admin", "user")
  */
-exports.createUser = functions.https.onCall((data, context) => {
+exports.createUser = functions.https.onCall(async (data, context) => {
   const auth = admin.auth();
 
   // Check if current user is authenticated.
@@ -35,21 +36,26 @@ exports.createUser = functions.https.onCall((data, context) => {
 
   // Check that arguments exist.
   // TODO: improve data validation
-  if (data.email == null || data.role == null) {
+  if (data.email == null || data.role == null || data.name == null) {
     throw new functions.https.HttpsError(
         "invalid-argument",
-        "Missing arguments. Request must include email, password, and role.",
+        "Missing arguments. Request must include email, name, and role.",
     );
   }
 
-  auth
-      .createUser({
-        email: data.email,
-        password: "defaultpassword",
-      })
-      .then((userRecord) => {
-        auth.setCustomUserClaims(userRecord.uid, {role: data.role});
-      });
+  try {
+    const userRecord = await auth.createUser(
+        {email: data.email, password: "defaultpassword"});
+
+    auth.setCustomUserClaims(userRecord.uid, {role: data.role});
+    db.collection("Users").add(
+        {firebase_id: userRecord.uid,
+          name: data.name,
+          type: data.role.toUpperCase()});
+    return;
+  } catch (error) {
+    throw new functions.https.HttpsError("unknown", `${error}`);
+  }
 });
 
 /*
