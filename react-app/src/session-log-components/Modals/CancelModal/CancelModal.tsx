@@ -17,6 +17,9 @@ const CancelModal = ({ open, onClose, onCancel }: cancelModalPropsType) => {
     <Modal open={open} onClose={onClose}>
       <>
         <div className={styles.header}>
+          <button className={styles.close} onClick={onClose}>
+            &#x2715;
+          </button>
           <div className={styles.heading}> Cancel Confirmation </div>
         </div>
         <div className={styles.content}>

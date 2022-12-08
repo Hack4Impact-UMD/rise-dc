@@ -1,17 +1,27 @@
+.close {
+  height: 0.5rem;
+  margin: 0.8rem 1.5rem 0 0;
+  align-self: end;
+  background: none;
+  border: none;
+  color: #666666;
+  cursor: pointer;
+}
+
 .header {
-  background: white;
   overflow: hidden;
+  background: white;
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
 }
 
 .heading {
   width: 200px;
-  margin: 0;
-  padding: 20px 10px 10px 0;
+  margin: 10px 0 15px 0;
   color: #2c3e50;
   font-family: "Fjalla One";
   font-weight: 900;
@@ -26,7 +36,7 @@
 }
 
 .paragraph {
-  width: 200px;
+  width: 220px;
   font-size: 14px;
   color: #2c3e50;
   text-align: center;
@@ -46,6 +56,47 @@
   align-items: center;
 }
 
+.yesButton {
+  width: 35%;
+  height: 35px;
+  margin: 0;
+  padding: 9px 20px;
+  background: #a0b9dc;
+  border: 2px solid #a0b9dc;
+  border-radius: 25px;
+  color: black;
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: all 0.25s ease;
+  cursor: pointer;
+  text-align: center;
+}
+
+.yesButton:hover {
+  background: #cbebf8;
+  border: 2px solid #cbebf8;
+}
+
+.noButton {
+  width: 35%;
+  height: 35px;
+  margin: 0;
+  padding: 9px 20px;
+  background: #fcfcfc;
+  border: 2px solid #a0b9dc;
+  border-radius: 25px;
+  color: #2c3e50;
+  font-size: 0.8rem;
+  font-weight: 500;
+
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.noButton:hover {
+  border: 2px solid #cbebf8;
+}
+/* 
 .yesButton {
   cursor: pointer;
   font-weight: 500;
@@ -81,4 +132,4 @@
   box-shadow: 0 10px 20px -10px rgba(211, 211, 211, 0.6);
   transform: translateY(-5px);
   background: #d3d3d3;
-}
+} */
