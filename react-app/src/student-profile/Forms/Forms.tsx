@@ -8,12 +8,6 @@ interface Prop {
   student: Student | undefined
 }
 
-type FileInfo = {
-  name: string,
-  url: string,
-  path: string
-}
-
 const Forms = ({student}: Prop) => {
   const [edit, setEdit] = useState<boolean>(false);
 
