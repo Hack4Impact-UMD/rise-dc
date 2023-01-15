@@ -1,0 +1,86 @@
+.card {
+  width: 50vh;
+  min-height: 400px;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 1.4rem;
+  border: 1.4px lightgrey solid;
+  justify-content: center;
+  background-color: white;
+  padding: 3vh 3.5vh;
+  font-size: 1.1rem;
+}
+
+.container {
+  background: url("./assets/login-background.png") no-repeat center center fixed;
+  background-color: rgb(215, 235, 211);
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  height: 100vh;
+  justify-content: center;
+  overflow: auto;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.error {
+  width: 31vh;
+  min-width: 180px;
+  color: red;
+  text-align: center;
+  font-family: "Libre Franklin";
+  font-size: 0.8rem;
+  margin: 10px 0 15px 0;
+}
+
+.forgot {
+  align-self: end;
+  margin: 10px 0 1.5vh 0;
+  font-size: 0.8rem;
+  color: #000080;
+  text-decoration: none;
+  background: none;
+  border: none;
+}
+
+.forgot:hover {
+  cursor: pointer;
+  color: #a0b9dc;
+}
+
+.logo {
+  width: auto;
+  height: 20vh;
+  min-height: 110px;
+  margin: 25px 0;
+}
+
+@media screen and (max-width: 600px) {
+  .card {
+    width: 60vw;
+    padding: 0;
+  }
+  .container {
+    justify-content: center;
+  }
+}
+
+@media screen and (max-height: 500px) {
+  .container {
+    align-items: normal;
+    padding: 20px 0;
+  }
+  .card {
+    padding: 20px 10px;
+  }
+  .error {
+    font-size: 0.7rem;
+  }
+}

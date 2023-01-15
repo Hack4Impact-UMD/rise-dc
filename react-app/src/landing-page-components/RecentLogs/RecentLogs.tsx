@@ -1,31 +1,37 @@
-import Arrow from './rightArrow.svg'
-import './RecentLogs.css'
+import Arrow from "./icons/rightArrow.svg";
+import TutorIcon from "./icons/Tutor.svg";
+import MentorIcon from "./icons/Mentor.svg";
+import styles from "./RecentLogs.module.css";
+import {Log} from "../../types/LogType";
+import { logsToWeeks } from "../../backend/FirestoreCalls";
+import { useNavigate } from "react-router-dom"
 
-const RecentLogs = ({props}: any) => {
-    const handleClick = () => {
-        console.log('hi')
-    }
-
-    return (
-        <div className = "log-container">
-            <h1 className = "log-title"> Most Recent Logs </h1>
-            <button onClick = {handleClick} className = "logs"> 
-                    <h1 className = "log-name">Log 1</h1>
-                    <img src={Arrow} alt="Arrow" className = "arrow"/>
-            </button>
-            <button onClick = {handleClick} className = "logs"> 
-                    <h1 className = "log-name">Log 2</h1>
-                    <img src={Arrow} alt="Arrow" className = "arrow"/>
-            </button>
-            <button onClick = {handleClick} className = "logs"> 
-                    <h1 className = "log-name">Log 3</h1>
-                    <img src={Arrow} alt="Arrow" className = "arrow"/>
-            </button>
-            <a className = "log-view-more" href = {props}>
-                View More 
-            </a>
-        </div>
-    )
+interface Props {
+  logs: Log[]
 }
+
+const RecentLogs = ({logs}: Props) => {
+  const navigate = useNavigate();
+  const handleClick = (log: Log) => {
+    navigate("/log")
+  };
+
+  return (
+    <div className={styles.container}>
+      <>
+      <h1 className={styles.title}> Most Recent Logs </h1>
+      {logs.map(log => (
+        <button onClick={() => {handleClick(log)}} className={styles.logs}>
+          <div className={styles.name}>
+            <img src={log.type == "MENTOR" ? MentorIcon : TutorIcon} alt={log.type == "MENTOR" ? "MentorIcon" : "TutorIcon"} className={styles.icon} />
+            <h1 className={styles.logName}>{log.instructor_name}</h1>
+          </div>
+          <img src={Arrow} alt="Arrow" className={styles.arrow} />
+        </button>
+      ))}
+      </>
+    </div>
+  );
+};
 
 export default RecentLogs;

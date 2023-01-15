@@ -1,0 +1,33 @@
+.profile {
+  width: 100%;
+  font-family: "Fjalla One";
+}
+
+.header {
+  height: 14vh;
+  background-color: #ffffff;
+}
+
+.profileContent {
+  width: 100%;
+  min-height: calc(100vh - 50px - 5rem);
+  background-color: #d7ebd3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-x: auto;
+}
+
+@media screen and (max-width: 1000px) {
+  .profileContent {
+    margin: auto;
+    align-items: normal;
+  }
+}
+
+.gradesAndForms {
+  width: calc(6rem + 900px);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

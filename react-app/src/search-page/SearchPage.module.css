@@ -1,0 +1,138 @@
+* {
+  margin: 0px;
+  padding: 0px;
+}
+
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.body {
+  min-height: calc(100vh - 7.2rem);
+  background-color: #d7ecd3;
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items: center;
+  overflow: auto;
+}
+
+.elementButton {
+  height: 34px;
+  padding: 5px 25px 5px 50px;
+  margin: 2rem 1.5rem 0 1rem;
+  background: url("./assets/Add.svg") no-repeat right;
+  background-size: 17px;
+  background-position: 15%;
+  background-color: #a0b9dc;
+
+  border: 1px transparent;
+  border-radius: 25px;
+  font-family: "Libre Franklin", sans-serif;
+  cursor: pointer;
+}
+
+.elementButton:hover {
+  background-color: #d0ecfc;
+  transition: all 0.3s ease;
+}
+
+.failureMessage {
+  padding-top: 20%;
+  margin: 0 25%;
+  align-self: center;
+  text-align: center;
+
+  font-size: 0.9rem;
+  font-family: "Libre Franklin";
+  word-break: break-all;
+}
+
+.header {
+  height: 7.2rem;
+  background-color: #ffffff;
+}
+
+.searchBar {
+  margin: 2rem 0 0 1.5rem;
+  padding: 8px 150px 8px 20px;
+  background: url("./assets/Search.svg") no-repeat right;
+  background-size: 17px;
+  background-position: 97%;
+  background-color: #f2f2f2;
+  border: 1px solid #f2f2f2;
+  border-radius: 25px;
+  font-family: "Libre Franklin", sans-serif;
+  color: black;
+}
+
+.spinner {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  margin-top: -10px;
+  margin-left: -10px;
+  border-radius: 50%;
+  border-top: 2px solid #07d;
+  border-right: 2px solid transparent;
+  animation: spinner 0.6s linear infinite;
+}
+
+@keyframes spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.topLine {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.whiteBackground {
+  width: 620px;
+  height: 70vh;
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+
+  border: 1px solid #c4c4c4;
+  border-radius: 15px;
+  box-shadow: 7px 7px 6px rgba(0, 0, 0, 0.25);
+  background-color: #ffffff;
+}
+
+@media screen and (max-width: 700px) {
+  .searchBar {
+    padding-right: 50px;
+  }
+  .whiteBackground {
+    width: 450px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .whiteBackground {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+}
+
+@media screen and (max-height: 650px) {
+  .whiteBackground {
+    height: 60vh;
+  }
+}
+
+@media screen and (max-height: 450px) {
+  .whiteBackground {
+    height: 50vh;
+  }
+}

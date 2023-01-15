@@ -1,0 +1,34 @@
+.session {
+  width: 100%;
+  font-family: "Fjalla One";
+}
+
+.header {
+  height: 150px;
+  background-color: #ffffff;
+}
+
+.sessionContent {
+  width: 100%;
+  min-height: calc(100vh - 50px - 5rem);
+  background-color: #d7ebd3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-x: auto;
+}
+
+.sessionButtons {
+  width: calc(900px + 6rem);
+  margin: 2rem 0 2rem 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+@media screen and (max-width: 1000px) {
+  .sessionContent {
+    margin: auto;
+    align-items: normal;
+  }
+}

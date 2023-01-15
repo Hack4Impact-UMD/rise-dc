@@ -1,17 +1,29 @@
-import React from 'react'
-import './Button.css'
+import React, { useEffect, useState } from "react";
+import styles from "./Button.module.css";
 
 interface ButtonProps {
-  text: string,
-  isDisabled?: boolean,
-  handleClick: VoidFunction
+  text: string;
+  isDisabled?: boolean;
+  handleClick: VoidFunction;
 }
 
-
-export const LoginButton: React.FC<ButtonProps> = ({text, isDisabled, handleClick}) => {
+export const LoginButton: React.FC<ButtonProps> = ({
+  text,
+  isDisabled,
+  handleClick,
+}) => {
   return (
-    <button className='login-btn' disabled={isDisabled} onClick={handleClick}>{text}</button>
-  )
-}
+    <form
+      onSubmit={(event) => {
+        event.preventDefault();
+        handleClick();
+      }}
+    >
+      <button className={styles.loginBtn} disabled={isDisabled}>
+        {isDisabled ? <div className={styles.spinner}></div> : text}
+      </button>
+    </form>
+  );
+};
 
-export default LoginButton
+export default LoginButton;
