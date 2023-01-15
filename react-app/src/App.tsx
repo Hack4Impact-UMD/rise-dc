@@ -5,12 +5,13 @@ import Login from "./login-page/Login";
 import Landing from "./landing-page-components/Landing";
 import SettingsPage from "./settings-page/SettingsPage";
 import { AuthProvider } from "./auth/AuthProvider";
-import Report from "./report/report-page-2/Report";
 import StudentProfile from "./student-profile/StudentProfile";
 import Session from "./session-log-components/Session";
 import SearchPage from "./search-page/SearchPage";
 import InvalidPage from "./InvalidPage/InvalidPage";
 import StudentCreation from "./student-profile/StudentCreation";
+import TimeReport from "./report/TimeReport/TimeReport";
+import IndividualReport from "./report/IndividualReport/IndividualReport";
 
 function App() {
   return (
@@ -41,8 +42,12 @@ function App() {
             element={<RequireAuth children={<StudentCreation />} />}
           />
           <Route
-            path="/report"
-            element={<RequireAuth children={<Report />} />}
+            path="/timereport"
+            element={<RequireAuth children={<TimeReport />} />}
+          />
+          <Route
+            path="/indivreport"
+            element={<RequireAuth children={<IndividualReport />} />}
           />
           <Route
             path="*"
