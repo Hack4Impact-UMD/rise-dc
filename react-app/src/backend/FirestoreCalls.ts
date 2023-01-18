@@ -182,12 +182,13 @@ export function getLogsTimeframe(start: Date, end: Date): Promise<Array<Log>> {
             const docs = snap.docs;
             docs.sort((a, b) => (a.data().date > b.data().date) ? 1 : -1);
             const logs: Log[] = [];
-
             docs.forEach((doc) => {
                 const log = doc.data() as Log;
-                if (log.date >= start && log.date <= end) {
+                const logDate = new Date(doc.data().date.seconds * 1000)
+                if (logDate >= start && logDate <= end) {
                     logs.push(log);
                 }
+                
             });
             return resolve(logs);
         }).catch((e) => {

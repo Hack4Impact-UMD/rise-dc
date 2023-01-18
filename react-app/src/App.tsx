@@ -42,7 +42,7 @@ function App() {
             element={<RequireAuth children={<StudentCreation />} />}
           />
           <Route
-            path="/timereport"
+            path="/timereport/:id"
             element={<RequireAuth children={<TimeReport />} />}
           />
           <Route
