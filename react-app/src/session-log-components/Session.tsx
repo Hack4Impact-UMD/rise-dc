@@ -25,7 +25,7 @@ const Session = () => {
     }).catch((e) => console.log(e));
   }, [])
 
-  console.log(recentLogs);
+  //console.log(recentLogs);
 
   return (
     <div className={styles.session}>
@@ -58,12 +58,12 @@ const Session = () => {
           recentLogs.map(value => (
               <StudentSession
                 teacherName={value.instructor_name}
-                role="Mentor"
-                date="2022-09-30"
+                role={value.type} // TODO: WHAT TO DO HERE?
+                date= {value.date ? String(value.date.valueOf()) : "2022-09-30"} //"2022-09-30"
                 startTime="16:00"
                 endTime="18:00"
-                reason="Reason 2"
-                summary="hello world"
+                reason={value.reason}
+                summary={value.summary}
                 collapse={collapse}
               />
           ))
