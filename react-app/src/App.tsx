@@ -53,7 +53,6 @@ function App() {
             path="*"
             element={<RequireAuth children={<InvalidPage />} />}
           />
-          <Route path="*" element={<p>404 Page not found</p>} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

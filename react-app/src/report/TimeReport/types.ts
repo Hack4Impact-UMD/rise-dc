@@ -13,7 +13,9 @@ export type SessionInformation = {
     names: String[];
     time: number;
   };
-  students: Map<String, Log[]>;
+  students: Map<string, Log[]>;
+  high_impact_students: String[];
+  low_impact_students: String[];
   tutor: {
     names: String[];
     time: number;

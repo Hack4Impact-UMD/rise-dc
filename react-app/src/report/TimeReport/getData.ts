@@ -1,5 +1,12 @@
-import { getLogsTimeframe } from "../../backend/FirestoreCalls";
+import { nextTick } from "process";
+import {
+  countHIWeeks,
+  getLogsTimeframe,
+  getStudentWithID,
+} from "../../backend/FirestoreCalls";
+import { Log } from "../../types/LogType";
 import { SessionInformation } from "./types";
+
 const getDates = (givenDates: String) => {
   const startDate = givenDates?.substring(0, 8);
   const endDate = givenDates?.substring(8);
@@ -19,11 +26,7 @@ const getDates = (givenDates: String) => {
       endDate?.substring(4, 6) +
       "-" +
       endDate?.substring(6);
-    console.log(
-      new Date(modifiedStart).toLocaleString("en-US", {
-        timeZone: "America/New_York",
-      })
-    );
+
     const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     const tz = new Intl.DateTimeFormat("en-GB", {
       timeZone: timeZone,
@@ -44,6 +47,41 @@ const getDates = (givenDates: String) => {
   }
 };
 
+const filterStudents = async (students: Map<string, Log[]>) => {
+  const high_impact_students: String[] = [];
+  const low_impact_students: String[] = [];
+  const student_ids: string[] = [];
+  let error = false;
+
+  students.forEach((value, key) => {
+    student_ids.push(key);
+  });
+  for (const key of student_ids) {
+    error = false;
+    const student_name: String = await getStudentWithID(key)
+      .then((result) => {
+        return result.name;
+      })
+      .catch((err) => {
+        error = true;
+        return "";
+      });
+    if (error) {
+      console.log(`Error getting the student name for student with id ${key}`);
+    } else {
+      const logs = students.get(key);
+      const high_imp_weeks = countHIWeeks(logs!);
+      if (high_imp_weeks >= 10) {
+        high_impact_students.push(student_name);
+      } else {
+        low_impact_students.push(student_name);
+      }
+    }
+  }
+
+  return { high_impact_students, low_impact_students };
+};
+
 export default async function getData(dateRange: String) {
   const allStudents: Set<String> = new Set();
 
@@ -56,6 +94,8 @@ export default async function getData(dateRange: String) {
       time: 0,
     },
     students: new Map(),
+    high_impact_students: [],
+    low_impact_students: [],
     tutor: {
       names: [],
       time: 0,
@@ -117,6 +157,13 @@ export default async function getData(dateRange: String) {
       .catch((error) => {
         error = true;
       });
+
+    const { high_impact_students, low_impact_students } = await filterStudents(
+      allSessions.students
+    );
+
+    allSessions.high_impact_students = high_impact_students;
+    allSessions.low_impact_students = low_impact_students;
     return { information: allSessions, error };
   }
 }

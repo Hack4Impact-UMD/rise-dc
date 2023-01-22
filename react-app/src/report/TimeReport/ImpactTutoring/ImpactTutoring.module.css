@@ -52,13 +52,19 @@
 }
 
 .row {
-  display: table;
+  display: flex;
+  flex-flow: row wrap;
+  word-break: break-word;
   width: 40%;
   height: 30px;
   margin-bottom: 1rem;
   margin-right: 20px;
   border-bottom: 1px solid #d3d3d3;
   font-weight: 300;
+  font-family: "Libre Franklin";
+  font-size: 0.8rem;
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 .rowName {
