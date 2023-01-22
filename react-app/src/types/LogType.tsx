@@ -15,5 +15,4 @@ export type Subject =
   | "MATH"
   | "SOCIAL STUDIES"
   | "HUMANITIES"
-  | "SCIENCE"
-  | "OTHER";
+  | "SCIENCE";

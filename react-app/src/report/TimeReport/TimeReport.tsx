@@ -1,56 +1,62 @@
 //given in yyyymmddyyyymmdd format
 import ImpactTutoring from "./ImpactTutoring/ImpactTutoring";
-import LineGraph from "./LineGraph/LineGraph";
 import Mentors from "./Mentors/Mentors";
 import Sessions from "./Sessions/Sessions";
 import Subjects from "./Subjects/Subjects";
 import styles from "./TimeReport.module.css";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { getLogsTimeframe, storeLog } from "../../backend/FirestoreCalls";
-import { Log, Subject } from "../../types/LogType";
-
-type dates = {
-  startDate: Date;
-  endDate: Date;
-};
+import getData from "./getData";
+import { SessionInformation } from "./types";
+import NavBar from "../../navbar/Navbar";
 
 export default function TimeReport() {
   const [error, setError] = useState<boolean>(false);
-  const [dateRange, setDateRange] = useState<dates>();
-  const [logs, setLogs] = useState<Array<Log>>();
+  const [sessionInfo, setSessionInfo] = useState<SessionInformation>();
+  const [sessionMinutes, setSessionMinutes] = useState<number>(0);
+  const [date, setDate] = useState<String>("");
+
   const urlDate = useParams().id;
 
-  const getDates = (givenDates: string) => {
-    const startDate = givenDates?.substring(0, 8);
-    const endDate = givenDates?.substring(8);
-    if (startDate == undefined || endDate == undefined || endDate.length != 8) {
-      setError(true);
-      return { startDate: undefined, endDate: undefined };
-    } else {
-      const modifiedStart =
-        startDate?.substring(0, 4) +
-        "-" +
-        startDate?.substring(4, 6) +
-        "-" +
-        startDate?.substring(6);
+  const makeDateString = (dateRange: any) => {
+    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const formatter = new Intl.DateTimeFormat("en-us", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+      timeZone: timeZone,
+    });
+    const startFormatted = formatter.formatToParts(dateRange?.startDate);
+    const endFormatted = formatter.formatToParts(dateRange?.endDate);
 
-      const modifiedEnd =
-        endDate?.substring(0, 4) +
-        "-" +
-        endDate?.substring(4, 6) +
-        "-" +
-        endDate?.substring(6);
-
-      setDateRange({
-        startDate: new Date(modifiedStart),
-        endDate: new Date(modifiedEnd),
-      });
-      return {
-        startDate: new Date(modifiedStart),
-        endDate: new Date(modifiedEnd),
-      };
+    function ending(day: number) {
+      if (day > 3 && day < 21) return "th";
+      switch (day % 10) {
+        case 1:
+          return "st";
+        case 2:
+          return "nd";
+        case 3:
+          return "rd";
+        default:
+          return "th";
+      }
     }
+    return (
+      startFormatted[0].value +
+      " " +
+      startFormatted[2].value +
+      ending(parseInt(startFormatted[2].value)) +
+      ", " +
+      startFormatted[4].value +
+      " - " +
+      endFormatted[0].value +
+      " " +
+      endFormatted[2].value +
+      ending(parseInt(endFormatted[2].value)) +
+      ", " +
+      endFormatted[4].value
+    );
   };
 
   useEffect(() => {
@@ -58,55 +64,79 @@ export default function TimeReport() {
       setError(true);
       return;
     }
-    const { startDate, endDate } = getDates(urlDate!);
-    if (!startDate || !endDate) {
-      return;
-    } else {
-      const getLogs = async () => {
-        await getLogsTimeframe(startDate, endDate)
-          .then((result) => setLogs(result))
-          .catch((error) => setError(true));
-      };
-      getLogs();
-    }
+    const retrieveData = async () => {
+      const result = await getData(urlDate!);
+      console.log(result);
+      if (result!.error) {
+        setError(true);
+        return;
+      }
+      setSessionInfo(result?.information);
+      setSessionMinutes(
+        result?.information.english_minutes! +
+          result?.information.math_minutes! +
+          result?.information.humanities_minutes! +
+          result?.information.science_minutes! +
+          result?.information.social_studies_minutes!
+      );
+      const dateRange = result?.information.dateRange;
+      setDate(makeDateString(dateRange));
+    };
+    retrieveData();
   }, []);
-
-  console.log(logs);
 
   return (
     <div className={styles.container}>
-      <div className={styles.navbar}></div>
-      <div className={styles.body}>
-        <div className={styles.stylingBox}>
-          <div className={styles.timeRange}>September 1 - Dec 2</div>
-          <LineGraph />
-          <div className={styles.lineGraph}></div>
-          <div className={styles.sessionAndMentors}>
-            <Sessions
-              total={10}
-              highImpact={30}
-              averageLength={80}
-              averageNumber={4}
+      <div className={styles.navbar}>
+        <NavBar title="Report" />
+      </div>
+      {error ? (
+        <div className={styles.error}>
+          Error fetching data <br /> <br />
+          Please try again later
+        </div>
+      ) : (
+        <div className={styles.body}>
+          <div className={styles.stylingBox}>
+            <div className={styles.timeRange}>{date}</div>
+            <div className={styles.lineGraph}></div>
+            <div className={styles.sessionAndMentors}>
+              <Sessions
+                total={sessionInfo?.total_sessions!}
+                highImpact={sessionInfo?.high_impact!}
+                averageLength={Math.round(
+                  sessionMinutes / sessionInfo?.total_sessions!
+                )}
+                averageNumber={Math.round(
+                  sessionInfo?.total_sessions! / sessionInfo?.students.size!
+                )}
+              />
+              <Mentors
+                totalMentors={sessionInfo?.mentor.names.length!}
+                totalTutors={sessionInfo?.tutor.names.length!}
+                mentorHours={Math.round(sessionInfo?.mentor.time! / 6) / 10}
+                tutorHours={Math.round(sessionInfo?.tutor.time! / 6) / 10}
+              />
+            </div>
+            <Subjects
+              students={sessionInfo?.students.size!}
+              mathHours={Math.round(sessionInfo?.math_minutes! / 6) / 10}
+              englishHours={Math.round(sessionInfo?.english_minutes! / 6) / 10}
+              scienceHours={Math.round(sessionInfo?.science_minutes! / 6) / 10}
+              historyHours={
+                Math.round(sessionInfo?.social_studies_minutes! / 6) / 10
+              }
+              humanitiesHours={
+                Math.round(sessionInfo?.humanities_minutes! / 6) / 10
+              }
             />
-            <Mentors
-              totalMentors={10}
-              totalTutors={20}
-              mentorHours={80}
-              tutorHours={4}
-            />
-          </div>
-          <Subjects
-            mathHours={5}
-            readingHours={2}
-            scienceHours={3}
-            historyHours={4}
-          />
-          {/* <ImpactTutoring
+            {/* <ImpactTutoring
             highImpact={highImpactStudents}
             lowImpact={lowImpactStudents}
           /> */}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
