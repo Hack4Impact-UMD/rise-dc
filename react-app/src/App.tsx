@@ -31,7 +31,7 @@ function App() {
             element={<RequireAuth children={<SettingsPage />} />}
           />
           <Route
-            path="/log"
+            path="/log/:id"
             element={<RequireAuth children={<Session />} />}
           />
           <Route
