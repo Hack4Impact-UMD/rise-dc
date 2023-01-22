@@ -10,6 +10,7 @@ import Session from "./session-log-components/Session";
 import SearchPage from "./search-page/SearchPage";
 import InvalidPage from "./InvalidPage/InvalidPage";
 import StudentCreation from "./student-profile/StudentCreation";
+import Loading from "./loading-screen/Loading";
 
 function App() {
   return (
@@ -30,10 +31,7 @@ function App() {
             path="/settings"
             element={<RequireAuth children={<SettingsPage />} />}
           />
-          <Route
-            path="/log"
-            element={<RequireAuth children={<Session />} />}
-          />
+          <Route path="/log" element={<RequireAuth children={<Session />} />} />
           <Route
             path="/search"
             element={<RequireAuth children={<SearchPage />} />}
@@ -46,7 +44,6 @@ function App() {
             path="*"
             element={<RequireAuth children={<InvalidPage />} />}
           />
-          <Route path="*" element={<p>404 Page not found</p>} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
