@@ -5,71 +5,134 @@ import StudentSession from "./StudentSession/StudentSession";
 import CollapseButton from "./CollapseButton/CollapseButton";
 import styles from "./Session.module.css";
 import { Log } from "../types/LogType";
-import { getAllLogs, getCurrentUser, getRecentLogs } from "../backend/FirestoreCalls";
-import { RISEUser } from "../types/UserType";
+import { getStudentLogs, getStudentWithID } from "../backend/FirestoreCalls";
+import { useParams } from "react-router";
+import Loading from "../loading-screen/Loading";
+
+type SessionState = {
+  loading: boolean;
+  error: boolean;
+  collapse: boolean;
+  addSession: boolean;
+};
 
 const Session = () => {
-  const [user, setUser] = useState<RISEUser>();
-  const [collapse, setCollapse] = useState<boolean>(false);
-  const [addSession, setAddSession] = useState<boolean>(false);
-  const [recentLogs, setRecentLogs] = useState<Log[]>([]);
-  
-  useEffect(() => {
-    getCurrentUser().then((user) => {
-      setUser(user);
-      if (user.id) {
-        getAllLogs().then((logs) => {
-          setRecentLogs(logs)
-        }).catch((e) => console.log(e))
-      }
-    }).catch((e) => console.log(e));
-  }, [])
+  const starting_state: SessionState = {
+    loading: true,
+    error: false,
+    collapse: false,
+    addSession: false,
+  };
+  const [sessionState, setSessionState] =
+    useState<SessionState>(starting_state);
+  const [name, setName] = useState<string>();
+  const [recentLogs, setRecentLogs] = useState<{ id: string; log: Log }[]>([]);
+  const student_id = useParams().id;
 
-  //console.log(recentLogs);
+  useEffect(() => {
+    if (student_id == undefined) {
+      setSessionState({ ...sessionState, error: true, loading: false });
+    } else {
+      const fetchData = async () => {
+        await getStudentWithID(student_id!)
+          .then(async (student) => {
+            setName(student.name);
+            await getStudentLogs(student_id!)
+              .then((result) => {
+                const sorted_logs = result.sort((a, b) =>
+                  a.log.date < b.log.date ? 1 : -1
+                );
+                setRecentLogs(sorted_logs);
+                setSessionState({
+                  ...sessionState,
+                  loading: false,
+                });
+              })
+              .catch(() =>
+                setSessionState({
+                  ...sessionState,
+                  error: true,
+                  loading: false,
+                })
+              );
+          })
+          .catch(() =>
+            setSessionState({ ...sessionState, error: true, loading: false })
+          );
+      };
+      fetchData();
+    }
+  }, []);
 
   return (
     <div className={styles.session}>
-      <div className={styles.header}>
-        <Navbar title="Session Logs" />
-      </div>
-      <div className={styles.sessionContent}>
-        <div className={styles.sessionButtons}>
-          <CollapseButton collapse={collapse} setCollapse={setCollapse} />
-          <AddSession setAddSession={setAddSession} />
-        </div>
-        {addSession ? (
-          <StudentSession
-            teacherName=""
-            role="Mentor"
-            date=""
-            startTime=""
-            endTime=""
-            reason=""
-            summary=""
-            collapse={false}
-            newLog={true}
-            removeSession={() => setAddSession(false)}
-          />
-        ) : (
-          <></>
-        )}
+      {sessionState.loading ? (
+        <Loading />
+      ) : (
         <>
-          {
-          recentLogs.map(value => (
-              <StudentSession
-                teacherName={value.instructor_name}
-                role={value.type} // TODO: WHAT TO DO HERE?
-                date= {value.date ? String(value.date.valueOf()) : "2022-09-30"} //"2022-09-30"
-                startTime="16:00"
-                endTime="18:00"
-                reason={value.reason}
-                summary={value.summary}
-                collapse={collapse}
-              />
-          ))
-          }
+          <div className={styles.header}>
+            <Navbar
+              title={
+                sessionState.error ? "Session Logs" : `${name}'s Session Logs`
+              }
+            />
+          </div>
+          {sessionState.error ? (
+            <div className={styles.error}>
+              Error fetching data <br /> <br />
+              Please try again later
+            </div>
+          ) : (
+            <div className={styles.sessionContent}>
+              <div className={styles.sessionButtons}>
+                <CollapseButton
+                  collapse={sessionState.collapse}
+                  setCollapse={() =>
+                    setSessionState({
+                      ...sessionState,
+                      collapse: !sessionState.collapse,
+                    })
+                  }
+                  logs={recentLogs.length}
+                />
+
+                <AddSession
+                  setAddSession={() =>
+                    setSessionState({
+                      ...sessionState,
+                      addSession: !sessionState.addSession,
+                    })
+                  }
+                />
+              </div>
+              {sessionState.addSession ? (
+                <StudentSession
+                  collapse={false}
+                  newLog={true}
+                  removeSession={() =>
+                    setSessionState({ ...sessionState, addSession: false })
+                  }
+                />
+              ) : (
+                <></>
+              )}
+              {recentLogs.length == 0 && !sessionState.addSession ? (
+                <div className={styles.noLogs}>No logs exist for {name}</div>
+              ) : (
+                <>
+                  {recentLogs.map((curr_log) => (
+                    <StudentSession
+                      id={curr_log.id}
+                      log={curr_log.log}
+                      collapse={sessionState.collapse}
+                    />
+                  ))}
+                </>
+              )}
+            </div>
+          )}
         </>
-      </div>
+      )}
     </div>
   );
 };
