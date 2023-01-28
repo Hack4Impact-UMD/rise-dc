@@ -1,13 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Dispatch, SetStateAction } from "react";
 import styles from "./ContactInformation.module.css";
 import { Student } from "../../types/StudentType";
-import { updateStudent } from "../../backend/FirestoreCalls";
+import CancelButton from "../CancelButton/CancelButton";
+import SaveButton from "../SaveButton/SaveButton";
 
 interface Props {
   student: Student | undefined;
+  setStudent: Dispatch<SetStateAction<Student | undefined>>;
 }
 
-const ContactInformation = ({ student }: Props) => {
+const ContactInformation = ({ student, setStudent }: Props) => {
+  const [openCancelModal, setOpenCancelModal] = useState<boolean>(false);
+  const [openSaveModal, setOpenSaveModal] = useState<boolean>(false);
   const blankStudent: Student = {
     address: "",
     email: "",
@@ -27,6 +31,7 @@ const ContactInformation = ({ student }: Props) => {
     guardian_email: "",
     guardian_name: "",
     guardian_phone: "",
+    guardian_address: "",
     high_school: "",
     name: "",
     phone_number: "",
@@ -34,20 +39,30 @@ const ContactInformation = ({ student }: Props) => {
     files: [],
   };
   const [edit, setEdit] = useState<boolean>(false);
-  const [data, setData] = useState<Student>(blankStudent);
+  const [data, setData] = useState<Student>(student!);
 
   useEffect(() => {
-    setData(student || blankStudent);
+    setData({
+      ...student!,
+      address: data.address,
+      email: data.email,
+      phone_number: data.phone_number,
+      high_school: data.high_school,
+      grade_level: data.grade_level,
+    });
   }, [student]);
 
-  const saveStudent = () => {
-    updateStudent(data);
+  const handleEdit = (event: React.MouseEvent<HTMLElement>) => {
+    if (edit) {
+      setOpenSaveModal(!openSaveModal);
+    } else {
+      setEdit(!edit);
+    }
   };
 
-  const handleEdit = (event: React.MouseEvent<HTMLElement>) => {
-    if (edit) saveStudent();
-    setEdit(!edit);
-  };
+  // const saveData = () => {
+  //   setStudent({ ...student });
+  // };
 
   return (
     <div className={styles.contactInfo}>
@@ -57,16 +72,35 @@ const ContactInformation = ({ student }: Props) => {
           <button className={styles.edit} onClick={handleEdit}>
             {edit ? "Save" : "Edit"}
           </button>
+          <SaveButton
+            open={openSaveModal}
+            onClose={() => {
+              setOpenSaveModal(!openSaveModal);
+            }}
+            saveInfo={() => {
+              setEdit(!edit);
+              setStudent(data);
+            }}
+            data={data}
+          />
           {edit ? (
-            <button
-              className={styles.cancel}
-              onClick={() => {
-                setData(student || blankStudent);
-                setEdit(false);
-              }}
-            >
-              Cancel
-            </button>
+            <>
+              <button
+                onClick={() => setOpenCancelModal(!openCancelModal)}
+                className={styles.edit}
+                style={{ color: "red" }}
+              >
+                Cancel
+              </button>
+              <CancelButton
+                open={openCancelModal}
+                onClose={() => setOpenCancelModal(!openCancelModal)}
+                resetInfo={() => {
+                  setData(student || blankStudent);
+                  setEdit(false);
+                }}
+              />
+            </>
           ) : (
             ""
           )}

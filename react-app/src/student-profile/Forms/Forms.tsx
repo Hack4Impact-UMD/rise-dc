@@ -1,20 +1,24 @@
 import { useState, useEffect } from "react";
 import styles from "./Forms.module.css";
 import symbol from "./fileUpload.svg";
-import {Student, StudentFile} from "../../types/StudentType"
-import { uploadStudentFile, getStudentWithID, deleteStudentFile} from "../../backend/FirestoreCalls";
+import { Student, StudentFile } from "../../types/StudentType";
+import {
+  uploadStudentFile,
+  getStudentWithID,
+  deleteStudentFile,
+} from "../../backend/FirestoreCalls";
 
 interface Prop {
-  student: Student | undefined
+  student: Student | undefined;
 }
 
-const Forms = ({student}: Prop) => {
+const Forms = ({ student }: Prop) => {
   const [edit, setEdit] = useState<boolean>(false);
 
   const [files, setFiles] = useState<File[]>([]);
 
   const [loading, setLoading] = useState<Boolean>(false);
-  
+
   const blankStudent: Student = {
     address: "",
     email: "",
@@ -34,6 +38,7 @@ const Forms = ({student}: Prop) => {
     guardian_email: "",
     guardian_name: "",
     guardian_phone: "",
+    guardian_address: "",
     high_school: "",
     name: "",
     phone_number: "",
@@ -41,39 +46,47 @@ const Forms = ({student}: Prop) => {
     files: [],
   };
 
-  const [currentStudent, setCurrentStudent] = useState<Student>(student || blankStudent);
+  const [currentStudent, setCurrentStudent] = useState<Student>(
+    student || blankStudent
+  );
 
- useEffect(() => {
-  setFiles([]);
-  setCurrentStudent(student || blankStudent)
- }, [student])
+  useEffect(() => {
+    setFiles([]);
+    setCurrentStudent(student || blankStudent);
+  }, [student]);
 
- const refreshStudent = () => {
-  if(student && student.id) {
-    getStudentWithID(student.id).then((student) => {
-      setCurrentStudent({...student, id: student.id})
-    }).catch((e: any) => console.log(e))
-  }
- }
-
- const deleteFile = (file: StudentFile) => {
-    if(student && student.id) {
-      setLoading(true)
-      deleteStudentFile(file, student.id).then(() => {
-        setLoading(false)
-        refreshStudent()
-      }).catch((e) => {
-        setLoading(false)
-        console.log(e);
-      })
+  const refreshStudent = () => {
+    if (student && student.id) {
+      getStudentWithID(student.id)
+        .then((student) => {
+          setCurrentStudent({ ...student, id: student.id });
+        })
+        .catch((e: any) => console.log(e));
     }
- }
+  };
+
+  const deleteFile = (file: StudentFile) => {
+    if (student && student.id) {
+      setLoading(true);
+      deleteStudentFile(file, student.id)
+        .then(() => {
+          setLoading(false);
+          refreshStudent();
+        })
+        .catch((e) => {
+          setLoading(false);
+          console.log(e);
+        });
+    }
+  };
 
   const handleEdit = (event: React.MouseEvent<HTMLElement>) => {
     if (edit) {
-      saveFiles().then(() => {
-        refreshStudent()
-      }).catch((e) => console.log(e))
+      saveFiles()
+        .then(() => {
+          refreshStudent();
+        })
+        .catch((e) => console.log(e));
 
       setFiles([]);
     }
@@ -82,35 +95,43 @@ const Forms = ({student}: Prop) => {
 
   const saveFiles = async () => {
     if (student?.id) {
-      setLoading(true)
+      setLoading(true);
       for (let file of files) {
         try {
-          await uploadStudentFile(file, student.id)
+          await uploadStudentFile(file, student.id);
         } catch (e) {
           console.log(e);
         }
       }
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className={styles.studentSession}>
       <div className={styles.topLine}>
         <h2 className={styles.title}>Forms</h2>
-        { !loading ?
-        <div className={styles.editButtons}>
-          <button className={styles.edit} onClick={handleEdit}>
-            {edit ? "Save" : "Edit"}
-          </button>
-          {edit ?
-          <button className={styles.cancel} onClick={() => {setEdit(false);}}>
-            Cancel
-          </button>
-          : ""
-          }
-        </div>
-        : ""}
+        {!loading ? (
+          <div className={styles.editButtons}>
+            <button className={styles.edit} onClick={handleEdit}>
+              {edit ? "Save" : "Edit"}
+            </button>
+            {edit ? (
+              <button
+                className={styles.cancel}
+                onClick={() => {
+                  setEdit(false);
+                }}
+              >
+                Cancel
+              </button>
+            ) : (
+              ""
+            )}
+          </div>
+        ) : (
+          ""
+        )}
       </div>
       <div className={styles.container}>
         <div className={`${styles.containerLines} ${styles.uploadLine}`}>
@@ -133,7 +154,6 @@ const Forms = ({student}: Prop) => {
             <></>
           )}
         </div>
-        {loading ? <p>Loading...</p> : ""}
         {files.map((file) => {
           return (
             <div className={styles.containerLines}>
@@ -141,11 +161,21 @@ const Forms = ({student}: Prop) => {
             </div>
           );
         })}
+
         {currentStudent.files.map((file) => {
           return (
             <div className={styles.containerLines}>
-              <div className={styles.informationText}><a href={file.downloadURL} target="_blank">{file.name}</a></div>
-              <button onClick={() => {deleteFile(file)}} className={styles.button}>
+              <div className={styles.informationText}>
+                <a href={file.downloadURL} target="_blank">
+                  {file.name}
+                </a>
+              </div>
+              <button
+                onClick={() => {
+                  deleteFile(file);
+                }}
+                className={styles.button}
+              >
                 <img className={styles.icon} alt="Delete Icon" />
               </button>
             </div>

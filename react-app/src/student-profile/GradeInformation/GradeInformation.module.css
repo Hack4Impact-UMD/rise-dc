@@ -93,7 +93,11 @@
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: center;
+  width: 100%;
+}
+
+.startingText {
+  justify-content: start;
 }
 
 .informationEdit {
@@ -105,7 +109,7 @@
   width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-evenly;
 }
 
 .reason {
@@ -117,6 +121,11 @@
   border: 1px solid #666666;
   border-radius: 5px;
   text-align: center;
+  border: none;
+}
+
+.reason:after {
+  content: none;
 }
 
 .selectOption {

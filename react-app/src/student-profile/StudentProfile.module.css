@@ -4,7 +4,7 @@
 }
 
 .header {
-  height: 14vh;
+  height: 120px;
   background-color: #ffffff;
 }
 
@@ -16,6 +16,18 @@
   flex-direction: column;
   align-items: center;
   overflow-x: auto;
+  padding-top: 20px;
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 85vh;
+  text-align: center;
+  font-size: 1.2rem;
+  font-family: "Libre Franklin";
 }
 
 @media screen and (max-width: 1000px) {

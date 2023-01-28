@@ -1,14 +1,19 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, SetStateAction, Dispatch } from "react";
 import { updateStudent } from "../../backend/FirestoreCalls";
 import { Student } from "../../types/StudentType";
+import CancelButton from "../CancelButton/CancelButton";
+import SaveButton from "../SaveButton/SaveButton";
 import styles from "./GradeInformation.module.css";
 
 interface Props {
-  student: Student
+  student: Student;
+  setStudent: Dispatch<SetStateAction<Student | undefined>>;
 }
 
-const GradeInformation = ({student} : Props) => {
-  const blankStudent = {
+const GradeInformation = ({ student, setStudent }: Props) => {
+  const [openCancelModal, setOpenCancelModal] = useState<boolean>(false);
+  const [openSaveModal, setOpenSaveModal] = useState<boolean>(false);
+  const blankStudent: Student = {
     address: "",
     email: "",
     grade_level: "",
@@ -22,31 +27,40 @@ const GradeInformation = ({student} : Props) => {
       math_before: "",
       math_after: "",
       science_before: "",
-      science_after: ""
+      science_after: "",
     },
     guardian_email: "",
     guardian_name: "",
     guardian_phone: "",
+    guardian_address: "",
     high_school: "",
     name: "",
     phone_number: "",
-    reading_level: ""
-  }
+    reading_level: "",
+    files: [],
+  };
+
   const [edit, setEdit] = useState<boolean>(false);
   const [data, setData] = useState<Student>(student || blankStudent);
 
   const handleEdit = (event: React.MouseEvent<HTMLElement>) => {
-    if (edit) saveStudent()
-    setEdit(!edit);
+    if (edit) {
+      setOpenSaveModal(!openSaveModal);
+    } else {
+      setEdit(!edit);
+    }
   };
 
   useEffect(() => {
-    setData(student || blankStudent)
-  }, [student])
+    setData({
+      ...student!,
+      grades: data.grades,
+    });
+  }, [student]);
 
   const saveStudent = () => {
-      updateStudent(data).catch((e) => console.log(e))
-  }
+    updateStudent(data).catch((e) => console.log(e));
+  };
 
   return (
     <div className={styles.gradeInfo}>
@@ -56,27 +70,58 @@ const GradeInformation = ({student} : Props) => {
           <button className={styles.edit} onClick={handleEdit}>
             {edit ? "Save" : "Edit"}
           </button>
-          {edit ?
-          <button className={styles.cancel} onClick={() => {setData(student || blankStudent); setEdit(false)}}>
-            Cancel
-          </button>
-          : ""
-          }
+          <SaveButton
+            open={openSaveModal}
+            onClose={() => {
+              setOpenSaveModal(!openSaveModal);
+            }}
+            saveInfo={() => {
+              setStudent(data);
+              setEdit(!edit);
+            }}
+            data={data}
+          />
+          {edit ? (
+            <>
+              <button
+                onClick={() => setOpenCancelModal(!openCancelModal)}
+                className={styles.edit}
+                style={{ color: "red" }}
+              >
+                Cancel
+              </button>
+              <CancelButton
+                open={openCancelModal}
+                onClose={() => setOpenCancelModal(!openCancelModal)}
+                resetInfo={() => {
+                  setData(student || blankStudent);
+                  setEdit(false);
+                }}
+              />
+            </>
+          ) : (
+            ""
+          )}
         </div>
       </div>
       <div className={styles.container}>
         <div className={styles.containerLines}>
           <div className={styles.lineLabel}>Reading Comprehension</div>
-          <select
-            className={styles.reason}
-            disabled={!edit}
-            value={data.reading_level}
-            onChange={(e) =>
-              {setData({...data, reading_level: e.target.value})}
-            }
-          >
-            {edit ? (
-              <>
+          {edit ? (
+            <>
+              <select
+                className={styles.reason}
+                disabled={!edit}
+                value={data.reading_level}
+                onChange={(e) => {
+                  setData({ ...data, reading_level: e.target.value });
+                }}
+              >
+                {data.reading_level == "" ? (
+                  <option className={styles.selectOption} value=""></option>
+                ) : (
+                  ""
+                )}
                 <option className={styles.selectOption} value="1st Grade">
                   1st Grade
                 </option>
@@ -113,24 +158,24 @@ const GradeInformation = ({student} : Props) => {
                 <option className={styles.selectOption} value="12th Grade">
                   12th Grade
                 </option>
-              </>
-            ) : (
-              <option value={data.reading_level}>{data.reading_level}</option>
-            )}
-          </select>
+              </select>
+            </>
+          ) : (
+            <p className={styles.informationText}>{data.reading_level}</p>
+          )}
         </div>
         <div className={styles.containerLines}>
           <div className={styles.lineLabel}></div>
           <div className={styles.gradeLabels}>
-            <div className={styles.informationText}> Starting </div>
-            <div className={styles.informationText}> Ending </div>
+            <div className={styles.informationText}>Starting </div>
+            <div className={styles.informationText}>Ending </div>
           </div>
         </div>
         <div className={styles.containerLines}>
           <div className={styles.lineLabel}>
-              <div className={styles.informationText}>
-                Math
-              </div>
+            <div className={`${styles.informationText} ${styles.startingText}`}>
+              Math
+            </div>
           </div>
           <div className={styles.gradeLabels}>
             <div className={styles.informationText}>
@@ -139,7 +184,12 @@ const GradeInformation = ({student} : Props) => {
                   className={styles.reason}
                   disabled={!edit}
                   value={data.grades.math_before}
-                  onChange={(e) => {setData({...data, grades: {...data.grades, math_before: e.target.value}})}}
+                  onChange={(e) => {
+                    setData({
+                      ...data,
+                      grades: { ...data.grades, math_before: e.target.value },
+                    });
+                  }}
                 >
                   <>
                     <option className={styles.selectOption} value="A">
@@ -171,7 +221,12 @@ const GradeInformation = ({student} : Props) => {
                   className={styles.reason}
                   disabled={!edit}
                   value={data.grades.math_after}
-                  onChange={(e) => {setData({...data, grades: {...data.grades, math_after: e.target.value}})}}
+                  onChange={(e) => {
+                    setData({
+                      ...data,
+                      grades: { ...data.grades, math_after: e.target.value },
+                    });
+                  }}
                 >
                   <>
                     <option className={styles.selectOption} value="A">
@@ -201,9 +256,9 @@ const GradeInformation = ({student} : Props) => {
         </div>
         <div className={styles.containerLines}>
           <div className={styles.lineLabel}>
-              <div className={styles.informationText}>
-                English
-              </div>
+            <div className={`${styles.informationText} ${styles.startingText}`}>
+              English
+            </div>
           </div>
           <div className={styles.gradeLabels}>
             <div className={styles.informationText}>
@@ -212,7 +267,15 @@ const GradeInformation = ({student} : Props) => {
                   className={styles.reason}
                   disabled={!edit}
                   value={data.grades.english_before}
-                  onChange={(e) => {setData({...data, grades: {...data.grades, english_before: e.target.value}})}}
+                  onChange={(e) => {
+                    setData({
+                      ...data,
+                      grades: {
+                        ...data.grades,
+                        english_before: e.target.value,
+                      },
+                    });
+                  }}
                 >
                   <>
                     <option className={styles.selectOption} value="A">
@@ -244,7 +307,12 @@ const GradeInformation = ({student} : Props) => {
                   className={styles.reason}
                   disabled={!edit}
                   value={data.grades.english_after}
-                  onChange={(e) => {setData({...data, grades: {...data.grades, english_after: e.target.value}})}}
+                  onChange={(e) => {
+                    setData({
+                      ...data,
+                      grades: { ...data.grades, english_after: e.target.value },
+                    });
+                  }}
                 >
                   <>
                     <option className={styles.selectOption} value="A">
@@ -274,9 +342,9 @@ const GradeInformation = ({student} : Props) => {
         </div>
         <div className={styles.containerLines}>
           <div className={styles.lineLabel}>
-              <div className={styles.informationText}>
-                Science
-              </div>
+            <div className={`${styles.informationText} ${styles.startingText}`}>
+              Science
+            </div>
           </div>
           <div className={styles.gradeLabels}>
             <div className={styles.informationText}>
@@ -285,7 +353,15 @@ const GradeInformation = ({student} : Props) => {
                   className={styles.reason}
                   disabled={!edit}
                   value={data.grades.science_before}
-                  onChange={(e) => {setData({...data, grades: {...data.grades, science_before: e.target.value}})}}
+                  onChange={(e) => {
+                    setData({
+                      ...data,
+                      grades: {
+                        ...data.grades,
+                        science_before: e.target.value,
+                      },
+                    });
+                  }}
                 >
                   <>
                     <option className={styles.selectOption} value="A">
@@ -317,7 +393,12 @@ const GradeInformation = ({student} : Props) => {
                   className={styles.reason}
                   disabled={!edit}
                   value={data.grades.science_after}
-                  onChange={(e) => {setData({...data, grades: {...data.grades, science_after: e.target.value}})}}
+                  onChange={(e) => {
+                    setData({
+                      ...data,
+                      grades: { ...data.grades, science_after: e.target.value },
+                    });
+                  }}
                 >
                   <>
                     <option className={styles.selectOption} value="A">
@@ -347,9 +428,9 @@ const GradeInformation = ({student} : Props) => {
         </div>
         <div className={styles.containerLines}>
           <div className={styles.lineLabel}>
-              <div className={styles.informationText}>
-                Social Studies
-              </div>
+            <div className={`${styles.informationText} ${styles.startingText}`}>
+              Social Studies
+            </div>
           </div>
           <div className={styles.gradeLabels}>
             <div className={styles.informationText}>
@@ -358,7 +439,15 @@ const GradeInformation = ({student} : Props) => {
                   className={styles.reason}
                   disabled={!edit}
                   value={data.grades.socialStudies_before}
-                  onChange={(e) => {setData({...data, grades: {...data.grades, socialStudies_before: e.target.value}})}}
+                  onChange={(e) => {
+                    setData({
+                      ...data,
+                      grades: {
+                        ...data.grades,
+                        socialStudies_before: e.target.value,
+                      },
+                    });
+                  }}
                 >
                   <>
                     <option className={styles.selectOption} value="A">
@@ -390,7 +479,15 @@ const GradeInformation = ({student} : Props) => {
                   className={styles.reason}
                   disabled={!edit}
                   value={data.grades.socialStudies_after}
-                  onChange={(e) => {setData({...data, grades: {...data.grades, socialStudies_after: e.target.value}})}}
+                  onChange={(e) => {
+                    setData({
+                      ...data,
+                      grades: {
+                        ...data.grades,
+                        socialStudies_after: e.target.value,
+                      },
+                    });
+                  }}
                 >
                   <>
                     <option className={styles.selectOption} value="A">
@@ -420,9 +517,9 @@ const GradeInformation = ({student} : Props) => {
         </div>
         <div className={styles.containerLines}>
           <div className={styles.lineLabel}>
-              <div className={styles.informationText}>
-                Humanities
-              </div>
+            <div className={`${styles.informationText} ${styles.startingText}`}>
+              Humanities
+            </div>
           </div>
           <div className={styles.gradeLabels}>
             <div className={styles.informationText}>
@@ -431,7 +528,15 @@ const GradeInformation = ({student} : Props) => {
                   className={styles.reason}
                   disabled={!edit}
                   value={data.grades.humanities_before}
-                  onChange={(e) => {setData({...data, grades: {...data.grades, humanities_before: e.target.value}})}}
+                  onChange={(e) => {
+                    setData({
+                      ...data,
+                      grades: {
+                        ...data.grades,
+                        humanities_before: e.target.value,
+                      },
+                    });
+                  }}
                 >
                   <>
                     <option className={styles.selectOption} value="A">
@@ -463,7 +568,15 @@ const GradeInformation = ({student} : Props) => {
                   className={styles.reason}
                   disabled={!edit}
                   value={data.grades.humanities_after}
-                  onChange={(e) => {setData({...data, grades: {...data.grades, humanities_after: e.target.value}})}}
+                  onChange={(e) => {
+                    setData({
+                      ...data,
+                      grades: {
+                        ...data.grades,
+                        humanities_after: e.target.value,
+                      },
+                    });
+                  }}
                 >
                   <>
                     <option className={styles.selectOption} value="A">
