@@ -1,10 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./StudentCreation.module.css";
 
-export default function SaveButton() {
-  return (
-    <button className={styles.saveButton} type="submit">
-      Save
-    </button>
-  );
+interface ButtonProps {
+  text: string;
+  isDisabled?: boolean;
+  handleClick: VoidFunction;
 }
+
+export const SaveButton: React.FC<ButtonProps> = ({
+  text,
+  isDisabled,
+  handleClick,
+}) => {
+  return (
+    <form
+      onSubmit={(event) => {
+        event.preventDefault();
+        handleClick();
+      }}
+    >
+      <button className={styles.saveButton} disabled={isDisabled}>
+        {isDisabled ? <div className={styles.spinner}></div> : text}
+      </button>
+    </form>
+  );
+};
+
+export default SaveButton;

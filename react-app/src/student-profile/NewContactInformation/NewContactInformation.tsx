@@ -25,8 +25,6 @@ const NewContactInformation = ({
     grade,
   });
 
-
-
   return (
     <div className={styles.contactInfo}>
       <div className={styles.topLine}>
@@ -42,6 +40,7 @@ const NewContactInformation = ({
             onChange={(e) =>
               setInformation({ ...information, address: e.target.value })
             }
+            placeholder="Enter new address here"
           ></input>
         </div>
         <div className={styles.containerLines}>

@@ -10,14 +10,30 @@ import { TypeFlags } from "typescript";
 import NavBar from "../navbar/Navbar";
 import SaveButton from "./SaveButton";
 import CancelButton from "./CancelButton";
-
-
-
+import {Student, StudentFile, Grades} from "../types/StudentType";
+import {storeStudent, updateStudent} from "../backend/FirestoreCalls";
 const StudentCreation = () => {
 
   const [information, setInformation] = useState<string>(
-      "Enter a student name");
+      "");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  // const [student, setStudent] = useState<Student>({
+  //   address: "",
+  //   email: string,
+  //   grade_level: string,
+  //   grades: Grades,
+  //   files: StudentFile[],
+  //   guardian_email: string,
+  //   guardian_name: string,
+  //   guardian_phone: string,
+  //   high_school: string,
+  //   name: string,
+  //   phone_number: string,
+  //   reading_level: string
+  // });
+        
+  
   return (
     <div className={styles.profile}>
       <div className={styles.header}>{<NavBar title="New Student"></NavBar>}</div>
@@ -30,26 +46,34 @@ const StudentCreation = () => {
             onChange={(e) =>
               setInformation(e.target.value)
             }
+            placeholder="Enter student name"
           ></input>
         <NewContactInformation
-          address="Enter address"
-          email="Enter email"
-          phoneNumber="Enter phone number"
-          highSchool="Enter High School"
-          grade="Enter 11"
+          address=""
+          email=""
+          phoneNumber=""
+          highSchool=""
+          grade=""
         />
         <NewGuardianInformation
-          name="Enter name"
-          address="Enter address"
-          email="Enter email"
-          phoneNumber="Enter phone number"
+          name=""
+          address=""
+          email=""
+          phoneNumber=""
         />
         <div className={styles.gradesAndForms}>
           <NewGradesInformation />
           <NewForms />
         </div>
         <div className={styles.buttons}>
-          <SaveButton></SaveButton>
+        <SaveButton
+          text="Save"
+          isDisabled={isLoading}
+          handleClick={() => {
+            setIsLoading(true);
+            // createStudent();
+          }}
+        />
           <CancelButton></CancelButton>
         </div>
       </div>

@@ -38,6 +38,7 @@ const NewGuardianInformation = ({
             onChange={(e) =>
               setInformation({ ...information, name: e.target.value })
             }
+            placeholder="Enter name here"
           ></input>
         </div>
         <div className={styles.containerLines}>
@@ -49,6 +50,7 @@ const NewGuardianInformation = ({
             onChange={(e) =>
               setInformation({ ...information, address: e.target.value })
             }
+            placeholder="Enter new address here"
           ></input>
         </div>
         <div className={styles.containerLines}>
@@ -60,6 +62,7 @@ const NewGuardianInformation = ({
             onChange={(e) =>
               setInformation({ ...information, email: e.target.value })
             }
+            placeholder="Enter new email here"
           ></input>
         </div>
         <div className={`${styles.bottomLine} ${styles.containerLines}`}>
@@ -71,6 +74,7 @@ const NewGuardianInformation = ({
             onChange={(e) =>
               setInformation({ ...information, phoneNumber: e.target.value })
             }
+            placeholder="Enter new phone number here"
           ></input>
         </div>
       </div>
