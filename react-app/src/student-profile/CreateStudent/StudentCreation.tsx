@@ -1,19 +1,22 @@
 import { useState } from "react";
 import Header from "../Header/Header";
+
 import styles from "./StudentCreation.module.css";
 import guardianStyles from "./NewGuardianInformation.module.css";
 import contactStyles from "./NewContactInformation.module.css";
 import gradeStyles from "./NewGradesInformation.module.css";
+import formStyles from "./NewForms.module.css";
+import symbol from "./fileUpload.svg";
 
-
-import NewForms from "../NewForms/NewForms";
 import { calculateBackoffMillis } from "@firebase/util";
 import { TypeFlags } from "typescript";
 import NavBar from "../../navbar/Navbar";
 import SaveButton from "./SaveButton";
 import CancelButton from "./CancelButton";
 import { Student, StudentFile, Grades } from "../../types/StudentType";
-import { storeStudent, updateStudent } from "../../backend/FirestoreCalls";
+import { uploadStudentFile, deleteStudentFile, storeStudent } from "../../backend/FirestoreCalls";
+import { useNavigate } from "react-router-dom";
+
 type GuardianInformationProp = {
   name: string;
   address: string;
@@ -31,7 +34,7 @@ const StudentCreation = () => {
 
   const [information, setInformation] = useState<string>(
     "");
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const [guardianInfo, setGuardianInfo] = useState<GuardianInformationProp>({
     name: "",
@@ -56,6 +59,35 @@ const StudentCreation = () => {
       GradeThree: { name: "Select Subject", starting: "Grade", ending: "Grade" },
     },
   });
+
+  const [files, setFiles] = useState<any[]>([]);
+
+
+  const blankStudent: Student = {
+    address: "",
+    email: "",
+    grade_level: "",
+    grades: {
+      english_before: "",
+      english_after: "",
+      humanities_before: "",
+      humanities_after: "",
+      socialStudies_before: "",
+      socialStudies_after: "",
+      math_before: "",
+      math_after: "",
+      science_before: "",
+      science_after: "",
+    },
+    guardian_email: "",
+    guardian_name: "",
+    guardian_phone: "",
+    high_school: "",
+    name: "",
+    phone_number: "",
+    reading_level: "",
+    files: [],
+  };
 
   const handleChangeGradeName = (
     e: React.ChangeEvent<HTMLSelectElement>,
@@ -106,6 +138,62 @@ const StudentCreation = () => {
     });
   };
 
+  const navigate = useNavigate();
+  const createStudent = (student: Student) => {
+    student.name = information;
+    student.address = contactInfo.address;
+    student.email = contactInfo.email;
+    student.phone_number = contactInfo.phoneNumber;
+    student.high_school = contactInfo.highSchool;
+    student.grade_level = contactInfo.grade;
+
+    student.guardian_name = guardianInfo.name;
+    student.guardian_email = guardianInfo.email;
+    student.guardian_phone = guardianInfo.phoneNumber;
+
+    student.reading_level = gradesInfo.reading;
+    if (gradesInfo.subjects["GradeOne"]["name"] == "Math") {
+      student.grades.math_before = gradesInfo.subjects["GradeOne"]["starting"];
+      student.grades.math_after = gradesInfo.subjects["GradeOne"]["ending"];
+    } else if (gradesInfo.subjects["GradeOne"]["name"] == "Science") {
+      student.grades.science_before = gradesInfo.subjects["GradeOne"]["starting"];
+      student.grades.science_after = gradesInfo.subjects["GradeOne"]["ending"];
+    } else if (gradesInfo.subjects["GradeOne"]["name"] == "Hisotry") {
+      student.grades.socialStudies_before = gradesInfo.subjects["GradeOne"]["starting"];
+      student.grades.socialStudies_after = gradesInfo.subjects["GradeOne"]["ending"];
+    } 
+    
+    if (gradesInfo.subjects["GradeTwo"]["name"] == "Math") {
+      student.grades.math_before = gradesInfo.subjects["GradeTwo"]["starting"];
+      student.grades.math_after = gradesInfo.subjects["GradeTwo"]["ending"];
+    } else if (gradesInfo.subjects["GradeTwo"]["name"] == "Science") {
+      student.grades.science_before = gradesInfo.subjects["GradeTwo"]["starting"];
+      student.grades.science_after = gradesInfo.subjects["GradeTwo"]["ending"];
+    } else if (gradesInfo.subjects["GradeTwo"]["name"] == "Hisotry") {
+      student.grades.socialStudies_before = gradesInfo.subjects["GradeTwo"]["starting"];
+      student.grades.socialStudies_after = gradesInfo.subjects["GradeTwo"]["ending"];
+    }
+
+    if (gradesInfo.subjects["GradeThree"]["name"] == "Math") {
+      student.grades.math_before = gradesInfo.subjects["GradeThree"]["starting"];
+      student.grades.math_after = gradesInfo.subjects["GradeThree"]["ending"];
+    } else if (gradesInfo.subjects["GradeThree"]["name"] == "Science") {
+      student.grades.science_before = gradesInfo.subjects["GradeThree"]["starting"];
+      student.grades.science_after = gradesInfo.subjects["GradeThree"]["ending"];
+    } else if (gradesInfo.subjects["GradeThree"]["name"] == "Hisotry") {
+      student.grades.socialStudies_before = gradesInfo.subjects["GradeThree"]["starting"];
+      student.grades.socialStudies_after = gradesInfo.subjects["GradeThree"]["ending"];
+    }
+    
+    student.files = files;
+    storeStudent(student).then(() => {
+      setTimeout(() => {
+        setLoading(false);
+        navigate("/search");
+      }, 300);
+    })
+  }
+
   return (
     <div className={styles.profile}>
       <div className={styles.header}>{<NavBar title="New Student"></NavBar>}</div>
@@ -135,7 +223,7 @@ const StudentCreation = () => {
                 onChange={(e) =>
                   setContactInfo({ ...contactInfo, address: e.target.value })
                 }
-                placeholder="Enter new address here"
+                placeholder="Enter new address"
               ></input>
             </div>
             <div className={contactStyles.containerLines}>
@@ -147,7 +235,7 @@ const StudentCreation = () => {
                 onChange={(e) =>
                   setContactInfo({ ...contactInfo, email: e.target.value })
                 }
-                placeholder="Enter new email here"
+                placeholder="Enter new email"
               ></input>
             </div>
             <div className={contactStyles.containerLines}>
@@ -159,7 +247,7 @@ const StudentCreation = () => {
                 onChange={(e) =>
                   setContactInfo({ ...contactInfo, phoneNumber: e.target.value })
                 }
-                placeholder="Enter new phone number here"
+                placeholder="Enter new phone number"
               ></input>
             </div>
             <div className={contactStyles.containerLines}>
@@ -171,7 +259,7 @@ const StudentCreation = () => {
                 onChange={(e) =>
                   setContactInfo({ ...contactInfo, highSchool: e.target.value })
                 }
-                placeholder="Enter new high school here"
+                placeholder="Enter new high school"
               ></input>
             </div>
             <div className={`${contactStyles.bottomLine} ${contactStyles.containerLines}`}>
@@ -183,7 +271,7 @@ const StudentCreation = () => {
                 onChange={(e) =>
                   setContactInfo({ ...contactInfo, grade: e.target.value })
                 }
-                placeholder="Enter new grade level here"
+                placeholder="Enter new grade level"
               ></input>
             </div>
           </div>
@@ -203,7 +291,7 @@ const StudentCreation = () => {
                 onChange={(e) =>
                   setGuardianInfo({ ...guardianInfo, name: e.target.value })
                 }
-                placeholder="Enter name here"
+                placeholder="Enter new name"
               ></input>
             </div>
             <div className={guardianStyles.containerLines}>
@@ -215,7 +303,7 @@ const StudentCreation = () => {
                 onChange={(e) =>
                   setGuardianInfo({ ...guardianInfo, address: e.target.value })
                 }
-                placeholder="Enter new address here"
+                placeholder="Enter new address"
               ></input>
             </div>
             <div className={guardianStyles.containerLines}>
@@ -227,7 +315,7 @@ const StudentCreation = () => {
                 onChange={(e) =>
                   setGuardianInfo({ ...guardianInfo, email: e.target.value })
                 }
-                placeholder="Enter new email here"
+                placeholder="Enter new email"
               ></input>
             </div>
             <div className={`${guardianStyles.bottomLine} ${guardianStyles.containerLines}`}>
@@ -239,7 +327,7 @@ const StudentCreation = () => {
                 onChange={(e) =>
                   setGuardianInfo({ ...guardianInfo, phoneNumber: e.target.value })
                 }
-                placeholder="Enter new phone number here"
+                placeholder="Enter new phone number"
               ></input>
             </div>
           </div>
@@ -541,15 +629,45 @@ const StudentCreation = () => {
               </div>
             </div>
           </div>
-          <NewForms />
+          <div className={formStyles.studentSession}>
+            <div className={formStyles.topLine}>
+              <h2 className={formStyles.title}>Forms</h2>
+            </div>
+            <div className={formStyles.container}>
+              <div className={`${formStyles.containerLines} ${formStyles.uploadLine}`}>
+                <input
+                  type="file"
+                  id="upload"
+                  onChange={(e: any) => setFiles([...files, e!.target!.files[0]])}
+                  hidden
+                />
+                <label htmlFor="upload" className={formStyles.edit}>
+                  Upload{" "}
+                  <img
+                    src={symbol}
+                    alt="File Upload Symbol"
+                    className={formStyles.uploadImage}
+                  ></img>
+                </label>
+              </div>
+              {files.map((file) => {
+                return (
+                  <div className={formStyles.containerLines}>
+                    <div className={formStyles.informationText}>{file.name}</div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
         </div>
         <div className={styles.buttons}>
           <SaveButton
             text="Save"
-            isDisabled={isLoading}
+            isDisabled={loading}
             handleClick={() => {
-              setIsLoading(true);
-              // createStudent();
+              setLoading(true);
+              createStudent(blankStudent);
             }}
           />
           <CancelButton></CancelButton>
