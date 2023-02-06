@@ -10,7 +10,8 @@ import Session from "./session-log-components/Session";
 import SearchPage from "./search-page/SearchPage";
 import InvalidPage from "./InvalidPage/InvalidPage";
 import StudentCreation from "./student-profile/CreateStudent/StudentCreation";
-import Loading from "./loading-screen/Loading";
+import TimeReport from "./report/TimeReport/TimeReport";
+import IndividualReport from "./report/IndividualReport/IndividualReport";
 
 function App() {
   return (
@@ -39,6 +40,14 @@ function App() {
           <Route
             path="/createstudent"
             element={<RequireAuth children={<StudentCreation />} />}
+          />
+          <Route
+            path="/timereport/:id"
+            element={<RequireAuth children={<TimeReport />} />}
+          />
+          <Route
+            path="/indivreport"
+            element={<RequireAuth children={<IndividualReport />} />}
           />
           <Route
             path="*"
