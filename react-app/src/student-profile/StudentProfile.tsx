@@ -42,6 +42,7 @@ const StudentProfile = () => {
     phone_number: "",
     reading_level: "",
     files: [],
+    active: true,
   };
 
   useEffect(() => {
@@ -50,11 +51,9 @@ const StudentProfile = () => {
         .then((student) => {
           let newStudent: Student = student || blankStudent;
           setStudent({ ...newStudent, id: studentId });
-          console.log(newStudent);
           setLoading(false);
         })
         .catch((e) => {
-          console.log(e);
           setError(true);
           setLoading(false);
         });
@@ -62,7 +61,7 @@ const StudentProfile = () => {
       setError(true);
       setLoading(false);
     }
-  }, []);
+  }, [student]);
 
   return (
     <div className={styles.profile}>
@@ -89,7 +88,7 @@ const StudentProfile = () => {
                 ) : (
                   ""
                 )}
-                {/* <Forms student={student} /> */}
+                <Forms student={student} />
               </div>
             </div>
           )}

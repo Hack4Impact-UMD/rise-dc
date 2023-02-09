@@ -37,6 +37,7 @@ const ContactInformation = ({ student, setStudent }: Props) => {
     phone_number: "",
     reading_level: "",
     files: [],
+    active: true,
   };
   const [edit, setEdit] = useState<boolean>(false);
   const [data, setData] = useState<Student>(student!);

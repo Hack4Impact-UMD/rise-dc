@@ -128,8 +128,8 @@
   font-size: 0.9rem;
   width: 80%;
   text-align: center;
-  overflow-y: scroll;
-  padding-top: 10px;
+  overflow-y: auto;
+  padding-top: 20px;
 }
 
 .title {

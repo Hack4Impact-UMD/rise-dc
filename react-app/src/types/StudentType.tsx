@@ -13,6 +13,7 @@ export type Student = {
   name: string;
   phone_number: string;
   reading_level: string;
+  active: boolean;
 };
 
 export type StudentFile = {

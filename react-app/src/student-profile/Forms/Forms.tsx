@@ -1,21 +1,31 @@
 import { useState, useEffect } from "react";
 import styles from "./Forms.module.css";
 import symbol from "./fileUpload.svg";
+import deleteIcon from "./delete.png";
 import { Student, StudentFile } from "../../types/StudentType";
 import {
   uploadStudentFile,
   getStudentWithID,
   deleteStudentFile,
 } from "../../backend/FirestoreCalls";
-
+import SaveButton from "../SaveButton/SaveButton";
+import CancelButton from "../CancelButton/CancelButton";
 interface Prop {
   student: Student | undefined;
 }
 
 const Forms = ({ student }: Prop) => {
   const [edit, setEdit] = useState<boolean>(false);
+  const [openSaveModal, setOpenSaveModal] = useState<boolean>(false);
+  const [openCancelModal, setOpenCancelModal] = useState<boolean>(false);
 
-  const [files, setFiles] = useState<File[]>([]);
+  const [files, setFiles] = useState<{
+    uploaded: File[];
+    deleted: String[];
+  }>({
+    uploaded: [],
+    deleted: [],
+  });
 
   const [loading, setLoading] = useState<Boolean>(false);
 
@@ -44,6 +54,7 @@ const Forms = ({ student }: Prop) => {
     phone_number: "",
     reading_level: "",
     files: [],
+    active: true,
   };
 
   const [currentStudent, setCurrentStudent] = useState<Student>(
@@ -51,7 +62,6 @@ const Forms = ({ student }: Prop) => {
   );
 
   useEffect(() => {
-    setFiles([]);
     setCurrentStudent(student || blankStudent);
   }, [student]);
 
@@ -82,27 +92,22 @@ const Forms = ({ student }: Prop) => {
 
   const handleEdit = (event: React.MouseEvent<HTMLElement>) => {
     if (edit) {
-      saveFiles()
-        .then(() => {
-          refreshStudent();
-        })
-        .catch((e) => console.log(e));
-
-      setFiles([]);
+      setOpenSaveModal(!openSaveModal);
+    } else {
+      setEdit(!edit);
     }
-    setEdit(!edit);
   };
 
   const saveFiles = async () => {
     if (student?.id) {
       setLoading(true);
-      for (let file of files) {
-        try {
-          await uploadStudentFile(file, student.id);
-        } catch (e) {
-          console.log(e);
-        }
-      }
+      // for (let file of files) {
+      //   try {
+      //     await uploadStudentFile(file, student.id);
+      //   } catch (e) {
+      //     console.log(e);
+      //   }
+      // }
       setLoading(false);
     }
   };
@@ -111,34 +116,52 @@ const Forms = ({ student }: Prop) => {
     <div className={styles.studentSession}>
       <div className={styles.topLine}>
         <h2 className={styles.title}>Forms</h2>
-        {!loading ? (
-          <div className={styles.editButtons}>
-            <button className={styles.edit} onClick={handleEdit}>
-              {edit ? "Save" : "Edit"}
-            </button>
-            {edit ? (
+        <div className={styles.editButtons}>
+          <button className={styles.edit} onClick={handleEdit}>
+            {edit ? "Save" : "Edit"}
+          </button>
+          <SaveButton
+            open={openSaveModal}
+            onClose={() => {
+              setOpenSaveModal(!openSaveModal);
+            }}
+            saveInfo={() => {}}
+            files={files}
+          />
+          {edit ? (
+            <>
               <button
-                className={styles.cancel}
-                onClick={() => {
-                  setEdit(false);
-                }}
+                onClick={() => setOpenCancelModal(!openCancelModal)}
+                className={styles.edit}
+                style={{ color: "red" }}
               >
                 Cancel
               </button>
-            ) : (
-              ""
-            )}
-          </div>
-        ) : (
-          ""
-        )}
+              <CancelButton
+                open={openCancelModal}
+                onClose={() => setOpenCancelModal(!openCancelModal)}
+                resetInfo={() => {
+                  setFiles({ uploaded: [], deleted: [] });
+                  setEdit(false);
+                }}
+              />
+            </>
+          ) : (
+            ""
+          )}
+        </div>
       </div>
       <div className={styles.container}>
         <div className={`${styles.containerLines} ${styles.uploadLine}`}>
           <input
             type="file"
             id="upload"
-            onChange={(e: any) => setFiles([...files, e!.target!.files[0]])}
+            onChange={(e: any) =>
+              setFiles({
+                ...files,
+                uploaded: [...files.uploaded, e!.target!.files[0]],
+              })
+            }
             hidden
           />
           {edit ? (
@@ -154,31 +177,68 @@ const Forms = ({ student }: Prop) => {
             <></>
           )}
         </div>
-        {files.map((file) => {
+        {files.uploaded?.map((file) => {
           return (
             <div className={styles.containerLines}>
               <div className={styles.informationText}>{file.name}</div>
+              <button
+                onClick={() => {
+                  setFiles({
+                    ...files,
+                    uploaded: files.uploaded.filter((ele) => ele != file),
+                  });
+                }}
+                className={styles.button}
+              >
+                <img
+                  className={styles.icon}
+                  alt="Delete Icon"
+                  src={deleteIcon}
+                />
+              </button>
             </div>
           );
         })}
 
-        {currentStudent.files.map((file) => {
+        {currentStudent.files?.map((file) => {
           return (
-            <div className={styles.containerLines}>
-              <div className={styles.informationText}>
-                <a href={file.downloadURL} target="_blank">
-                  {file.name}
-                </a>
-              </div>
-              <button
-                onClick={() => {
-                  deleteFile(file);
-                }}
-                className={styles.button}
-              >
-                <img className={styles.icon} alt="Delete Icon" />
-              </button>
-            </div>
+            <>
+              {files.deleted.includes(file.downloadURL) ? (
+                <></>
+              ) : (
+                <div className={styles.containerLines}>
+                  <div className={styles.informationText}>
+                    <a href={file.downloadURL} target="_blank">
+                      {file.name}
+                    </a>
+                  </div>
+                  {edit ? (
+                    <button
+                      onClick={() => {
+                        const arr = files.deleted;
+                        if (!arr.includes(file.downloadURL)) {
+                          arr.push(file.downloadURL);
+                        }
+                        setFiles({
+                          ...files,
+                          deleted: arr,
+                        });
+                        console.log(files);
+                      }}
+                      className={styles.button}
+                    >
+                      <img
+                        className={styles.icon}
+                        alt="Delete Icon"
+                        src={deleteIcon}
+                      />
+                    </button>
+                  ) : (
+                    <></>
+                  )}
+                </div>
+              )}
+            </>
           );
         })}
       </div>

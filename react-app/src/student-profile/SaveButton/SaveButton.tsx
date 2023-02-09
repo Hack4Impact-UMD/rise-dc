@@ -1,32 +1,42 @@
 import { useState } from "react";
 import { updateStudent } from "../../backend/FirestoreCalls";
 import Modal from "../../ModalWrapper/Modal";
-import { Student } from "../../types/StudentType";
+import { Student, StudentFile } from "../../types/StudentType";
 import styles from "./SaveButton.module.css";
 
 type saveButtonType = {
   open: boolean;
   onClose: any;
   saveInfo: any;
-  data: Student;
+  data?: Student;
+  files?: { uploaded: File[]; deleted: String[] };
 };
 
-const SaveButton = ({ open, onClose, saveInfo, data }: saveButtonType) => {
+const SaveButton = ({
+  open,
+  onClose,
+  saveInfo,
+  data,
+  files,
+}: saveButtonType) => {
   const [submitted, setSubmitted] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleSubmit = () => {
     setLoading(true);
-    updateStudent(data)
-      .then(() => {
-        setSubmitted("Your changes have been saved.");
-      })
-      .catch((error) =>
-        setSubmitted(
-          `Changes failed to save due to the following error: ${error}`
+    if (data) {
+      updateStudent(data)
+        .then(() => {
+          setSubmitted("Your changes have been saved.");
+        })
+        .catch((error) =>
+          setSubmitted(
+            `Changes failed to save due to the following error: ${error}`
+          )
         )
-      )
-      .finally(() => setLoading(false));
+        .finally(() => setLoading(false));
+    } else if (files) {
+    }
   };
 
   const handleOnClose = () => {

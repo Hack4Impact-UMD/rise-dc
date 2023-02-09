@@ -38,6 +38,7 @@ const GradeInformation = ({ student, setStudent }: Props) => {
     phone_number: "",
     reading_level: "",
     files: [],
+    active: true,
   };
 
   const [edit, setEdit] = useState<boolean>(false);
@@ -117,11 +118,7 @@ const GradeInformation = ({ student, setStudent }: Props) => {
                   setData({ ...data, reading_level: e.target.value });
                 }}
               >
-                {data.reading_level == "" ? (
-                  <option className={styles.selectOption} value=""></option>
-                ) : (
-                  ""
-                )}
+                <option className={styles.selectOption} value=""></option>
                 <option className={styles.selectOption} value="1st Grade">
                   1st Grade
                 </option>
@@ -161,7 +158,7 @@ const GradeInformation = ({ student, setStudent }: Props) => {
               </select>
             </>
           ) : (
-            <p className={styles.informationText}>{data.reading_level}</p>
+            <p className={styles.readingLevelText}>{data.reading_level}</p>
           )}
         </div>
         <div className={styles.containerLines}>
@@ -192,6 +189,7 @@ const GradeInformation = ({ student, setStudent }: Props) => {
                   }}
                 >
                   <>
+                    <option className={styles.selectOption} value=""></option>
                     <option className={styles.selectOption} value="A">
                       A
                     </option>
@@ -229,6 +227,7 @@ const GradeInformation = ({ student, setStudent }: Props) => {
                   }}
                 >
                   <>
+                    <option className={styles.selectOption} value=""></option>
                     <option className={styles.selectOption} value="A">
                       A
                     </option>
@@ -278,6 +277,7 @@ const GradeInformation = ({ student, setStudent }: Props) => {
                   }}
                 >
                   <>
+                    <option className={styles.selectOption} value=""></option>
                     <option className={styles.selectOption} value="A">
                       A
                     </option>
@@ -315,6 +315,7 @@ const GradeInformation = ({ student, setStudent }: Props) => {
                   }}
                 >
                   <>
+                    <option className={styles.selectOption} value=""></option>
                     <option className={styles.selectOption} value="A">
                       A
                     </option>
@@ -364,6 +365,7 @@ const GradeInformation = ({ student, setStudent }: Props) => {
                   }}
                 >
                   <>
+                    <option className={styles.selectOption} value=""></option>
                     <option className={styles.selectOption} value="A">
                       A
                     </option>
@@ -401,6 +403,7 @@ const GradeInformation = ({ student, setStudent }: Props) => {
                   }}
                 >
                   <>
+                    <option className={styles.selectOption} value=""></option>
                     <option className={styles.selectOption} value="A">
                       A
                     </option>
@@ -450,6 +453,7 @@ const GradeInformation = ({ student, setStudent }: Props) => {
                   }}
                 >
                   <>
+                    <option className={styles.selectOption} value=""></option>
                     <option className={styles.selectOption} value="A">
                       A
                     </option>
@@ -490,6 +494,7 @@ const GradeInformation = ({ student, setStudent }: Props) => {
                   }}
                 >
                   <>
+                    <option className={styles.selectOption} value=""></option>
                     <option className={styles.selectOption} value="A">
                       A
                     </option>
@@ -515,7 +520,7 @@ const GradeInformation = ({ student, setStudent }: Props) => {
             </div>
           </div>
         </div>
-        <div className={styles.containerLines}>
+        <div className={`${styles.containerLines} ${styles.lastLine}`}>
           <div className={styles.lineLabel}>
             <div className={`${styles.informationText} ${styles.startingText}`}>
               Humanities
@@ -539,6 +544,7 @@ const GradeInformation = ({ student, setStudent }: Props) => {
                   }}
                 >
                   <>
+                    <option className={styles.selectOption} value=""></option>
                     <option className={styles.selectOption} value="A">
                       A
                     </option>
@@ -579,6 +585,7 @@ const GradeInformation = ({ student, setStudent }: Props) => {
                   }}
                 >
                   <>
+                    <option className={styles.selectOption} value=""></option>
                     <option className={styles.selectOption} value="A">
                       A
                     </option>
