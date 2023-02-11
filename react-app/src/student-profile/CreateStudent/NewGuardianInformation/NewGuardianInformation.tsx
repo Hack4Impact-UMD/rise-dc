@@ -1,28 +1,10 @@
-import { useState } from "react";
+import { Student } from "../../../types/StudentType";
 import styles from "./NewGuardianInformation.module.css";
 
-type GuardianInformationProp = {
-  name: string;
-  address: string;
-  email: string;
-  phoneNumber: string;
-};
-
-const NewGuardianInformation = ({
-  name,
-  address,
-  email,
-  phoneNumber,
-}: GuardianInformationProp) => {
-
-  const [information, setInformation] = useState<GuardianInformationProp>({
-    name,
-    address,
-    email,
-    phoneNumber,
-  });
-
-
+const NewGuardianInformation: React.FC<{
+  sharedStudent: Student;
+  setSharedStudent: any;
+}> = ({ sharedStudent, setSharedStudent }) => {
   return (
     <div className={styles.guardianInfo}>
       <div className={styles.topLine}>
@@ -34,10 +16,14 @@ const NewGuardianInformation = ({
           <input
             type="text"
             className={styles.informationEdit}
-            value={information.name}
+            value={sharedStudent.guardian_name}
             onChange={(e) =>
-              setInformation({ ...information, name: e.target.value })
+              setSharedStudent({
+                ...sharedStudent,
+                guardian_name: e.target.value,
+              })
             }
+            placeholder="Enter new name"
           ></input>
         </div>
         <div className={styles.containerLines}>
@@ -45,10 +31,14 @@ const NewGuardianInformation = ({
           <input
             type="text"
             className={styles.informationEdit}
-            value={information.address}
+            value={sharedStudent.guardian_address}
             onChange={(e) =>
-              setInformation({ ...information, address: e.target.value })
+              setSharedStudent({
+                ...sharedStudent,
+                guardian_address: e.target.value,
+              })
             }
+            placeholder="Enter new address"
           ></input>
         </div>
         <div className={styles.containerLines}>
@@ -56,10 +46,14 @@ const NewGuardianInformation = ({
           <input
             type="text"
             className={styles.informationEdit}
-            value={information.email}
+            value={sharedStudent.guardian_email}
             onChange={(e) =>
-              setInformation({ ...information, email: e.target.value })
+              setSharedStudent({
+                ...sharedStudent,
+                guardian_email: e.target.value,
+              })
             }
+            placeholder="Enter new email"
           ></input>
         </div>
         <div className={`${styles.bottomLine} ${styles.containerLines}`}>
@@ -67,10 +61,14 @@ const NewGuardianInformation = ({
           <input
             type="text"
             className={styles.informationEdit}
-            value={information.phoneNumber}
+            value={sharedStudent.guardian_phone}
             onChange={(e) =>
-              setInformation({ ...information, phoneNumber: e.target.value })
+              setSharedStudent({
+                ...sharedStudent,
+                guardian_phone: e.target.value,
+              })
             }
+            placeholder="Enter new phone number"
           ></input>
         </div>
       </div>
