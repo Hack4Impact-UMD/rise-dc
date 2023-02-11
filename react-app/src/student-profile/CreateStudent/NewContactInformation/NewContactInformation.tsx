@@ -1,32 +1,11 @@
 import { useState } from "react";
+import { Student } from "../../../types/StudentType";
 import styles from "./NewContactInformation.module.css";
 
-type ContactInformationProp = {
-  address: string;
-  email: string;
-  phoneNumber: string;
-  highSchool: string;
-  grade: string;
-};
-
-const NewContactInformation = ({
-  address,
-  email,
-  phoneNumber,
-  highSchool,
-  grade,
-}: ContactInformationProp) => {
-
-  const [information, setInformation] = useState<ContactInformationProp>({
-    address,
-    email,
-    phoneNumber,
-    highSchool,
-    grade,
-  });
-
-
-
+const NewContactInformation: React.FC<{
+  sharedStudent: Student;
+  setSharedStudent: any;
+}> = ({ sharedStudent, setSharedStudent }) => {
   return (
     <div className={styles.contactInfo}>
       <div className={styles.topLine}>
@@ -38,10 +17,11 @@ const NewContactInformation = ({
           <input
             type="text"
             className={styles.informationEdit}
-            value={information.address}
+            value={sharedStudent.address}
             onChange={(e) =>
-              setInformation({ ...information, address: e.target.value })
+              setSharedStudent({ ...sharedStudent, address: e.target.value })
             }
+            placeholder="Enter new address"
           ></input>
         </div>
         <div className={styles.containerLines}>
@@ -49,11 +29,11 @@ const NewContactInformation = ({
           <input
             type="text"
             className={styles.informationEdit}
-            value={information.email}
+            value={sharedStudent.email}
             onChange={(e) =>
-              setInformation({ ...information, email: e.target.value })
+              setSharedStudent({ ...sharedStudent, email: e.target.value })
             }
-            placeholder="Enter new email here"
+            placeholder="Enter new email"
           ></input>
         </div>
         <div className={styles.containerLines}>
@@ -61,11 +41,14 @@ const NewContactInformation = ({
           <input
             type="text"
             className={styles.informationEdit}
-            value={information.phoneNumber}
+            value={sharedStudent.phone_number}
             onChange={(e) =>
-              setInformation({ ...information, phoneNumber: e.target.value })
+              setSharedStudent({
+                ...sharedStudent,
+                phone_number: e.target.value,
+              })
             }
-            placeholder="Enter new phone number here"
+            placeholder="Enter new phone number"
           ></input>
         </div>
         <div className={styles.containerLines}>
@@ -73,11 +56,14 @@ const NewContactInformation = ({
           <input
             type="text"
             className={styles.informationEdit}
-            value={information.highSchool}
+            value={sharedStudent.high_school}
             onChange={(e) =>
-              setInformation({ ...information, highSchool: e.target.value })
+              setSharedStudent({
+                ...sharedStudent,
+                high_school: e.target.value,
+              })
             }
-            placeholder="Enter new high school here"
+            placeholder="Enter new high school"
           ></input>
         </div>
         <div className={`${styles.bottomLine} ${styles.containerLines}`}>
@@ -85,11 +71,14 @@ const NewContactInformation = ({
           <input
             type="text"
             className={styles.informationEdit}
-            value={information.grade}
+            value={sharedStudent.grade_level}
             onChange={(e) =>
-              setInformation({ ...information, grade: e.target.value })
+              setSharedStudent({
+                ...sharedStudent,
+                grade_level: e.target.value,
+              })
             }
-            placeholder="Enter new grade level here"
+            placeholder="Enter new grade level"
           ></input>
         </div>
       </div>

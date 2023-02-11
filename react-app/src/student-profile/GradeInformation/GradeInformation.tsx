@@ -40,7 +40,6 @@ const GradeInformation = ({ student, setStudent }: Props) => {
     files: [],
     active: true,
   };
-
   const [edit, setEdit] = useState<boolean>(false);
   const [data, setData] = useState<Student>(student || blankStudent);
 

@@ -24,6 +24,7 @@ import randomstring from "randomstring";
 import app from "../config/firebase";
 import { resolve } from "path";
 import { rejects } from "assert";
+import dayjs from "dayjs";
 
 export function getStudentWithID(id: string): Promise<Student> {
   return new Promise((resolve, reject) => {
@@ -83,11 +84,11 @@ export function getCurrentUser(): Promise<RISEUser> {
   });
 }
 
-export function storeStudent(student: Student): Promise<void> {
+export function storeStudent(student: Student): Promise<string> {
   return new Promise((resolve, reject) => {
     addDoc(collection(db, "Students"), student)
-      .then(() => {
-        return resolve();
+      .then((docRef) => {
+        return resolve(docRef.id);
       })
       .catch((e) => {
         return reject(e);
@@ -157,7 +158,6 @@ export function updateStudent(student: Student): Promise<void> {
   return new Promise((resolve, reject) => {
     if (student.id) {
       const ref = doc(db, "Students", student.id);
-      console.log(ref);
       updateDoc(ref, {
         address: student.address,
         email: student.email,
@@ -177,11 +177,11 @@ export function updateStudent(student: Student): Promise<void> {
         guardian_email: student.guardian_email,
         guardian_name: student.guardian_name,
         guardian_phone: student.guardian_phone,
-        guardian_address: student.guardian_address,
         high_school: student.high_school,
         name: student.name,
         phone_number: student.phone_number,
         reading_level: student.reading_level,
+        active: student.active,
       })
         .then(() => {
           return resolve();
@@ -214,10 +214,10 @@ export function getLogsTimeframe(start: Date, end: Date): Promise<Array<Log>> {
         const docs = snap.docs;
         docs.sort((a, b) => (a.data().date > b.data().date ? 1 : -1));
         const logs: Log[] = [];
-
         docs.forEach((doc) => {
           const log = doc.data() as Log;
-          if (log.date >= start && log.date <= end) {
+          const logDate = new Date(doc.data().date.seconds * 1000);
+          if (logDate >= start && logDate <= end) {
             logs.push(log);
           }
         });
@@ -499,25 +499,26 @@ export function countHIWeeks(logs: Array<Log>): number {
   if (logs.length == 0) {
     return 0;
   }
-  let thirty = true;
+  let addedWeek = false;
   let ninety = 0;
-  let date = logs[0].date;
-  let date1 = date;
+  let curr_date = logs[0].date;
+  let old_date = curr_date;
   logs.forEach((log) => {
-    const date = log.date;
-    const same = sameWeek(date, date1);
-    if (!same) {
-      thirty = true;
+    curr_date = log.date;
+    const dayObject = dayjs(old_date);
+    const sameWeek = dayObject.isSame(dayjs(curr_date));
+    if (!sameWeek) {
       ninety = 0;
+      addedWeek = false;
     }
-    if (log.duration_minutes < 30) {
-      thirty = false;
+    if (log.duration_minutes >= 30) {
+      ninety += log.duration_minutes;
     }
-    ninety += log.duration_minutes;
-    if (thirty && ninety >= 90) {
+    if (!addedWeek && ninety >= 90) {
       count++;
+      addedWeek = true;
     }
-    date1 = date;
+    old_date = curr_date;
   });
   return count;
 }
