@@ -44,7 +44,10 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-right: 20px;
+}
+
+.marginLeft {
+  margin-left: 20px;
 }
 
 .edit:hover {

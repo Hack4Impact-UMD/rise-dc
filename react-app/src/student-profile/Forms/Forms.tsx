@@ -21,7 +21,7 @@ const Forms = ({ student }: Prop) => {
 
   const [files, setFiles] = useState<{
     uploaded: File[];
-    deleted: String[];
+    deleted: StudentFile[];
   }>({
     uploaded: [],
     deleted: [],
@@ -124,15 +124,19 @@ const Forms = ({ student }: Prop) => {
             open={openSaveModal}
             onClose={() => {
               setOpenSaveModal(!openSaveModal);
+              setEdit(!edit);
             }}
-            saveInfo={() => {}}
+            data={student}
+            saveInfo={() => {
+              setFiles({ ...files, uploaded: [] });
+            }}
             files={files}
           />
           {edit ? (
             <>
               <button
                 onClick={() => setOpenCancelModal(!openCancelModal)}
-                className={styles.edit}
+                className={`${styles.edit} ${styles.marginLeft}`}
                 style={{ color: "red" }}
               >
                 Cancel
@@ -141,7 +145,7 @@ const Forms = ({ student }: Prop) => {
                 open={openCancelModal}
                 onClose={() => setOpenCancelModal(!openCancelModal)}
                 resetInfo={() => {
-                  setFiles({ uploaded: [], deleted: [] });
+                  setFiles({ ...files, uploaded: [], deleted: [] });
                   setEdit(false);
                 }}
               />
@@ -180,7 +184,13 @@ const Forms = ({ student }: Prop) => {
         {files.uploaded?.map((file) => {
           return (
             <div className={styles.containerLines}>
-              <div className={styles.informationText}>{file.name}</div>
+              <div className={styles.informationText}>
+                {file.name.length > 30
+                  ? file.name.substring(0, 28) +
+                    ". . . " +
+                    file.name.substring(file.name.indexOf(".") - 3)
+                  : file.name}
+              </div>
               <button
                 onClick={() => {
                   setFiles({
@@ -203,27 +213,32 @@ const Forms = ({ student }: Prop) => {
         {currentStudent.files?.map((file) => {
           return (
             <>
-              {files.deleted.includes(file.downloadURL) ? (
+              {files.deleted.find(
+                (deletedFile) => deletedFile.path == file.path
+              ) ? (
                 <></>
               ) : (
                 <div className={styles.containerLines}>
                   <div className={styles.informationText}>
                     <a href={file.downloadURL} target="_blank">
-                      {file.name}
+                      {file.name.length > 30
+                        ? file.name.substring(0, 28) +
+                          ". . . " +
+                          file.name.substring(file.name.indexOf(".") - 3)
+                        : file.name}
                     </a>
                   </div>
                   {edit ? (
                     <button
                       onClick={() => {
                         const arr = files.deleted;
-                        if (!arr.includes(file.downloadURL)) {
-                          arr.push(file.downloadURL);
+                        if (!arr.includes(file)) {
+                          arr.push(file);
                         }
                         setFiles({
                           ...files,
                           deleted: arr,
                         });
-                        console.log(files);
                       }}
                       className={styles.button}
                     >

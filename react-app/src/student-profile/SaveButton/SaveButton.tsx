@@ -1,5 +1,9 @@
 import { useState } from "react";
-import { updateStudent } from "../../backend/FirestoreCalls";
+import {
+  deleteStudentFile,
+  updateStudent,
+  uploadStudentFile,
+} from "../../backend/FirestoreCalls";
 import Modal from "../../ModalWrapper/Modal";
 import { Student, StudentFile } from "../../types/StudentType";
 import styles from "./SaveButton.module.css";
@@ -9,7 +13,7 @@ type saveButtonType = {
   onClose: any;
   saveInfo: any;
   data?: Student;
-  files?: { uploaded: File[]; deleted: String[] };
+  files?: { uploaded: File[]; deleted: StudentFile[] };
 };
 
 const SaveButton = ({
@@ -24,8 +28,8 @@ const SaveButton = ({
 
   const handleSubmit = () => {
     setLoading(true);
-    if (data) {
-      updateStudent(data)
+    if (!files) {
+      updateStudent(data!)
         .then(() => {
           setSubmitted("Your changes have been saved.");
         })
@@ -35,13 +39,46 @@ const SaveButton = ({
           )
         )
         .finally(() => setLoading(false));
-    } else if (files) {
+    } else {
+      let uploadError = 0;
+      let deleteError = 0;
+      Promise.all([]);
+      const uploadArray = [];
+      for (const uploadedFile of files.uploaded) {
+        setLoading(true);
+        uploadStudentFile(uploadedFile, data!.id!)
+          .then(() => {})
+          .catch((e) => {
+            uploadError++;
+          })
+          .finally(() => setLoading(false));
+      }
+
+      for (const deletedFile of files.deleted) {
+        setLoading(true);
+        deleteStudentFile(deletedFile, data!.id!)
+          .then(() => {})
+          .catch((e) => {
+            deleteError++;
+          })
+          .finally(() => setLoading(false));
+      }
+      if (uploadError == 0 && deleteError == 0) {
+        setSubmitted("Your changes have been saved.");
+      } else {
+        setSubmitted(
+          "An error occurred while trying to save your changes. Please try again later."
+        );
+      }
     }
   };
 
   const handleOnClose = () => {
     if (submitted == "Your changes have been saved.") {
       saveInfo();
+    }
+    if (files) {
+      window.location.reload();
     }
     onClose();
     setSubmitted("");
@@ -75,6 +112,9 @@ const SaveButton = ({
               ) : (
                 <>
                   <p className={styles.submit}>
+                    {files
+                      ? "The page will be reloaded and any unsaved changes will be deleted. "
+                      : ""}
                     Are you sure you would like to save your changes?
                   </p>
                 </>
