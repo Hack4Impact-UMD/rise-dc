@@ -45,6 +45,7 @@ const ContactInformation = ({ student, setStudent }: Props) => {
   useEffect(() => {
     setData({
       ...student!,
+      name: data.name,
       address: data.address,
       email: data.email,
       phone_number: data.phone_number,
@@ -108,6 +109,23 @@ const ContactInformation = ({ student, setStudent }: Props) => {
         </div>
       </div>
       <div className={styles.container}>
+        <div className={styles.containerLines}>
+          <div className={styles.lineLabel}>Name</div>
+          <input
+            type="text"
+            className={
+              edit
+                ? `${styles.informationEdit} ${styles.informationText}`
+                : styles.informationText
+            }
+            disabled={!edit}
+            value={data.name}
+            onChange={(e) => {
+              setData({ ...data, name: e.target.value });
+            }}
+            placeholder="Enter new name here"
+          ></input>
+        </div>
         <div className={styles.containerLines}>
           <div className={styles.lineLabel}>Address</div>
           <input
