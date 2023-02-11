@@ -28,7 +28,6 @@ export default function SearchPage() {
   }, []);
 
   const handleAdd = () => {
-    // fix this
     navigate("/createstudent");
   };
 
