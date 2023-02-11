@@ -125,3 +125,7 @@
   width: 900px;
   padding: 0 4rem 0 2rem;
 }
+
+.redName {
+  border: 1px solid red;
+}

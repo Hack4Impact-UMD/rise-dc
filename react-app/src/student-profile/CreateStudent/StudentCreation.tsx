@@ -10,6 +10,7 @@ import ClearButton from "./ClearButton/ClearButton";
 import SaveButton from "./SaveButton/SaveButton";
 
 const StudentCreation = () => {
+  const [requireName, setRequireName] = useState<boolean>(false);
   const [files, setFiles] = useState<File[]>([]);
   const [openCancelModal, setOpenCancelModal] = useState<boolean>(false);
   const [openSaveModal, setOpenSaveModal] = useState<boolean>(false);
@@ -53,9 +54,14 @@ const StudentCreation = () => {
       <div className={styles.profileContent}>
         <input
           type="text"
-          className={styles.informationEdit}
+          className={`${styles.informationEdit} ${
+            requireName ? styles.redName : ""
+          }`}
           value={student.name}
-          onChange={(e) => setStudent({ ...student, name: e.target.value })}
+          onChange={(e) => {
+            setRequireName(false);
+            setStudent({ ...student, name: e.target.value });
+          }}
           placeholder="Enter student name"
         ></input>
 
@@ -77,7 +83,14 @@ const StudentCreation = () => {
 
         <div className={styles.buttons}>
           <button
-            onClick={() => setOpenSaveModal(!openSaveModal)}
+            onClick={() => {
+              if (student.name != "") {
+                setOpenSaveModal(!openSaveModal);
+              } else {
+                window.scrollTo(0, 0);
+                setRequireName(true);
+              }
+            }}
             className={styles.saveButton}
           >
             Save
