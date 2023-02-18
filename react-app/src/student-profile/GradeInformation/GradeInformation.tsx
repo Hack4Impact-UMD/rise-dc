@@ -474,7 +474,7 @@ const GradeInformation = ({ student }: Props) => {
         </div>
         <div className={styles.containerLines}>
           <div className={styles.lineLabel}>
-            <div className={styles.informationText}>Humanities</div>
+            <div className={styles.informationText}>Humanities/Other</div>
           </div>
           <div className={styles.gradeLabels}>
             <div className={styles.informationText}>
