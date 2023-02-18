@@ -9,7 +9,7 @@ import StudentProfile from "./student-profile/StudentProfile";
 import Session from "./session-log-components/Session";
 import SearchPage from "./search-page/SearchPage";
 import InvalidPage from "./InvalidPage/InvalidPage";
-import StudentCreation from "./student-profile/StudentCreation";
+import StudentCreation from "./student-profile/CreateStudent/StudentCreation";
 import TimeReport from "./report/TimeReport/TimeReport";
 import IndividualReport from "./report/IndividualReport/IndividualReport";
 

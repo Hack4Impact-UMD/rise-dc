@@ -84,11 +84,11 @@ export function getCurrentUser(): Promise<RISEUser> {
   });
 }
 
-export function storeStudent(student: Student): Promise<void> {
+export function storeStudent(student: Student): Promise<string> {
   return new Promise((resolve, reject) => {
     addDoc(collection(db, "Students"), student)
-      .then(() => {
-        return resolve();
+      .then((docRef) => {
+        return resolve(docRef.id);
       })
       .catch((e) => {
         return reject(e);
