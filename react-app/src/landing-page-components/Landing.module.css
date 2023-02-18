@@ -19,7 +19,8 @@
   width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: left;
+  justify-content: space-between;
+  margin: 2rem 0 0.5rem 0;
 }
 
 .statistics {

@@ -73,6 +73,7 @@ export default function TimeReport() {
         return;
       }
       setSessionInfo(result?.information);
+      console.log(result?.information);
       setSessionMinutes(
         result?.information.english_minutes! +
           result?.information.math_minutes! +
