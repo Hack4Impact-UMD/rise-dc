@@ -29,7 +29,7 @@ const StudentProfile = () => {
 
   return (
     <div className={styles.profile}>
-      <div className={styles.header}>{<NavBar title="Alice Lee"></NavBar>}</div>
+      <div className={styles.header}>{<NavBar title={student?.name || ""}></NavBar>}</div>
       <div className={styles.profileContent}>
         <ContactInformation
           student={student}

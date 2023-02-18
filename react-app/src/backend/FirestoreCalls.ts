@@ -153,7 +153,25 @@ export function countTutors(): Promise<number> {
       });
   });
 }
-
+export function updateLog(log: Log): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (log.id) {
+      const ref = doc(db, "Logs", log.id);
+      updateDoc(ref, {
+        date: log.date,
+        duration_minutes: log.duration_minutes,
+        instructor_name: log.instructor_name,
+        reason: log.reason,
+        summary: log.summary,
+        start_time: log.start_time,
+        end_time: log.end_time,
+      }).then(() => { return resolve(); })
+        .catch((e) => { return reject(e); });
+    } else {
+      return reject(new Error("Log does not have an ID"));
+    }
+  });
+}
 export function updateStudent(student: Student): Promise<void> {
   return new Promise((resolve, reject) => {
     if (student.id) {

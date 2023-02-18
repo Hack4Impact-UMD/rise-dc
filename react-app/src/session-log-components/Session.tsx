@@ -5,18 +5,26 @@ import StudentSession from "./StudentSession/StudentSession";
 import CollapseButton from "./CollapseButton/CollapseButton";
 import styles from "./Session.module.css";
 import { getCurrentUser } from "../backend/FirestoreCalls";
+import { RISEUser } from "../types/UserType";
 
 const Session = () => {
   const [collapse, setCollapse] = useState<boolean>(false);
   const [addSession, setAddSession] = useState<boolean>(false);
-  const [userRole, setUserRole] = useState<String>("");
-  
-  // get current user
+  const [user, setUser] = useState<RISEUser>();
   useEffect(() => {
     getCurrentUser().then((user) => {
-      setUserRole(user?.type || "");
+      setUser(user);
+      setName(user.name);
+      if(user.type == "TUTOR") {
+        setRole("Tutor");
+      }
     }).catch((e) => console.log(e));
   }, [])
+
+  // returns the current user's name
+  const [name, setName] = useState<string>("");
+  // returns the current user's role
+  const [role, setRole] = useState<string>("Mentor");
 
   return (
     <div className={styles.session}>
@@ -26,17 +34,13 @@ const Session = () => {
       <div className={styles.sessionContent}>
         <div className={styles.sessionButtons}>
           <CollapseButton collapse={collapse} setCollapse={setCollapse} />
-          {userRole === "MENTOR" || userRole === "TUTOR" ? (
-            <AddSession setAddSession={setAddSession} />
-          ) : (
-            <></>
-          )}
+          <AddSession setAddSession={setAddSession} />
         </div>
         {addSession ? (
           <StudentSession
-            teacherName=""
-            role="Mentor"
-            date=""
+            teacherName={name}
+            role={role}
+            date= {new Date().toISOString().split('T')[0]}
             startTime=""
             endTime=""
             reason=""

@@ -5,7 +5,8 @@ import { useState, useEffect } from "react";
 import SaveModal from "../Modals/SaveModal/SaveModal";
 import CancelModal from "../Modals/CancelModal/CancelModal";
 import styles from "./StudentSession.module.css";
-
+import { updateLog } from "../../backend/FirestoreCalls";
+import { Log } from "../../types/LogType";
 type studentSessionProp = {
   teacherName: string;
   role: string;
@@ -36,10 +37,26 @@ const StudentSession = ({
   const [collapsed, setCollapsed] = useState<boolean>(collapse);
   const [openSaveModal, setOpenSaveModal] = useState<boolean>(false);
   const [openCancelModal, setOpenCancelModal] = useState<boolean>(false);
+  const [data, setData] = useState<Log>();
+
+  // const log: Log = {
+  //   date: dayjs(date).toDate(),
+  //   duration_minutes: 120,
+  //   instructor_name: teacherName,
+  //   reason: reason,
+  //   creator_id: "123",
+  //   subject: "ENGLISH",
+  //   summary: summary,
+  //   type: role === "Mentor" ? "MENTOR" : "TUTOR",
+  // };
 
   useEffect(() => {
     setCollapsed(collapse);
   }, [collapse]);
+  // useEffect(() => {
+  //   let data = 
+  //   setData();
+  // }, [data]);
 
   const findDuration = (startingTime: string, endingTime: string): string => {
     const startTimeHour: number = parseInt(startingTime.split(":")[0]);
