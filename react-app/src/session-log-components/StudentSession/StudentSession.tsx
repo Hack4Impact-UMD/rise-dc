@@ -7,6 +7,8 @@ import CancelModal from "../Modals/CancelModal/CancelModal";
 import styles from "./StudentSession.module.css";
 import { updateLog } from "../../backend/FirestoreCalls";
 import { Log } from "../../types/LogType";
+import { useParams } from "react-router-dom";
+
 type studentSessionProp = {
   teacherName: string;
   role: string;
@@ -16,6 +18,7 @@ type studentSessionProp = {
   duration?: string;
   reason: string;
   summary: string;
+  creatorId: string;
   collapse: boolean;
   newLog?: boolean;
   removeSession?: any;
@@ -30,6 +33,7 @@ const StudentSession = ({
   reason,
   summary,
   collapse,
+  creatorId,
   newLog,
   removeSession,
 }: studentSessionProp) => {
@@ -37,27 +41,30 @@ const StudentSession = ({
   const [collapsed, setCollapsed] = useState<boolean>(collapse);
   const [openSaveModal, setOpenSaveModal] = useState<boolean>(false);
   const [openCancelModal, setOpenCancelModal] = useState<boolean>(false);
-  const [data, setData] = useState<Log>();
-
-  // const log: Log = {
-  //   date: dayjs(date).toDate(),
-  //   duration_minutes: 120,
-  //   instructor_name: teacherName,
-  //   reason: reason,
-  //   creator_id: "123",
-  //   subject: "ENGLISH",
-  //   summary: summary,
-  //   type: role === "Mentor" ? "MENTOR" : "TUTOR",
-  // };
+  const logID = useParams().id;
 
   useEffect(() => {
     setCollapsed(collapse);
   }, [collapse]);
-  // useEffect(() => {
-  //   let data = 
-  //   setData();
-  // }, [data]);
+  // parses a string of the form "HH:MM" into a Date object
+  const str_to_time = (str: string): Date => { 
+    let time = new Date();
+    time.setHours(parseInt(str.split(":")[0]), parseInt(str.split(":")[1]));
+    return time;
+  }
+  // parses a string of the form "HH hour MM minutes" into a number of minutes
+  const str_to_duration = (time: string): number => {
+    let duration = 0;
+    if (time.includes("hour")) {
+      duration += parseInt(time.split(" ")[0]) * 60;
+    }
+    if (time.includes("minute")) {
+      duration += parseInt(time.split(" ")[2]);
+    }
+    return duration;
+  }
 
+  // returns the duration of the session in string form
   const findDuration = (startingTime: string, endingTime: string): string => {
     const startTimeHour: number = parseInt(startingTime.split(":")[0]);
     let endTimeHour: number = parseInt(endingTime.split(":")[0]);
@@ -89,7 +96,7 @@ const StudentSession = ({
     } else if (minutesTaken > 1) {
       minutesString = `${minutesTaken} minutes`;
     }
-
+    
     if (hoursString === "" && minutesString === "") {
       return "0 minutes";
     }
@@ -97,20 +104,28 @@ const StudentSession = ({
     return `${hoursString}${minutesString}`;
   };
 
-  const initialDuration = findDuration(startTime, endTime);
-  const [information, setInformation] = useState<studentSessionProp>({
-    teacherName,
-    role,
-    date,
-    startTime,
-    endTime,
-    duration: initialDuration,
-    reason,
-    summary,
-    collapse,
+  const [information, setInformation] = useState<Log>({
+    date: new Date(date),
+    duration_minutes: str_to_duration(findDuration(startTime, endTime)),
+    instructor_name: teacherName,
+    reason: reason,
+    creator_id: creatorId,
+    subject: "ENGLISH",
+    summary: summary,
+    type: role === "Mentor" ? "MENTOR" : "TUTOR",
+    student_id: "",
+    id: logID,
+    student_name: "",
+    start_time: str_to_time(startTime),
+    end_time: str_to_time(endTime),
   });
 
+  const saveLog = () => {
+    updateLog(information);
+  };
+
   const handleEdit = (event: React.MouseEvent<HTMLElement>) => {
+    if (edit) saveLog();
     setEdit(!edit);
   };
 
@@ -123,7 +138,7 @@ const StudentSession = ({
       }
     >
       <div className={styles.topLine}>
-        <h2 className={styles.studentName}>{information.teacherName}</h2>
+        <h2 className={styles.studentName}>{information.instructor_name}</h2>
         {collapsed ? (
           <div>
             <button
@@ -193,9 +208,9 @@ const StudentSession = ({
                   : styles.informationText
               }
               disabled={!edit}
-              value={information.teacherName}
+              value={information.instructor_name}
               onChange={(e) =>
-                setInformation({ ...information, teacherName: e.target.value })
+                setInformation({ ...information, instructor_name: e.target.value })
               }
             ></input>
           </div>
@@ -206,9 +221,9 @@ const StudentSession = ({
                 type="date"
                 className={`${styles.informationEdit} ${styles.dateEdit}`}
                 disabled={!edit}
-                value={information.date}
+                value={information.date.toISOString().split('T')[0]}
                 onChange={(e) =>
-                  setInformation({ ...information, date: e.target.value })
+                  setInformation({ ...information, date: new Date(e.target.value) })
                 }
               ></input>
             ) : (
@@ -239,12 +254,12 @@ const StudentSession = ({
                     : `${styles.timeInformation} ${styles.informationText}`
                 }
                 disabled={!edit}
-                value={information.startTime}
+                value={information.start_time.getHours() + ":" + information.start_time.getMinutes()}
                 onChange={(e) =>
                   setInformation({
                     ...information,
-                    startTime: e.target.value,
-                    duration: findDuration(e.target.value, information.endTime),
+                    start_time: str_to_time(e.target.value),
+                    duration_minutes: str_to_duration(findDuration(e.target.value, information.end_time.getHours() + ":" + information.end_time.getMinutes())),
                   })
                 }
               ></input>
@@ -261,15 +276,12 @@ const StudentSession = ({
                     : styles.informationText
                 }
                 disabled={!edit}
-                value={information.endTime}
+                value={information.end_time.getHours() + ":" + information.end_time.getMinutes()}
                 onChange={(e) =>
                   setInformation({
                     ...information,
-                    endTime: e.target.value,
-                    duration: findDuration(
-                      information.startTime,
-                      e.target.value
-                    ),
+                    end_time: str_to_time(e.target.value),
+                    duration_minutes: str_to_duration(findDuration(information.start_time.getHours() + ":" + information.start_time.getMinutes(), e.target.value)),
                   })
                 }
               ></input>
@@ -281,9 +293,9 @@ const StudentSession = ({
               type="text"
               className={styles.informationText}
               disabled
-              value={information.duration}
+              value={findDuration(information.start_time.getHours() + ":" + information.start_time.getMinutes(), information.end_time.getHours() + ":" + information.end_time.getMinutes())}
               onChange={(e) =>
-                setInformation({ ...information, duration: e.target.value })
+                setInformation({ ...information, duration_minutes: str_to_duration(e.target.value) })
               }
             ></input>
           </div>

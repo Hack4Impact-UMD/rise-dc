@@ -40,11 +40,12 @@ const Session = () => {
           <StudentSession
             teacherName={name}
             role={role}
-            date= {new Date().toISOString().split('T')[0]}
+            date=""
             startTime=""
             endTime=""
             reason=""
             summary=""
+            creatorId={user?.id || ""}
             collapse={false}
             newLog={true}
             removeSession={() => setAddSession(false)}
@@ -60,6 +61,8 @@ const Session = () => {
           endTime="18:00"
           reason="Reason 2"
           summary="hello world"
+          creatorId="123"
+          
           collapse={collapse}
         />
         <StudentSession
@@ -70,6 +73,7 @@ const Session = () => {
           endTime="18:00"
           reason="Reason 2"
           summary="hello world"
+          creatorId="123"
           collapse={collapse}
         />
       </div>

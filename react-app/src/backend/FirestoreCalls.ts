@@ -45,6 +45,25 @@ export function getStudentWithID(id: string): Promise<Student> {
   });
 }
 
+export function getLogWithID(id: string): Promise<Log> {
+  return new Promise((resolve, reject) => {
+    const logRef = doc(db, "Logs", id);
+    getDoc(logRef)
+      .then((logSnap) => {
+        if (logSnap.exists()) {
+          let log = logSnap.data();
+          log.id = id;
+          return resolve(log as Log);
+        } else {
+          return reject(new Error("Log not found"));
+        }
+      })
+      .catch((e) => {
+        return reject(e);
+      });
+  });
+}
+
 export function getAllStudents(): Promise<Array<Student>> {
   return new Promise((resolve, reject) => {
     getDocs(collection(db, "Students"))

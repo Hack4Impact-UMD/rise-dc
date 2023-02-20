@@ -8,9 +8,9 @@ export type Log = {
   summary: string;
   type: "MENTOR" | "TUTOR";
   student_id: string;
-  id: string;
+  id?: string;
   student_name: string;
-  start_time?: Date;
+  start_time: Date;
   end_time: Date;
 };
 
