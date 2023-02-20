@@ -1,3 +1,4 @@
+import { useParams } from "react-router-dom";
 import styles from "./IndividualReport.module.css";
 import Sessions from "./Sessions/Sessions";
 import Subjects from "./Subjects/Subjects";

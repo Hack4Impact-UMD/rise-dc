@@ -27,11 +27,13 @@ const GuardianInformation = ({ student }: Prop) => {
     guardian_email: "",
     guardian_name: "",
     guardian_phone: "",
+    guardian_address: "",
     high_school: "",
     name: "",
     phone_number: "",
     reading_level: "",
     files: [],
+    active: true,
   };
   const [edit, setEdit] = useState<boolean>(false);
   const [data, setData] = useState<Student>(student || blankStudent);
