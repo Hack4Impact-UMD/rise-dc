@@ -4,8 +4,8 @@
 }
 
 .header {
-  height: 150px;
-  background-color: #ffffff;
+  height: 120px;
+  background-color: white;
 }
 
 .sessionContent {
@@ -24,6 +24,28 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: calc(100vh - 120px);
+  text-align: center;
+  font-size: 1.2rem;
+  font-family: "Libre Franklin";
+}
+
+.noLogs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: calc(100vh - 160px - 4rem);
+  text-align: center;
+  font-size: 1.2rem;
+  font-family: "Libre Franklin";
 }
 
 @media screen and (max-width: 1000px) {
