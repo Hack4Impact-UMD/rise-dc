@@ -181,6 +181,7 @@ export function updateStudent(student: Student): Promise<void> {
         name: student.name,
         phone_number: student.phone_number,
         reading_level: student.reading_level,
+        active: student.active,
       })
         .then(() => {
           return resolve();

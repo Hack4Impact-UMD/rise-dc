@@ -1,0 +1,23 @@
+.container {
+  background: #a0b9dc;
+  border: none;
+  border-radius: 18px;
+  width: 180px;
+  height: 40px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  align-self: start;
+  margin: 10px 0 10px 260px;
+}
+
+.notebook {
+  width: 30px;
+  margin-right: 10px;
+}
+
+.container:hover {
+  background: #cbebf8;
+  cursor: pointer;
+}
