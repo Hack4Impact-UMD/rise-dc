@@ -140,7 +140,7 @@ export default async function getData(dateRange: String) {
               case "SOCIAL STUDIES":
                 allSessions.social_studies_minutes += log.duration_minutes;
                 break;
-              case "HUMANITIES":
+              case "HUMANITIES/OTHER":
                 allSessions.humanities_minutes += log.duration_minutes;
                 break;
             }

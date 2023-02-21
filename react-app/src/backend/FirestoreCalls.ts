@@ -380,7 +380,7 @@ export function hoursSpent(logs: Array<Log>): SubjectHours {
       hrs.english_hours += log.duration_minutes;
     } else if (log.subject == "MATH") {
       hrs.math_hours += log.duration_minutes;
-    } else if (log.subject == "HUMANITIES") {
+    } else if (log.subject == "HUMANITIES/OTHER") {
       hrs.humanities_hours += log.duration_minutes;
     } else if (log.subject == "SCIENCE") {
       hrs.science_hours += log.duration_minutes;
