@@ -9,7 +9,9 @@ import StudentProfile from "./student-profile/StudentProfile";
 import Session from "./session-log-components/Session";
 import SearchPage from "./search-page/SearchPage";
 import InvalidPage from "./InvalidPage/InvalidPage";
-import StudentCreation from "./student-profile/StudentCreation";
+import StudentCreation from "./student-profile/CreateStudent/StudentCreation";
+import TimeReport from "./report/TimeReport/TimeReport";
+import IndividualReport from "./report/IndividualReport/IndividualReport";
 
 function App() {
   return (
@@ -31,7 +33,7 @@ function App() {
             element={<RequireAuth children={<SettingsPage />} />}
           />
           <Route
-            path="/log"
+            path="/log/:id"
             element={<RequireAuth children={<Session />} />}
           />
           <Route
@@ -43,10 +45,17 @@ function App() {
             element={<RequireAuth children={<StudentCreation />} />}
           />
           <Route
+            path="/timereport/:id"
+            element={<RequireAuth children={<TimeReport />} />}
+          />
+          <Route
+            path="/indivreport"
+            element={<RequireAuth children={<IndividualReport />} />}
+          />
+          <Route
             path="*"
             element={<RequireAuth children={<InvalidPage />} />}
           />
-          <Route path="*" element={<p>404 Page not found</p>} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
