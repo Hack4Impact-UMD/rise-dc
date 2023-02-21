@@ -8,7 +8,7 @@ type modalPropsType = {
 
 const Modal = ({ open, onClose, children }: modalPropsType) => {
   return (
-    <div>
+    <div onClick={(e) => e.stopPropagation()}>
       {open ? (
         <>
           <div className={styles.background} onClick={() => onClose()} />

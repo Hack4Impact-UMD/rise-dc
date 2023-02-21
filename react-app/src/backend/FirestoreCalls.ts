@@ -10,10 +10,12 @@ import {
   arrayUnion,
   orderBy,
   limit,
+
+  arrayRemove,
 } from "firebase/firestore";
-import { ref } from "firebase/storage";
+import { ref, getDownloadURL, deleteObject } from "firebase/storage";
 import { getStorage, uploadBytes } from "firebase/storage";
-import { Student } from "../types/StudentType";
+import { Student, StudentFile } from "../types/StudentType";
 import { db } from "../config/firebase";
 import { Log } from "../types/LogType";
 import { getAuth } from "firebase/auth";
@@ -21,6 +23,10 @@ import { RISEUser } from "../types/UserType";
 import { SubjectHours } from "../types/SubjectHoursType";
 import randomstring from "randomstring";
 import app from "../config/firebase";
+import { resolve } from "path";
+import { rejects } from "assert";
+import dayjs from "dayjs";
+
 
 export function getStudentWithID(id: string): Promise<Student> {
   return new Promise((resolve, reject) => {
@@ -606,19 +612,79 @@ export function getNumberStudents(): Promise<number> {
   });
 }
 
-// export function splitStudents(students: Array<Student>): Array<Array<Student>> {
-//   let s = [[], []] as Array<Array<Student>>;
-//   students.forEach((student) => {
-//     const stud: string = student.id !== undefined ? student.id : "";
-//     const p = getStudentLogs(stud!);
+export function splitStudents(students: Array<Student>): Array<Array<Student>> {
+  let s = [[], []] as Array<Array<Student>>;
+  students.forEach((student) => {
+    const stud: string = student.id !== undefined ? student.id : "";
+    const p = getStudentLogs(stud!);
+    receivedHITutoring(p).then((r) => {
+      if (r) {
+        s[0].push(student);
+      } else {
+        s[1].push(student);
+      }
+    });
+  });
+  return s;
+}
 
-//     receivedHITutoring(p).then((r) => {
-//       if (r) {
-//         s[0].push(student);
-//       } else {
-//         s[1].push(student);
-//       }
-//     });
-//   });
-//   return s;
-// }
+export function uploadStudentFile(
+  file: File,
+  studentId: string
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const storage = getStorage(app);
+    const name = randomstring.generate(20);
+    const storageRef = ref(storage, name);
+    uploadBytes(storageRef, file)
+      .then((snapshot) => {
+        getDownloadURL(snapshot.ref)
+          .then((url) => {
+            updateDoc(doc(db, "Students", studentId), {
+              files: arrayUnion({
+                path: name,
+                name: file.name,
+                downloadURL: url,
+              } as StudentFile),
+            })
+              .then(() => {
+                return resolve();
+              })
+              .catch((e) => {
+                return reject(e);
+              });
+          })
+          .catch((e) => {
+            return reject(e);
+          });
+      })
+      .catch((e) => {
+        return reject(e);
+      });
+  });
+}
+
+export function deleteStudentFile(
+  file: StudentFile,
+  studentId: string
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const storage = getStorage(app);
+    const storageRef = ref(storage, file.path);
+    deleteObject(storageRef)
+      .then(() => {
+        updateDoc(doc(db, "Students", studentId), {
+          files: arrayRemove(file),
+        })
+          .then(() => {
+            return resolve();
+          })
+          .catch((e) => {
+            return reject(e);
+          });
+      })
+      .catch((e) => {
+        return reject(e);
+      });
+  });
+}

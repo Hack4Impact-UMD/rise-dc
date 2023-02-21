@@ -1,0 +1,131 @@
+.profile {
+  width: 100%;
+  font-family: "Fjalla One";
+}
+
+.header {
+  height: 14vh;
+  background-color: #ffffff;
+  padding-bottom: 20px;
+}
+
+.profileContent {
+  width: 100%;
+  background-color: #d7ebd3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+@media screen and (max-width: 1000px) {
+  .profileContent {
+    margin: auto;
+    align-items: normal;
+  }
+}
+
+.informationEdit {
+  width: calc(900px + 6rem - 40px);
+  margin-top: 3rem;
+  padding: 10px 10px 10px 30px;
+  border: 1px solid;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 300;
+  font-family: "Libre Franklin";
+}
+
+.gradesAndForms {
+  width: calc(6rem + 900px);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.saveButton {
+  width: 150px;
+  height: 50px;
+  display: block;
+  margin-left: 20px;
+  color: #afaeae;
+  font-family: "Libre Franklin", sans-serif;
+  padding-right: 40px;
+  padding-left: 40px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-radius: 20px;
+  border: none;
+  margin-top: 10px;
+  color: black;
+  background-color: #a0b9dc;
+  font-weight: 100;
+  cursor: pointer;
+}
+
+.saveButton:hover {
+  background-color: #d0ecfc;
+  transition: all 0.3s ease;
+}
+
+.clearButton {
+  width: 200px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  padding: 11px 0 11px 0;
+  font-weight: 500;
+  font-size: 0.8rem;
+  font-family: "Libre Franklin";
+  border: none;
+  border-radius: 25px;
+  background: red;
+  color: black;
+  cursor: pointer;
+  margin-top: 2rem;
+}
+
+.clearButton:hover {
+  background-color: rgba(255, 0, 0, 0.6);
+  transition: all 0.25s ease;
+}
+
+.saveButton {
+  width: 200px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  padding: 11px 0 11px 0;
+  font-weight: 500;
+  font-size: 0.8rem;
+  font-family: "Libre Franklin";
+  border: none;
+  border-radius: 25px;
+  background: #a0b9dc;
+  color: black;
+  cursor: pointer;
+  margin-top: 2rem;
+  margin-right: 4rem;
+}
+
+.saveButton:hover {
+  background-color: #cbebf8;
+  transition: all 0.25s ease;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  width: 900px;
+  padding: 0 4rem 0 2rem;
+}
+
+.redName {
+  border: 1px solid red;
+}

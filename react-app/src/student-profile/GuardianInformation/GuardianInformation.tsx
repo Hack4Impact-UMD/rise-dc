@@ -1,13 +1,19 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, SetStateAction, Dispatch } from "react";
 import styles from "./GuardianInformation.module.css";
 import { Student } from "../../types/StudentType";
-import { updateStudent } from "../../backend/FirestoreCalls";
+import { storeStudent, updateStudent } from "../../backend/FirestoreCalls";
+import CancelButton from "../CancelButton/CancelButton";
+import SaveButton from "../SaveButton/SaveButton";
 
 interface Prop {
   student: Student | undefined;
+  setStudent: Dispatch<SetStateAction<Student | undefined>>;
 }
 
-const GuardianInformation = ({ student }: Prop) => {
+const GuardianInformation = ({ student, setStudent }: Prop) => {
+  const [openCancelModal, setOpenCancelModal] = useState<boolean>(false);
+  const [openSaveModal, setOpenSaveModal] = useState<boolean>(false);
+
   const blankStudent: Student = {
     address: "",
     email: "",
@@ -27,26 +33,33 @@ const GuardianInformation = ({ student }: Prop) => {
     guardian_email: "",
     guardian_name: "",
     guardian_phone: "",
+    guardian_address: "",
     high_school: "",
     name: "",
     phone_number: "",
     reading_level: "",
     files: [],
+    active: true,
   };
   const [edit, setEdit] = useState<boolean>(false);
-  const [data, setData] = useState<Student>(student || blankStudent);
+  const [data, setData] = useState<Student>(student!);
 
   useEffect(() => {
-    setData(student || blankStudent);
+    setData({
+      ...student!,
+      guardian_address: data.guardian_address,
+      guardian_email: data.guardian_email,
+      guardian_phone: data.guardian_phone,
+      guardian_name: data.guardian_name,
+    });
   }, [student]);
 
-  const saveStudent = () => {
-    updateStudent(data);
-  };
-
   const handleEdit = (event: React.MouseEvent<HTMLElement>) => {
-    if (edit) saveStudent();
-    setEdit(!edit);
+    if (edit) {
+      setOpenSaveModal(!openSaveModal);
+    } else {
+      setEdit(!edit);
+    }
   };
 
   return (
@@ -57,16 +70,35 @@ const GuardianInformation = ({ student }: Prop) => {
           <button className={styles.edit} onClick={handleEdit}>
             {edit ? "Save" : "Edit"}
           </button>
+          <SaveButton
+            open={openSaveModal}
+            onClose={() => {
+              setOpenSaveModal(!openSaveModal);
+            }}
+            saveInfo={() => {
+              setStudent(data);
+              setEdit(!edit);
+            }}
+            data={data}
+          />
           {edit ? (
-            <button
-              className={styles.cancel}
-              onClick={() => {
-                setData(student || blankStudent);
-                setEdit(false);
-              }}
-            >
-              Cancel
-            </button>
+            <>
+              <button
+                onClick={() => setOpenCancelModal(!openCancelModal)}
+                className={styles.edit}
+                style={{ color: "red" }}
+              >
+                Cancel
+              </button>
+              <CancelButton
+                open={openCancelModal}
+                onClose={() => setOpenCancelModal(!openCancelModal)}
+                resetInfo={() => {
+                  setData(student || blankStudent);
+                  setEdit(false);
+                }}
+              />
+            </>
           ) : (
             ""
           )}
@@ -100,9 +132,9 @@ const GuardianInformation = ({ student }: Prop) => {
                 : styles.informationText
             }
             disabled={!edit}
-            value={data.address}
+            value={data.guardian_address}
             onChange={(e) => {
-              setData({ ...data, address: e.target.value });
+              setData({ ...data, guardian_address: e.target.value });
             }}
             placeholder="Enter new address here"
           ></input>
