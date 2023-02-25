@@ -41,6 +41,7 @@
   font-family: "Libre Franklin";
   background: none;
   border: none;
+  margin-left: 30px;
 }
 
 .edit:hover {

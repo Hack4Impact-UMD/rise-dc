@@ -10,6 +10,7 @@ import {
   arrayUnion,
   orderBy,
   limit,
+
   arrayRemove,
 } from "firebase/firestore";
 import { ref, getDownloadURL, deleteObject } from "firebase/storage";
@@ -25,6 +26,7 @@ import app from "../config/firebase";
 import { resolve } from "path";
 import { rejects } from "assert";
 import dayjs from "dayjs";
+
 
 export function getStudentWithID(id: string): Promise<Student> {
   return new Promise((resolve, reject) => {
@@ -84,11 +86,11 @@ export function getCurrentUser(): Promise<RISEUser> {
   });
 }
 
-export function storeStudent(student: Student): Promise<string> {
+export function storeStudent(student: Student): Promise<void> {
   return new Promise((resolve, reject) => {
     addDoc(collection(db, "Students"), student)
-      .then((docRef) => {
-        return resolve(docRef.id);
+      .then(() => {
+        return resolve();
       })
       .catch((e) => {
         return reject(e);
@@ -96,7 +98,9 @@ export function storeStudent(student: Student): Promise<string> {
   });
 }
 
-export async function getStudentLogs(student_id: string): Promise<Array<Log>> {
+export async function getStudentLogs(
+  student_id: string
+): Promise<{ id: string; log: Log }[]> {
   const q = query(
     collection(db, "Logs"),
     where("student_id", "==", student_id)
@@ -104,7 +108,15 @@ export async function getStudentLogs(student_id: string): Promise<Array<Log>> {
   return new Promise((resolve, reject) => {
     getDocs(q)
       .then((querySnapshot) => {
-        return resolve(querySnapshot.docs.map((doc) => doc.data() as Log));
+        const log_objects: { id: string; log: Log }[] = [];
+
+        querySnapshot.docs.map((doc) => {
+          const log = doc.data() as Log;
+          log.date = new Date(doc.data().date.seconds * 1000);
+          log_objects.push({ id: doc.id, log: log });
+        });
+
+        return resolve(log_objects);
       })
       .catch((e) => {
         return reject(e);
@@ -194,6 +206,35 @@ export function updateStudent(student: Student): Promise<void> {
   });
 }
 
+export function updateLog(log: Log, id: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (id) {
+      const ref = doc(db, "Logs", id);
+      getCurrentUser().then((user) => {
+        updateDoc(ref, {
+          date: log.date,
+          duration_minutes: log.duration_minutes,
+          instructor_name: log.instructor_name,
+          reason: log.reason,
+          creator_id: user.id,
+          subject: log.subject,
+          summary: log.summary,
+          type: log.type,
+          student_id: log.student_id,
+        })
+          .then(() => {
+            return resolve();
+          })
+          .catch((e) => {
+            return reject(e);
+          });
+      });
+    } else {
+      return reject("Log missing id");
+    }
+  });
+}
+
 export function countHISessions(logs: Array<Log>): Promise<number> {
   return new Promise((resolve, reject) => {
     let count = 0;
@@ -213,10 +254,10 @@ export function getLogsTimeframe(start: Date, end: Date): Promise<Array<Log>> {
         const docs = snap.docs;
         docs.sort((a, b) => (a.data().date > b.data().date ? 1 : -1));
         const logs: Log[] = [];
+
         docs.forEach((doc) => {
           const log = doc.data() as Log;
-          const logDate = new Date(doc.data().date.seconds * 1000);
-          if (logDate >= start && logDate <= end) {
+          if (log.date >= start && log.date <= end) {
             logs.push(log);
           }
         });
@@ -379,7 +420,7 @@ export function hoursSpent(logs: Array<Log>): SubjectHours {
       hrs.english_hours += log.duration_minutes;
     } else if (log.subject == "MATH") {
       hrs.math_hours += log.duration_minutes;
-    } else if (log.subject == "HUMANITIES/OTHER") {
+    } else if (log.subject == "HUMANITIES") {
       hrs.humanities_hours += log.duration_minutes;
     } else if (log.subject == "SCIENCE") {
       hrs.science_hours += log.duration_minutes;
@@ -453,6 +494,31 @@ export async function receivedHITutoring(
       });
   });
 }
+export function uploadStudentFile(
+  file: File,
+  studentId: string
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const storage = getStorage(app);
+    const name = randomstring.generate(20);
+    const storageRef = ref(storage, name);
+    uploadBytes(storageRef, file)
+      .then((snapshot) => {
+        updateDoc(doc(db, "Students", studentId), {
+          files: arrayUnion(name),
+        })
+          .then(() => {
+            return resolve();
+          })
+          .catch((e) => {
+            return reject(e);
+          });
+      })
+      .catch((e) => {
+        return reject(e);
+      });
+  });
+}
 
 export function totalSessions(student: Student): Promise<number> {
   return new Promise((resolve, reject) => {
@@ -498,26 +564,25 @@ export function countHIWeeks(logs: Array<Log>): number {
   if (logs.length == 0) {
     return 0;
   }
-  let addedWeek = false;
+  let thirty = true;
   let ninety = 0;
-  let curr_date = logs[0].date;
-  let old_date = curr_date;
+  let date = logs[0].date;
+  let date1 = date;
   logs.forEach((log) => {
-    curr_date = log.date;
-    const dayObject = dayjs(old_date);
-    const sameWeek = dayObject.isSame(dayjs(curr_date));
-    if (!sameWeek) {
+    const date = log.date;
+    const same = sameWeek(date, date1);
+    if (!same) {
+      thirty = true;
       ninety = 0;
-      addedWeek = false;
     }
-    if (log.duration_minutes >= 30) {
-      ninety += log.duration_minutes;
+    if (log.duration_minutes < 30) {
+      thirty = false;
     }
-    if (!addedWeek && ninety >= 90) {
+    ninety += log.duration_minutes;
+    if (thirty && ninety >= 90) {
       count++;
-      addedWeek = true;
     }
-    old_date = curr_date;
+    date1 = date;
   });
   return count;
 }

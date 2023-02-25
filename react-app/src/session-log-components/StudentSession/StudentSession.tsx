@@ -5,29 +5,19 @@ import { useState, useEffect } from "react";
 import SaveModal from "../Modals/SaveModal/SaveModal";
 import CancelModal from "../Modals/CancelModal/CancelModal";
 import styles from "./StudentSession.module.css";
+import { Log } from "../../types/LogType";
 
 type studentSessionProp = {
-  teacherName: string;
-  role: string;
-  date: string;
-  startTime: string;
-  endTime: string;
-  duration?: string;
-  reason: string;
-  summary: string;
+  id?: String,
+  log?: Log,
   collapse: boolean;
   newLog?: boolean;
   removeSession?: any;
 };
 
 const StudentSession = ({
-  teacherName,
-  role,
-  date,
-  startTime,
-  endTime,
-  reason,
-  summary,
+  id,
+  log,
   collapse,
   newLog,
   removeSession,
@@ -81,8 +71,8 @@ const StudentSession = ({
   };
 
   const initialDuration = findDuration(startTime, endTime);
-  const [information, setInformation] = useState<studentSessionProp>({
-    teacherName,
+  const [information, setInformation] = useState<Log>({
+    role: log ? log.type : ,
     role,
     date,
     startTime,
@@ -96,7 +86,7 @@ const StudentSession = ({
   const handleEdit = (event: React.MouseEvent<HTMLElement>) => {
     setEdit(!edit);
   };
-
+  console.log(new Date());
   return (
     <div
       className={
@@ -106,7 +96,7 @@ const StudentSession = ({
       }
     >
       <div className={styles.topLine}>
-        <h2 className={styles.studentName}>{information.teacherName}</h2>
+        <h2 className={styles.studentName}>{log?.instructor_name}</h2>
         {collapsed ? (
           <div>
             <button
@@ -189,9 +179,12 @@ const StudentSession = ({
                 type="date"
                 className={`${styles.informationEdit} ${styles.dateEdit}`}
                 disabled={!edit}
-                value={information.date}
+                value={information.date.toDateString()}
                 onChange={(e) =>
-                  setInformation({ ...information, date: e.target.value })
+                  setInformation({
+                    ...information,
+                    date: e.target.valueAsDate!,
+                  })
                 }
               ></input>
             ) : (

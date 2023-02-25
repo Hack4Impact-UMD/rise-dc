@@ -3,7 +3,7 @@ import styles from "./AddSession.module.css";
 import { Dispatch, SetStateAction } from "react";
 
 type addSessionFunction = {
-  setAddSession: Dispatch<SetStateAction<boolean>>;
+  setAddSession: any;
 };
 
 const AddSession = ({ setAddSession }: addSessionFunction) => {

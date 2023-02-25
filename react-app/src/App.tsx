@@ -32,7 +32,10 @@ function App() {
             path="/settings"
             element={<RequireAuth children={<SettingsPage />} />}
           />
-          <Route path="/log" element={<RequireAuth children={<Session />} />} />
+          <Route
+            path="/log/:id"
+            element={<RequireAuth children={<Session />} />}
+          />
           <Route
             path="/search"
             element={<RequireAuth children={<SearchPage />} />}
