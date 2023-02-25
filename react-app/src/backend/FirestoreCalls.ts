@@ -86,11 +86,12 @@ export function getCurrentUser(): Promise<RISEUser> {
   });
 }
 
-export function storeStudent(student: Student): Promise<void> {
+export function storeStudent(student: Student): Promise<string> {
   return new Promise((resolve, reject) => {
     addDoc(collection(db, "Students"), student)
       .then(() => {
-        return resolve();
+       // return id of student added
+        return resolve(student.id!);
       })
       .catch((e) => {
         return reject(e);
@@ -420,7 +421,7 @@ export function hoursSpent(logs: Array<Log>): SubjectHours {
       hrs.english_hours += log.duration_minutes;
     } else if (log.subject == "MATH") {
       hrs.math_hours += log.duration_minutes;
-    } else if (log.subject == "HUMANITIES") {
+    } else if (log.subject == "HUMANITIES/OTHER") {
       hrs.humanities_hours += log.duration_minutes;
     } else if (log.subject == "SCIENCE") {
       hrs.science_hours += log.duration_minutes;
@@ -494,31 +495,7 @@ export async function receivedHITutoring(
       });
   });
 }
-export function uploadStudentFile(
-  file: File,
-  studentId: string
-): Promise<void> {
-  return new Promise((resolve, reject) => {
-    const storage = getStorage(app);
-    const name = randomstring.generate(20);
-    const storageRef = ref(storage, name);
-    uploadBytes(storageRef, file)
-      .then((snapshot) => {
-        updateDoc(doc(db, "Students", studentId), {
-          files: arrayUnion(name),
-        })
-          .then(() => {
-            return resolve();
-          })
-          .catch((e) => {
-            return reject(e);
-          });
-      })
-      .catch((e) => {
-        return reject(e);
-      });
-  });
-}
+
 
 export function totalSessions(student: Student): Promise<number> {
   return new Promise((resolve, reject) => {
@@ -610,22 +587,6 @@ export function getNumberStudents(): Promise<number> {
       })
       .catch((e) => reject(e));
   });
-}
-
-export function splitStudents(students: Array<Student>): Array<Array<Student>> {
-  let s = [[], []] as Array<Array<Student>>;
-  students.forEach((student) => {
-    const stud: string = student.id !== undefined ? student.id : "";
-    const p = getStudentLogs(stud!);
-    receivedHITutoring(p).then((r) => {
-      if (r) {
-        s[0].push(student);
-      } else {
-        s[1].push(student);
-      }
-    });
-  });
-  return s;
 }
 
 export function uploadStudentFile(
