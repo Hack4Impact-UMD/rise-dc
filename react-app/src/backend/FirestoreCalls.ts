@@ -10,7 +10,6 @@ import {
   arrayUnion,
   orderBy,
   limit,
-
   arrayRemove,
 } from "firebase/firestore";
 import { ref, getDownloadURL, deleteObject } from "firebase/storage";
@@ -26,7 +25,6 @@ import app from "../config/firebase";
 import { resolve } from "path";
 import { rejects } from "assert";
 import dayjs from "dayjs";
-
 
 export function getStudentWithID(id: string): Promise<Student> {
   return new Promise((resolve, reject) => {
@@ -420,7 +418,7 @@ export function hoursSpent(logs: Array<Log>): SubjectHours {
       hrs.english_hours += log.duration_minutes;
     } else if (log.subject == "MATH") {
       hrs.math_hours += log.duration_minutes;
-    } else if (log.subject == "HUMANITIES") {
+    } else if (log.subject == "HUMANITIES/OTHER") {
       hrs.humanities_hours += log.duration_minutes;
     } else if (log.subject == "SCIENCE") {
       hrs.science_hours += log.duration_minutes;
@@ -458,30 +456,30 @@ function sameWeek(date: Date, date1: Date): boolean {
 }
 
 export async function receivedHITutoring(
-  logs: Promise<Array<Log>>
+  logs: Promise<Array<{ id: String; log: Log }>>
 ): Promise<boolean> {
   return new Promise((resolve, reject) => {
     logs
       .then((logs) => {
-        logs.sort((a, b) => (a.date > b.date ? 1 : -1));
+        logs.sort((a, b) => (a.log.date > b.log.date ? 1 : -1));
         if (logs.length == 0) {
           return resolve(false);
         }
         let thirty = true;
         let ninety = 0;
-        let date = logs[0].date;
+        let date = logs[0].log.date;
         let date1 = date;
         logs.forEach((l) => {
-          const date = l.date;
+          const date = l.log.date;
           const same = sameWeek(date, date1);
           if (!same) {
             thirty = true;
             ninety = 0;
           }
-          if (l.duration_minutes < 30) {
+          if (l.log.duration_minutes < 30) {
             thirty = false;
           }
-          ninety += l.duration_minutes;
+          ninety += l.log.duration_minutes;
           if (thirty && ninety >= 90) {
             return true;
           }
@@ -491,31 +489,6 @@ export async function receivedHITutoring(
       })
       .catch((e) => {
         return Promise.reject(e);
-      });
-  });
-}
-export function uploadStudentFile(
-  file: File,
-  studentId: string
-): Promise<void> {
-  return new Promise((resolve, reject) => {
-    const storage = getStorage(app);
-    const name = randomstring.generate(20);
-    const storageRef = ref(storage, name);
-    uploadBytes(storageRef, file)
-      .then((snapshot) => {
-        updateDoc(doc(db, "Students", studentId), {
-          files: arrayUnion(name),
-        })
-          .then(() => {
-            return resolve();
-          })
-          .catch((e) => {
-            return reject(e);
-          });
-      })
-      .catch((e) => {
-        return reject(e);
       });
   });
 }
