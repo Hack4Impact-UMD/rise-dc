@@ -456,30 +456,30 @@ function sameWeek(date: Date, date1: Date): boolean {
 }
 
 export async function receivedHITutoring(
-  logs: Promise<Array<Log>>
+  logs: Promise<Array<{ id: String; log: Log }>>
 ): Promise<boolean> {
   return new Promise((resolve, reject) => {
     logs
       .then((logs) => {
-        logs.sort((a, b) => (a.date > b.date ? 1 : -1));
+        logs.sort((a, b) => (a.log.date > b.log.date ? 1 : -1));
         if (logs.length == 0) {
           return resolve(false);
         }
         let thirty = true;
         let ninety = 0;
-        let date = logs[0].date;
+        let date = logs[0].log.date;
         let date1 = date;
         logs.forEach((l) => {
-          const date = l.date;
+          const date = l.log.date;
           const same = sameWeek(date, date1);
           if (!same) {
             thirty = true;
             ninety = 0;
           }
-          if (l.duration_minutes < 30) {
+          if (l.log.duration_minutes < 30) {
             thirty = false;
           }
-          ninety += l.duration_minutes;
+          ninety += l.log.duration_minutes;
           if (thirty && ninety >= 90) {
             return true;
           }
@@ -489,42 +489,6 @@ export async function receivedHITutoring(
       })
       .catch((e) => {
         return Promise.reject(e);
-      });
-  });
-}
-
-export function uploadStudentFile(
-  file: File,
-  studentId: string
-): Promise<void> {
-  return new Promise((resolve, reject) => {
-    const storage = getStorage(app);
-    const name = randomstring.generate(20);
-    const storageRef = ref(storage, name);
-    uploadBytes(storageRef, file)
-      .then((snapshot) => {
-        getDownloadURL(snapshot.ref)
-          .then((url) => {
-            updateDoc(doc(db, "Students", studentId), {
-              files: arrayUnion({
-                path: name,
-                name: file.name,
-                downloadURL: url,
-              } as StudentFile),
-            })
-              .then(() => {
-                return resolve();
-              })
-              .catch((e) => {
-                return reject(e);
-              });
-          })
-          .catch((e) => {
-            return reject(e);
-          });
-      })
-      .catch((e) => {
-        return reject(e);
       });
   });
 }
