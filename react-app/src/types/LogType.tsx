@@ -11,7 +11,6 @@ export type Log = {
   id: string;
   start_time: string;
   end_time: string;
-  collapse: boolean;
 };
 
 

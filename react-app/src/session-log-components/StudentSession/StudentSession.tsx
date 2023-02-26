@@ -6,9 +6,6 @@ import SaveModal from "../Modals/SaveModal/SaveModal";
 import CancelModal from "../Modals/CancelModal/CancelModal";
 import styles from "./StudentSession.module.css";
 import { Log } from "../../types/LogType";
-import { RISEUser } from "../../types/UserType";
-import { getCurrentUser } from "../../backend/FirestoreCalls";
-
 type studentSessionProp = {
   id?: String,
   log?: Log,
@@ -29,17 +26,6 @@ const StudentSession = ({
   const [collapsed, setCollapsed] = useState<boolean>(collapse);
   const [openSaveModal, setOpenSaveModal] = useState<boolean>(false);
   const [openCancelModal, setOpenCancelModal] = useState<boolean>(false);
-  const [user, setUser] = useState<RISEUser>();
-  const [role, setRole] = useState<"MENTOR" | "TUTOR">("MENTOR");
-  useEffect(() => {
-    getCurrentUser().then((user) => {
-      setUser(user);
-      if(user.type == "TUTOR") {
-        setRole(user.type);
-      }
-    }).catch((e) => console.log(e));
-  }, [])
-
 
   useEffect(() => {
     setCollapsed(collapse);
@@ -98,14 +84,14 @@ const StudentSession = ({
   }
 
   const [information, setInformation] = useState<Log>({
-    date: new Date(),
+    date: log? log.date : new Date(),
     duration_minutes: log? str_to_duration(findDuration(log.start_time, log.end_time)): 0,
-    instructor_name: log? log.instructor_name : user?.name || "",
+    instructor_name: log? log.instructor_name : "",
     reason: log? log.reason : "",
-    creator_id: log? log.creator_id : user?.id || "",
+    creator_id: log? log.creator_id : "",
     subject: log? log.subject : "ENGLISH",
     summary: log? log.summary : "",
-    type: log? log.type : role,
+    type: log? log.type : "MENTOR",
     id: log? log.id : "",
     student_id: log? log.student_id : "",
     start_time: log? log.end_time : "00:00",
