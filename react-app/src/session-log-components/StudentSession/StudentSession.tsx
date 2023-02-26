@@ -110,7 +110,6 @@ const StudentSession = ({
     student_id: log? log.student_id : "",
     start_time: log? log.end_time : "00:00",
     end_time: log? log.start_time : "00:00",
-    collapse: log? log.collapse : false,
   });
 
   const handleEdit = (event: React.MouseEvent<HTMLElement>) => {
