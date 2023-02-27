@@ -10,7 +10,6 @@ import {
   arrayUnion,
   orderBy,
   limit,
-
   arrayRemove,
 } from "firebase/firestore";
 import { ref, getDownloadURL, deleteObject } from "firebase/storage";
@@ -26,7 +25,6 @@ import app from "../config/firebase";
 import { resolve } from "path";
 import { rejects } from "assert";
 import dayjs from "dayjs";
-
 
 export function getStudentWithID(id: string): Promise<Student> {
   return new Promise((resolve, reject) => {
@@ -460,30 +458,30 @@ function sameWeek(date: Date, date1: Date): boolean {
 }
 
 export async function receivedHITutoring(
-  logs: Promise<Array<Log>>
+  logs: Promise<Array<{ id: String; log: Log }>>
 ): Promise<boolean> {
   return new Promise((resolve, reject) => {
     logs
       .then((logs) => {
-        logs.sort((a, b) => (a.date > b.date ? 1 : -1));
+        logs.sort((a, b) => (a.log.date > b.log.date ? 1 : -1));
         if (logs.length == 0) {
           return resolve(false);
         }
         let thirty = true;
         let ninety = 0;
-        let date = logs[0].date;
+        let date = logs[0].log.date;
         let date1 = date;
         logs.forEach((l) => {
-          const date = l.date;
+          const date = l.log.date;
           const same = sameWeek(date, date1);
           if (!same) {
             thirty = true;
             ninety = 0;
           }
-          if (l.duration_minutes < 30) {
+          if (l.log.duration_minutes < 30) {
             thirty = false;
           }
-          ninety += l.duration_minutes;
+          ninety += l.log.duration_minutes;
           if (thirty && ninety >= 90) {
             return true;
           }

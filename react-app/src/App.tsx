@@ -49,7 +49,7 @@ function App() {
             element={<RequireAuth children={<TimeReport />} />}
           />
           <Route
-            path="/indivreport"
+            path="/indivreport/:id/:date"
             element={<RequireAuth children={<IndividualReport />} />}
           />
           <Route
