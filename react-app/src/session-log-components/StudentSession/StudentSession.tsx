@@ -8,6 +8,7 @@ import styles from "./StudentSession.module.css";
 import { Log } from "../../types/LogType";
 import { RISEUser } from "../../types/UserType";
 import { getCurrentUser } from "../../backend/FirestoreCalls";
+import SaveExisting from "../Modals/SaveExisting/SaveExisting";
 
 type studentSessionProp = {
   id?: String,
@@ -19,7 +20,6 @@ type studentSessionProp = {
 
 
 const StudentSession = ({
-  id,
   log,
   collapse,
   newLog,
@@ -116,6 +116,9 @@ const StudentSession = ({
   });
 
   const handleEdit = (event: React.MouseEvent<HTMLElement>) => {
+    if (edit) {
+      setOpenSaveModal(!openSaveModal);
+    }
     setEdit(!edit);
   };
   console.log(new Date());
@@ -172,6 +175,16 @@ const StudentSession = ({
             <button className={styles.edit} onClick={handleEdit}>
               {edit ? "Save" : "Edit"}
             </button>
+            <SaveExisting
+              open={openSaveModal}
+              onClose={() => setOpenSaveModal(false)}
+              saveInfo={() => {
+                setEdit(!edit);
+                setInformation(information);
+              }}
+              information={information}
+            />
+
             <button
               className={styles.collapseButton}
               onClick={() => setCollapsed(!collapsed)}
