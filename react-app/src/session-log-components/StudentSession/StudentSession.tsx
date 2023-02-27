@@ -6,6 +6,9 @@ import SaveModal from "../Modals/SaveModal/SaveModal";
 import CancelModal from "../Modals/CancelModal/CancelModal";
 import styles from "./StudentSession.module.css";
 import { Log } from "../../types/LogType";
+import { RISEUser } from "../../types/UserType";
+import { getCurrentUser } from "../../backend/FirestoreCalls";
+
 type studentSessionProp = {
   id?: String,
   log?: Log,
@@ -26,6 +29,17 @@ const StudentSession = ({
   const [collapsed, setCollapsed] = useState<boolean>(collapse);
   const [openSaveModal, setOpenSaveModal] = useState<boolean>(false);
   const [openCancelModal, setOpenCancelModal] = useState<boolean>(false);
+  const [user, setUser] = useState<RISEUser>();
+  const [role, setRole] = useState<"MENTOR" | "TUTOR">("MENTOR");
+  useEffect(() => {
+    getCurrentUser().then((user) => {
+      setUser(user);
+      if(user.type == "TUTOR") {
+        setRole(user.type);
+      }
+    }).catch((e) => console.log(e));
+  }, [])
+
 
   useEffect(() => {
     setCollapsed(collapse);
@@ -83,17 +97,20 @@ const StudentSession = ({
     return duration;
   }
 
+  const url = window.location.pathname.split('/');
+  const stud_id = url[url.length - 1];
+
   const [information, setInformation] = useState<Log>({
-    date: log? log.date : new Date(),
+    date: new Date(),
     duration_minutes: log? str_to_duration(findDuration(log.start_time, log.end_time)): 0,
-    instructor_name: log? log.instructor_name : "",
+    instructor_name: log? log.instructor_name : user?.name || "",
     reason: log? log.reason : "",
-    creator_id: log? log.creator_id : "",
+    creator_id: log? log.creator_id : user?.id || "",
     subject: log? log.subject : "ENGLISH",
     summary: log? log.summary : "",
-    type: log? log.type : "MENTOR",
+    type: log? log.type : role,
     id: log? log.id : "",
-    student_id: log? log.student_id : "",
+    student_id: log? log.student_id : stud_id,
     start_time: log? log.end_time : "00:00",
     end_time: log? log.start_time : "00:00",
   });
@@ -142,6 +159,7 @@ const StudentSession = ({
             <SaveModal
               open={openSaveModal}
               onClose={() => setOpenSaveModal(false)}
+              information={information}
             />
             <CancelModal
               open={openCancelModal}

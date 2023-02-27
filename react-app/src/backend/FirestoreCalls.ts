@@ -89,9 +89,9 @@ export function getCurrentUser(): Promise<RISEUser> {
 export function storeStudent(student: Student): Promise<string> {
   return new Promise((resolve, reject) => {
     addDoc(collection(db, "Students"), student)
-      .then(() => {
+      .then((docRef) => {
        // return id of student added
-        return resolve(student.id!);
+        return resolve(docRef.id);
       })
       .catch((e) => {
         return reject(e);
@@ -124,15 +124,14 @@ export async function getStudentLogs(
       });
   });
 }
-
-export function storeLog(log: Log): Promise<void> {
+export function storeLog(log: Log): Promise<string> {
   return new Promise((resolve, reject) => {
     addDoc(collection(db, "Logs"), log)
-      .then(() => {
-        return Promise.resolve();
+      .then((docRef) => {
+        return resolve(docRef.id);
       })
       .catch((e) => {
-        return Promise.reject(e);
+        return reject(e);
       });
   });
 }
@@ -222,6 +221,8 @@ export function updateLog(log: Log, id: string): Promise<void> {
           summary: log.summary,
           type: log.type,
           student_id: log.student_id,
+          start_time: log.start_time,
+          end_time: log.end_time,
         })
           .then(() => {
             return resolve();
