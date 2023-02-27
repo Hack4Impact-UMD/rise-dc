@@ -26,22 +26,15 @@ const getDates = (givenDates: String) => {
       endDate?.substring(4, 6) +
       "-" +
       endDate?.substring(6);
+  
+    const userOffset = new Date().getTimezoneOffset()*60*1000;
 
-    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const tz = new Intl.DateTimeFormat("en-GB", {
-      timeZone: timeZone,
-      timeZoneName: "short",
-    }).format(new Date());
-
-    const diff = tz.split("GMT")[1];
-    const offset = parseInt(diff, 10);
-    const offsetMins = offset * 60;
 
     return {
       startDate: new Date(
-        new Date(modifiedStart).getTime() - offsetMins * 60000
+        new Date(modifiedStart).getTime() + userOffset
       ),
-      endDate: new Date(new Date(modifiedEnd).getTime() - offsetMins * 60000),
+      endDate: new Date(new Date(modifiedEnd).getTime() + userOffset),
       dateError: false,
     };
   }
@@ -109,61 +102,61 @@ export default async function getData(dateRange: String) {
   let error = false;
   const { startDate, endDate, dateError } = getDates(dateRange);
 
-  if (dateError) {
-    error = true;
-  } else {
-    await getLogsTimeframe(startDate!, endDate!)
-      .then((result) => {
-        if (result.length == 0) {
-          error = true;
-        } else {
-          allSessions.dateRange = { startDate, endDate };
-          result.forEach((log) => {
-            allSessions.total_sessions += 1;
-            if (log.duration_minutes >= 30) {
-              allSessions.high_impact += 1;
-            }
-            const type = log.type === "MENTOR" ? "mentor" : "tutor";
-            const subject = log.subject.toString();
-            allSessions[type].time += log.duration_minutes;
-            allSessions[type].names.push(log.instructor_name);
-            switch (log.subject) {
-              case "MATH":
-                allSessions.math_minutes += log.duration_minutes;
-                break;
-              case "ENGLISH":
-                allSessions.english_minutes += log.duration_minutes;
-                break;
-              case "SCIENCE":
-                allSessions.science_minutes += log.duration_minutes;
-                break;
-              case "SOCIAL STUDIES":
-                allSessions.social_studies_minutes += log.duration_minutes;
-                break;
-              case "HUMANITIES/OTHER":
-                allSessions.humanities_minutes += log.duration_minutes;
-                break;
-            }
-            const curr_logs = allSessions.students.get(log.student_id);
-            if (curr_logs != undefined) {
-              curr_logs.push(log);
-              allSessions.students.set(log.student_id, curr_logs);
-            } else {
-              allSessions.students.set(log.student_id, [log]);
-            }
-          });
-        }
-      })
-      .catch((error) => {
+  if (dateError) 
+    return { information: allSessions, error: true }
+
+  await getLogsTimeframe(startDate!, endDate!)
+    .then((result) => {
+      if (result.length == 0) {
         error = true;
-      });
+      } else {
+        allSessions.dateRange = { startDate, endDate };
+        result.forEach((log) => {
+          allSessions.total_sessions += 1;
+          if (log.duration_minutes >= 30) {
+            allSessions.high_impact += 1;
+          }
+          const type = log.type === "MENTOR" ? "mentor" : "tutor";
+          const subject = log.subject.toString();
+          allSessions[type].time += log.duration_minutes;
+          allSessions[type].names.push(log.instructor_name);
+          switch (log.subject) {
+            case "MATH":
+              allSessions.math_minutes += log.duration_minutes;
+              break;
+            case "ENGLISH":
+              allSessions.english_minutes += log.duration_minutes;
+              break;
+            case "SCIENCE":
+              allSessions.science_minutes += log.duration_minutes;
+              break;
+            case "SOCIAL STUDIES":
+              allSessions.social_studies_minutes += log.duration_minutes;
+              break;
+            case "HUMANITIES/OTHER":
+              allSessions.humanities_minutes += log.duration_minutes;
+              break;
+          }
+          const curr_logs = allSessions.students.get(log.student_id);
+          if (curr_logs != undefined) {
+            curr_logs.push(log);
+            allSessions.students.set(log.student_id, curr_logs);
+          } else {
+            allSessions.students.set(log.student_id, [log]);
+          }
+        });
+      }
+    })
+    .catch((error) => {
+      error = true;
+    });
 
-    const { high_impact_students, low_impact_students } = await filterStudents(
-      allSessions.students
-    );
+  const { high_impact_students, low_impact_students } = await filterStudents(
+    allSessions.students
+  );
 
-    allSessions.high_impact_students = high_impact_students;
-    allSessions.low_impact_students = low_impact_students;
-    return { information: allSessions, error };
-  }
+  allSessions.high_impact_students = high_impact_students;
+  allSessions.low_impact_students = low_impact_students;
+  return { information: allSessions, error }
+  
 }

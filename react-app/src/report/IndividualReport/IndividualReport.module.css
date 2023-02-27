@@ -20,13 +20,13 @@
 
 .timeRange {
   width: 100%;
-  height: 50px;
+  height: 40px;
   display: flex;
   flex-direction: row;
   align-items: center;
   font-family: "Libre Franklin";
   color: #666;
-  margin: 1rem 0 0 5rem;
+  margin-top: 1rem;
   justify-self: start;
 }
 
@@ -40,4 +40,15 @@
 .navbar {
   height: 15vh;
   background-color: #d7ebd3;
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 85vh;
+  text-align: center;
+  font-size: 1.2rem;
+  font-family: "Libre Franklin";
 }

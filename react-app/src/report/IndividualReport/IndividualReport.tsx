@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getStudentWithID } from "../../backend/FirestoreCalls";
+import Loading from "../../loading-screen/Loading";
+import NavBar from "../../navbar/Navbar";
 import getData from "./getData";
 import styles from "./IndividualReport.module.css";
-import Sessions from "./Sessions/Sessions";
-import Subjects from "./Subjects/Subjects";
 
 export default function IndividualReport() {
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const params = useParams();
   const studentId = params.id;
   const date = params.date;
@@ -33,26 +34,27 @@ export default function IndividualReport() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.navbar}></div>
-      <div className={styles.body}>
-        <div className={styles.stylingBox}>
-          <div className={styles.timeRange}>
-            September 1, 2022 &nbsp;- &nbsp;Dec 2, 2022
+      {loading ? (
+        <Loading />
+      ) : (
+        <>
+          <div className={styles.navbar}>
+            <NavBar title="Report" />
           </div>
-          <Sessions
-            total={10}
-            highImpact={4}
-            highImpactWeeks={2}
-            averageLength={20}
-          />
-          <Subjects
-            mathHours={10}
-            readingHours={3}
-            scienceHours={4}
-            historyHours={2}
-          />
-        </div>
-      </div>
+          {error ? (
+            <div className={styles.error}>
+              Error fetching data <br /> <br />
+              Please try again later
+            </div>
+          ) : (
+            <div className={styles.body}>
+              <div className={styles.stylingBox}>
+                <div className={styles.timeRange}>{date}</div>
+              </div>
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 }
