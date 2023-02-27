@@ -87,8 +87,9 @@ export function getCurrentUser(): Promise<RISEUser> {
 export function storeStudent(student: Student): Promise<string> {
   return new Promise((resolve, reject) => {
     addDoc(collection(db, "Students"), student)
-      .then((doc) => {
-        return resolve(doc.id);
+      .then((docRef) => {
+       // return id of student added
+        return resolve(docRef.id);
       })
       .catch((e) => {
         return reject(e);
@@ -96,6 +97,7 @@ export function storeStudent(student: Student): Promise<string> {
   });
 }
 
+// return all logs that have 
 export async function getStudentLogs(
   student_id: string
 ): Promise<{ id: string; log: Log }[]> {
@@ -122,14 +124,14 @@ export async function getStudentLogs(
   });
 }
 
-export function storeLog(log: Log): Promise<void> {
+export function storeLog(log: Log): Promise<string> {
   return new Promise((resolve, reject) => {
     addDoc(collection(db, "Logs"), log)
-      .then(() => {
-        return Promise.resolve();
+      .then((docRef) => {
+        return resolve(docRef.id);
       })
       .catch((e) => {
-        return Promise.reject(e);
+        return reject(e);
       });
   });
 }
@@ -208,17 +210,18 @@ export function updateLog(log: Log, id: string): Promise<void> {
   return new Promise((resolve, reject) => {
     if (id) {
       const ref = doc(db, "Logs", id);
-      getCurrentUser().then((user) => {
         updateDoc(ref, {
           date: log.date,
           duration_minutes: log.duration_minutes,
           instructor_name: log.instructor_name,
           reason: log.reason,
-          creator_id: user.id,
           subject: log.subject,
           summary: log.summary,
+          id: id,
           type: log.type,
           student_id: log.student_id,
+          start_time: log.start_time,
+          end_time: log.end_time,
         })
           .then(() => {
             return resolve();
@@ -226,7 +229,6 @@ export function updateLog(log: Log, id: string): Promise<void> {
           .catch((e) => {
             return reject(e);
           });
-      });
     } else {
       return reject("Log missing id");
     }
@@ -493,6 +495,7 @@ export async function receivedHITutoring(
   });
 }
 
+
 export function totalSessions(student: Student): Promise<number> {
   return new Promise((resolve, reject) => {
     const studentQuery = query(
@@ -583,22 +586,6 @@ export function getNumberStudents(): Promise<number> {
       })
       .catch((e) => reject(e));
   });
-}
-
-export function splitStudents(students: Array<Student>): Array<Array<Student>> {
-  let s = [[], []] as Array<Array<Student>>;
-  students.forEach((student) => {
-    const stud: string = student.id !== undefined ? student.id : "";
-    const p = getStudentLogs(stud!);
-    receivedHITutoring(p).then((r) => {
-      if (r) {
-        s[0].push(student);
-      } else {
-        s[1].push(student);
-      }
-    });
-  });
-  return s;
 }
 
 export function uploadStudentFile(

@@ -13,8 +13,8 @@ const Students = ({students}: Props) => {
   const handleClickProfile = (student: Student) => {
     navigate(`/profile/${student.id}`)
   };
-  const handleClickLog = () => {
-    navigate("/log")
+  const handleClickLog = (student: Student) => {
+    navigate(`/log/${student.id}`)
   };
 
   return (
@@ -25,7 +25,7 @@ const Students = ({students}: Props) => {
         <div className={styles.student} key={student.name}>
         <h1 className={styles.studentName}>{student.name}</h1>
         <div className={styles.icons}>
-          <button onClick={handleClickLog} className={styles.button}>
+          <button onClick={() => {handleClickLog(student)}} className={styles.button}>
             <img src={notepad} className={styles.icon} alt="Notepad Icon" />
           </button>
           <button onClick={() => {handleClickProfile(student)}} className={styles.button}>

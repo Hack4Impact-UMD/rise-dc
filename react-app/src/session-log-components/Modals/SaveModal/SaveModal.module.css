@@ -56,6 +56,28 @@
   align-items: center;
 }
 
+.spinner:before {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin-top: -10px;
+  margin-left: -10px;
+  border-radius: 50%;
+  border-top: 2px solid #07d;
+  border-right: 2px solid transparent;
+  animation: spinner 0.6s linear infinite;
+}
+
+@keyframes spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .yesButton {
   width: 35%;
   height: 35px;
@@ -95,6 +117,24 @@
 
 .noButton:hover {
   border: 2px solid #cbebf8;
+}
+
+.submit {
+  font-family: "Libre Franklin";
+  font-size: 0.9rem;
+  width: 70%;
+  text-align: center;
+  padding-top: 2rem;
+}
+
+.submitted {
+  font-family: "Libre Franklin";
+  height: 100px;
+  font-size: 0.9rem;
+  width: 80%;
+  text-align: center;
+  overflow-y: auto;
+  padding-top: 20px;
 }
 /* 
 .yesButton {
