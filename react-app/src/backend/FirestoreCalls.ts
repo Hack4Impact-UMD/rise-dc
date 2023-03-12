@@ -122,14 +122,14 @@ export async function getStudentLogs(
   });
 }
 
-export function storeLog(log: Log): Promise<void> {
+export function storeLog(log: Log): Promise<string> {
   return new Promise((resolve, reject) => {
     addDoc(collection(db, "Logs"), log)
-      .then(() => {
-        return Promise.resolve();
+      .then((docRef) => {
+        return resolve(docRef.id);
       })
       .catch((e) => {
-        return Promise.reject(e);
+        return reject(e);
       });
   });
 }
@@ -583,22 +583,6 @@ export function getNumberStudents(): Promise<number> {
       })
       .catch((e) => reject(e));
   });
-}
-
-export function splitStudents(students: Array<Student>): Array<Array<Student>> {
-  let s = [[], []] as Array<Array<Student>>;
-  students.forEach((student) => {
-    const stud: string = student.id !== undefined ? student.id : "";
-    const p = getStudentLogs(stud!);
-    receivedHITutoring(p).then((r) => {
-      if (r) {
-        s[0].push(student);
-      } else {
-        s[1].push(student);
-      }
-    });
-  });
-  return s;
 }
 
 export function uploadStudentFile(

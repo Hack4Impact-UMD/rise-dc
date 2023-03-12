@@ -4008,6 +4008,16 @@
     "whatwg-mimetype" "^2.3.0"
     "whatwg-url" "^8.0.0"
 
+"dayjs-plugin-utc@^0.1.2":
+  "integrity" "sha512-ExERH5o3oo6jFOdkvMP3gytTCQ9Ksi5PtylclJWghr7k7m3o2U5QrwtdiJkOxLOH4ghr0EKhpqGefzGz1VvVJg=="
+  "resolved" "https://registry.npmjs.org/dayjs-plugin-utc/-/dayjs-plugin-utc-0.1.2.tgz"
+  "version" "0.1.2"
+
+"dayjs-timezone-iana-plugin@^0.1.0":
+  "integrity" "sha512-xc8cIZmi4oKr2nfu41I/FDWZKa8n8YaRMxSz9MrpXTNo8c6ZsjZuIoy5RPNmLXPqntFuITWI8obB7lUA+CdzGQ=="
+  "resolved" "https://registry.npmjs.org/dayjs-timezone-iana-plugin/-/dayjs-timezone-iana-plugin-0.1.0.tgz"
+  "version" "0.1.0"
+
 "dayjs@^1.11.6":
   "integrity" "sha512-zZbY5giJAinCG+7AGaw0wIhNZ6J8AhWuSXKvuc1KAyMiRsvGQWqh4L+MomvhdAYjN+lqvVCMq1I41e3YHvXkyQ=="
   "resolved" "https://registry.npmjs.org/dayjs/-/dayjs-1.11.6.tgz"

@@ -1,16 +1,22 @@
-import { nextTick } from "process";
 import {
   countHIWeeks,
   getLogsTimeframe,
   getStudentWithID,
 } from "../../backend/FirestoreCalls";
 import { Log } from "../../types/LogType";
-import { SessionInformation } from "./types";
+import { IndividualSessionInformation, Week } from "./types";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timeZone from "dayjs/timezone/iana/plugin";
 
 const getDates = (givenDates: String) => {
   const startDate = givenDates?.substring(0, 8);
   const endDate = givenDates?.substring(8);
-  if (startDate == undefined || endDate == undefined || endDate.length != 8) {
+  if (
+    givenDates.length != 16 ||
+    startDate == undefined ||
+    endDate == undefined
+  ) {
     return { startDate: new Date(), endDate: new Date(), dateError: true };
   } else {
     const modifiedStart =
@@ -18,23 +24,35 @@ const getDates = (givenDates: String) => {
       "-" +
       startDate?.substring(4, 6) +
       "-" +
-      startDate?.substring(6);
+      startDate?.substring(6) +
+      "T00:00:00Z";
 
     const modifiedEnd =
       endDate?.substring(0, 4) +
       "-" +
       endDate?.substring(4, 6) +
       "-" +
-      endDate?.substring(6);
-  
-    const userOffset = new Date().getTimezoneOffset()*60*1000;
+      endDate?.substring(6) +
+      "T00:00:00Z";
 
+    // const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    // const tz = new Intl.DateTimeFormat("en-GB", {
+    //   timeZone: timeZone,
+    //   timeZoneName: "short",
+    // }).format(new Date());
+
+    // const diff = tz.split("GMT")[1];
+    // // 4 is subtracted so that all times are converted to EST
+    // const offset = parseInt(diff, 10) - 4;
+    // const offsetMins = offset * 60;
 
     return {
-      startDate: new Date(
-        new Date(modifiedStart).getTime() + userOffset
-      ),
-      endDate: new Date(new Date(modifiedEnd).getTime() + userOffset),
+      startDate: new Date(modifiedStart)
+        .toLocaleString("en-US", { timeZone: "America/New_York" })
+        .split(",")[0],
+      endDate: new Date(modifiedEnd)
+        .toLocaleString("en-US", { timeZone: "America/New_York" })
+        .split(",")[0],
       dateError: false,
     };
   }
@@ -78,32 +96,25 @@ const filterStudents = async (students: Map<string, Log[]>) => {
 export default async function getData(dateRange: String) {
   const allStudents: Set<String> = new Set();
 
-  const allSessions: SessionInformation = {
+  const allSessions: IndividualSessionInformation = {
     dateRange: { startDate: new Date(), endDate: new Date() },
     total_sessions: 0,
     high_impact: 0,
-    mentor: {
-      names: [],
-      time: 0,
-    },
-    students: new Map(),
-    high_impact_students: [],
-    low_impact_students: [],
-    tutor: {
-      names: [],
-      time: 0,
-    },
+    high_impact_weeks: 0,
+    total_minutes: 0,
     math_minutes: 0,
     english_minutes: 0,
     science_minutes: 0,
     social_studies_minutes: 0,
     humanities_minutes: 0,
+    weeks: [],
   };
   let error = false;
   const { startDate, endDate, dateError } = getDates(dateRange);
 
-  if (dateError) 
-    return { information: allSessions, error: true }
+  if (dateError) {
+    return { information: allSessions, error: true };
+  }
 
   await getLogsTimeframe(startDate!, endDate!)
     .then((result) => {
@@ -111,15 +122,13 @@ export default async function getData(dateRange: String) {
         error = true;
       } else {
         allSessions.dateRange = { startDate, endDate };
+        const week = [];
         result.forEach((log) => {
           allSessions.total_sessions += 1;
           if (log.duration_minutes >= 30) {
             allSessions.high_impact += 1;
           }
-          const type = log.type === "MENTOR" ? "mentor" : "tutor";
-          const subject = log.subject.toString();
-          allSessions[type].time += log.duration_minutes;
-          allSessions[type].names.push(log.instructor_name);
+          allSessions.total_minutes += log.duration_minutes;
           switch (log.subject) {
             case "MATH":
               allSessions.math_minutes += log.duration_minutes;
@@ -137,13 +146,7 @@ export default async function getData(dateRange: String) {
               allSessions.humanities_minutes += log.duration_minutes;
               break;
           }
-          const curr_logs = allSessions.students.get(log.student_id);
-          if (curr_logs != undefined) {
-            curr_logs.push(log);
-            allSessions.students.set(log.student_id, curr_logs);
-          } else {
-            allSessions.students.set(log.student_id, [log]);
-          }
+          dayjs.sameWeek();
         });
       }
     })
@@ -151,12 +154,5 @@ export default async function getData(dateRange: String) {
       error = true;
     });
 
-  const { high_impact_students, low_impact_students } = await filterStudents(
-    allSessions.students
-  );
-
-  allSessions.high_impact_students = high_impact_students;
-  allSessions.low_impact_students = low_impact_students;
-  return { information: allSessions, error }
-  
+  return { information: allSessions, error };
 }
