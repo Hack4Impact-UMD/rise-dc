@@ -7,6 +7,7 @@ import Sessions from "./Sessions/Sessions";
 import Subjects from "./Subjects/Subjects";
 
 export default function IndividualReport() {
+  // error processing logs. please make sure there are logs in this time range for this student
   const [error, setError] = useState(false);
   const params = useParams();
   const studentId = params.id;
