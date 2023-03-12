@@ -8,9 +8,11 @@ export type Log = {
   summary: string;
   type: "MENTOR" | "TUTOR";
   student_id: string;
+  id: string;
   start_time: string;
   end_time: string;
 };
+
 
 export type Subject =
   | "ENGLISH"

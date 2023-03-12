@@ -11,12 +11,13 @@ import { getCurrentUser } from "../../backend/FirestoreCalls";
 import SaveExisting from "../Modals/SaveExisting/SaveExisting";
 
 type studentSessionProp = {
-  id?: String;
-  log?: Log;
+  id?: String,
+  log?: Log,
   collapse: boolean;
   newLog?: boolean;
   removeSession?: any;
 };
+
 
 const StudentSession = ({
   log,
@@ -31,15 +32,14 @@ const StudentSession = ({
   const [user, setUser] = useState<RISEUser>();
   const [role, setRole] = useState<"MENTOR" | "TUTOR">("MENTOR");
   useEffect(() => {
-    getCurrentUser()
-      .then((user) => {
-        setUser(user);
-        if (user.type == "TUTOR") {
-          setRole(user.type);
-        }
-      })
-      .catch((e) => console.log(e));
-  }, []);
+    getCurrentUser().then((user) => {
+      setUser(user);
+      if(user.type == "TUTOR") {
+        setRole(user.type);
+      }
+    }).catch((e) => console.log(e));
+  }, [])
+
 
   useEffect(() => {
     setCollapsed(collapse);
@@ -84,6 +84,7 @@ const StudentSession = ({
     return `${hoursString}${minutesString}`;
   };
 
+
   // parses a string of the form "HH hour MM minutes" into a number of minutes
   const str_to_duration = (time: string): number => {
     let duration = 0;
@@ -94,25 +95,24 @@ const StudentSession = ({
       duration += parseInt(time.split(" ")[2]);
     }
     return duration;
-  };
+  }
 
-  const url = window.location.pathname.split("/");
+  const url = window.location.pathname.split('/');
   const stud_id = url[url.length - 1];
 
   const [information, setInformation] = useState<Log>({
     date: new Date(),
-    duration_minutes: log
-      ? str_to_duration(findDuration(log.start_time, log.end_time))
-      : 0,
-    instructor_name: log ? log.instructor_name : user?.name || "",
-    reason: log ? log.reason : "",
-    creator_id: log ? log.creator_id : user?.id || "",
-    subject: log ? log.subject : "ENGLISH",
-    summary: log ? log.summary : "",
-    type: log ? log.type : role,
-    student_id: log ? log.student_id : stud_id,
-    start_time: log ? log.end_time : "00:00",
-    end_time: log ? log.start_time : "00:00",
+    duration_minutes: log? str_to_duration(findDuration(log.start_time, log.end_time)): 0,
+    instructor_name: log? log.instructor_name : user?.name || "",
+    reason: log? log.reason : "",
+    creator_id: log? log.creator_id : user?.id || "",
+    subject: log? log.subject : "ENGLISH",
+    summary: log? log.summary : "",
+    type: log? log.type : role,
+    id: log? log.id : "",
+    student_id: log? log.student_id : stud_id,
+    start_time: log? log.end_time : "00:00",
+    end_time: log? log.start_time : "00:00",
   });
 
   const handleEdit = (event: React.MouseEvent<HTMLElement>) => {
@@ -182,7 +182,7 @@ const StudentSession = ({
                 setEdit(!edit);
                 setInformation(information);
               }}
-              information={{ info: information, id: stud_id }}
+              information={information}
             />
 
             <button
@@ -214,10 +214,7 @@ const StudentSession = ({
               disabled={!edit}
               value={information.instructor_name}
               onChange={(e) =>
-                setInformation({
-                  ...information,
-                  instructor_name: e.target.value,
-                })
+                setInformation({ ...information, instructor_name: e.target.value })
               }
             ></input>
           </div>
@@ -269,9 +266,7 @@ const StudentSession = ({
                   setInformation({
                     ...information,
                     start_time: e.target.value,
-                    duration_minutes: str_to_duration(
-                      findDuration(e.target.value, information.end_time)
-                    ),
+                    duration_minutes: str_to_duration(findDuration(e.target.value, information.end_time)),
                   })
                 }
               ></input>
@@ -293,8 +288,9 @@ const StudentSession = ({
                   setInformation({
                     ...information,
                     end_time: e.target.value,
-                    duration_minutes: str_to_duration(
-                      findDuration(information.start_time, e.target.value)
+                    duration_minutes: str_to_duration(findDuration(
+                      information.start_time,
+                      e.target.value)
                     ),
                   })
                 }
@@ -309,10 +305,7 @@ const StudentSession = ({
               disabled
               value={findDuration(information.start_time, information.end_time)}
               onChange={(e) =>
-                setInformation({
-                  ...information,
-                  duration_minutes: str_to_duration(e.target.value),
-                })
+                setInformation({ ...information, duration_minutes: str_to_duration(e.target.value) })
               }
             ></input>
           </div>

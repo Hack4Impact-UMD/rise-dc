@@ -210,17 +210,18 @@ export function updateLog(log: Log, id: string): Promise<void> {
   return new Promise((resolve, reject) => {
     if (id) {
       const ref = doc(db, "Logs", id);
-      getCurrentUser().then((user) => {
         updateDoc(ref, {
           date: log.date,
           duration_minutes: log.duration_minutes,
           instructor_name: log.instructor_name,
           reason: log.reason,
-          creator_id: user.id,
           subject: log.subject,
           summary: log.summary,
+          id: id,
           type: log.type,
           student_id: log.student_id,
+          start_time: log.start_time,
+          end_time: log.end_time,
         })
           .then(() => {
             return resolve();
@@ -228,7 +229,6 @@ export function updateLog(log: Log, id: string): Promise<void> {
           .catch((e) => {
             return reject(e);
           });
-      });
     } else {
       return reject("Log missing id");
     }
