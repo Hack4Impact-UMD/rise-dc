@@ -8,14 +8,14 @@ type saveButtonType = {
   open: boolean;
   onClose: any;
   saveInfo: any;
-  information: Log;
+  information: { info: Log; id: string };
 };
 
 const SaveExisting = ({
   open,
   onClose,
   saveInfo,
-    information,
+  information,
 }: saveButtonType) => {
   const [submitted, setSubmitted] = useState<string>("");
   const [route, setRoute] = useState<string>("./");
@@ -23,18 +23,18 @@ const SaveExisting = ({
 
   const handleSubmit = () => {
     setLoading(true);
-    updateLog(information, information.id).then(() => {
+    updateLog(information.info, information.id)
+      .then(() => {
         setSubmitted("Your changes have been saved.");
-        })
-        .catch((error) => {
-            setSubmitted(
-                `An error occurred while trying to save your changes. Please try again later. Error: ${error}`
-            );
-            setRoute("failed");
-        })
-        .finally(() => setLoading(false));
+      })
+      .catch((error) => {
+        setSubmitted(
+          `An error occurred while trying to save your changes. Please try again later. Error: ${error}`
+        );
+        setRoute("failed");
+      })
+      .finally(() => setLoading(false));
   };
-
 
   const handleOnClose = () => {
     if (submitted == "Your changes have been saved.") {
@@ -45,7 +45,6 @@ const SaveExisting = ({
     setSubmitted("");
     setLoading(false);
   };
-  
 
   return (
     <Modal
@@ -111,4 +110,3 @@ const SaveExisting = ({
 };
 
 export default SaveExisting;
-
