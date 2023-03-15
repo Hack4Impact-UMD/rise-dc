@@ -328,14 +328,20 @@ const StudentSession = ({
             >
               {edit ? (
                 <>
-                  <option className={styles.selectOption} value="Reason 1">
-                    Reason 1
+                  <option className={styles.selectOption} value="English">
+                    English
                   </option>
-                  <option className={styles.selectOption} value="Reason 2">
-                    Reason 2
+                  <option className={styles.selectOption} value="Math">
+                    Math
                   </option>
-                  <option className={styles.selectOption} value="Reason 3">
-                    Reason 3
+                  <option className={styles.selectOption} value="Social Studies">
+                    Social Studies
+                  </option>
+                  <option className={styles.selectOption} value="Science">
+                    Science
+                  </option>
+                  <option className={styles.selectOption} value="Humanities/Other">
+                    Humanities/Other
                   </option>
                 </>
               ) : (
