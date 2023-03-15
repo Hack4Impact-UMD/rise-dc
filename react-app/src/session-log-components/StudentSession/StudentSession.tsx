@@ -26,6 +26,7 @@ const StudentSession = ({
   removeSession,
 }: studentSessionProp) => {
   const [edit, setEdit] = useState<boolean>(newLog ? true : false);
+  const [mentor, setMentor] = useState<boolean>(true);
   const [collapsed, setCollapsed] = useState<boolean>(collapse);
   const [openSaveModal, setOpenSaveModal] = useState<boolean>(false);
   const [openCancelModal, setOpenCancelModal] = useState<boolean>(false);
@@ -36,6 +37,7 @@ const StudentSession = ({
       setUser(user);
       if(user.type == "TUTOR") {
         setRole(user.type);
+        setMentor(false);
       }
     }).catch((e) => console.log(e));
   }, [])
@@ -318,36 +320,52 @@ const StudentSession = ({
           </div>
           <div className={styles.containerLines}>
             <div className={styles.lineLabel}>Session Reason</div>
-            <select
-              className={styles.reason}
-              disabled={!edit}
-              value={information.reason}
-              onChange={(e) =>
-                setInformation({ ...information, reason: e.target.value })
-              }
-            >
               {edit ? (
                 <>
-                  <option className={styles.selectOption} value="English">
-                    English
-                  </option>
-                  <option className={styles.selectOption} value="Math">
-                    Math
-                  </option>
-                  <option className={styles.selectOption} value="Social Studies">
-                    Social Studies
-                  </option>
-                  <option className={styles.selectOption} value="Science">
-                    Science
-                  </option>
-                  <option className={styles.selectOption} value="Humanities/Other">
-                    Humanities/Other
-                  </option>
-                </>
+                <select
+                  className={styles.reason}
+                  disabled={!edit}
+                  value={information.reason}
+                  onChange={(e) =>
+                  setInformation({ ...information, reason: e.target.value })
+                }
+                >
+                {mentor ? (
+                  <>
+                    <option className={styles.selectOption} value="English">
+                      English
+                    </option>
+                    <option className={styles.selectOption} value="Math">
+                      Math
+                    </option>
+                    <option className={styles.selectOption} value="Social Studies">
+                      Social Studies
+                    </option>
+                    <option className={styles.selectOption} value="Science">
+                      Science
+                    </option>
+                    <option className={styles.selectOption} value="Humanities/Other">
+                      Humanities/Other
+                    </option>
+                  </>
               ) : (
-                <option value={information.reason}>{information.reason}</option>
+                <>
+                    <option className={styles.selectOption} value="College Prep Support">
+                    College Prep Support
+                    </option>
+                    <option className={styles.selectOption} value="Mentor-Mentee Outing">
+                    Mentor-Mentee Outing
+                    </option>
+                    <option className={styles.selectOption} value="Mentor-Mentee Outing">
+                    Mentor-Mentee Outing
+                    </option>
+                  </>
               )}
             </select>
+                </>
+              ) : (
+                <div className={styles.informationText}> {information.reason}</div>
+              )}
           </div>
           <div className={`${styles.summaryLine} ${styles.containerLines}`}>
             <div className={styles.lineLabel}>Session Summary</div>
