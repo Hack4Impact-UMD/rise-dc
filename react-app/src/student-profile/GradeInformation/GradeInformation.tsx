@@ -55,6 +55,7 @@ const GradeInformation = ({ student, setStudent }: Props) => {
     setData({
       ...student!,
       grades: data.grades,
+      reading_level: data.reading_level,
     });
   }, [student]);
 
@@ -157,7 +158,9 @@ const GradeInformation = ({ student, setStudent }: Props) => {
               </select>
             </>
           ) : (
-            <p className={styles.readingLevelText}>{data.reading_level}</p>
+            <div className={styles.informationText}>
+                  {data.reading_level}
+                </div>
           )}
         </div>
         <div className={styles.containerLines}>
