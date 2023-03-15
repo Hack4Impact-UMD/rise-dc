@@ -19,7 +19,6 @@ const SaveModal = ({ open, onClose, information }: saveModalPropsType) => {
     setLoading(true);
     storeLog(information)
       .then((id) => {
-        console.log(id);
         updateLog(information, id);
         setSubmitted("Session log has been created successfully.");
       })
@@ -50,7 +49,7 @@ const SaveModal = ({ open, onClose, information }: saveModalPropsType) => {
             onClick={() => {handleOnClose();}}>
             &#x2715;
           </button>
-          <div className={styles.heading}> New Session Log Confirmation </div>
+          <div className={styles.title}> New Session Log Confirmation </div>
         </div>
         
         {loading ? (
