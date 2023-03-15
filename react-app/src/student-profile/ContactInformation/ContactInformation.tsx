@@ -123,7 +123,9 @@ const ContactInformation = ({ student, setStudent }: Props) => {
             onChange={(e) => {
               setData({ ...data, name: e.target.value });
             }}
-            placeholder="Enter new name here"
+            placeholder={
+              edit ? "Student Name" : ""
+            }
           ></input>
         </div>
         <div className={styles.containerLines}>
@@ -140,7 +142,9 @@ const ContactInformation = ({ student, setStudent }: Props) => {
             onChange={(e) => {
               setData({ ...data, address: e.target.value });
             }}
-            placeholder="Enter new address here"
+            placeholder={
+              edit ? "Student Address" : ""
+            }
           ></input>
         </div>
         <div className={styles.containerLines}>
@@ -157,7 +161,9 @@ const ContactInformation = ({ student, setStudent }: Props) => {
             onChange={(e) => {
               setData({ ...data, email: e.target.value });
             }}
-            placeholder="Enter new email here"
+            placeholder={
+              edit ? "Student Email" : ""
+            }
           ></input>
         </div>
         <div className={styles.containerLines}>
@@ -174,7 +180,9 @@ const ContactInformation = ({ student, setStudent }: Props) => {
             onChange={(e) => {
               setData({ ...data, phone_number: e.target.value });
             }}
-            placeholder="Enter new phone number here"
+            placeholder={
+              edit ? "Student Phone Number" : ""
+            }
           ></input>
         </div>
         <div className={styles.containerLines}>
@@ -191,7 +199,9 @@ const ContactInformation = ({ student, setStudent }: Props) => {
             onChange={(e) => {
               setData({ ...data, high_school: e.target.value });
             }}
-            placeholder="Enter new high school here"
+            placeholder={
+              edit ? "Name of High School" : ""
+            }
           ></input>
         </div>
         <div className={`${styles.bottomLine} ${styles.containerLines}`}>
@@ -208,7 +218,9 @@ const ContactInformation = ({ student, setStudent }: Props) => {
             onChange={(e) => {
               setData({ ...data, grade_level: e.target.value });
             }}
-            placeholder="Enter new grade level here"
+            placeholder={
+              edit ? "Student Grade Level" : ""
+            }
           ></input>
         </div>
       </div>

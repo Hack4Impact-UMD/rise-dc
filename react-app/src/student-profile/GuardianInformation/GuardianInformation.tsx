@@ -119,7 +119,9 @@ const GuardianInformation = ({ student, setStudent }: Prop) => {
             onChange={(e) => {
               setData({ ...data, guardian_name: e.target.value });
             }}
-            placeholder="Enter new name here"
+            placeholder={
+              edit ? "Guardian Name" : ""
+            }
           ></input>
         </div>
         <div className={styles.containerLines}>
@@ -136,7 +138,9 @@ const GuardianInformation = ({ student, setStudent }: Prop) => {
             onChange={(e) => {
               setData({ ...data, guardian_address: e.target.value });
             }}
-            placeholder="Enter new address here"
+            placeholder={
+              edit ? "Guardian Address" : ""
+            }
           ></input>
         </div>
         <div className={styles.containerLines}>
@@ -153,7 +157,9 @@ const GuardianInformation = ({ student, setStudent }: Prop) => {
             onChange={(e) => {
               setData({ ...data, guardian_email: e.target.value });
             }}
-            placeholder="Enter new email here"
+            placeholder={
+              edit ? "Guardian Email" : ""
+            }
           ></input>
         </div>
         <div className={`${styles.bottomLine} ${styles.containerLines}`}>
@@ -170,7 +176,9 @@ const GuardianInformation = ({ student, setStudent }: Prop) => {
             onChange={(e) => {
               setData({ ...data, guardian_phone: e.target.value });
             }}
-            placeholder="Enter new phone number here"
+            placeholder={
+              edit ? "Guardian Phone Number" : ""
+            }
           ></input>
         </div>
       </div>
