@@ -122,6 +122,13 @@ const StudentSession = ({
     setEdit(!edit);
   };
   console.log(new Date());
+  
+  function titleCase(type: string): import("react").ReactNode {
+    return type.toLowerCase().split(' ').map(function(word) {
+      return word.replace(word[0], word[0].toUpperCase());
+    }).join(' ')
+  }
+
   return (
     <div
       className={
@@ -203,7 +210,7 @@ const StudentSession = ({
       ) : (
         <div className={styles.container}>
           <div className={styles.containerLines}>
-            <div className={styles.lineLabel}>{information.type}</div>
+            <div className={styles.lineLabel}>{titleCase(information.type)}</div>
             <input
               type="text"
               className={
