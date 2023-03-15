@@ -2,6 +2,8 @@ import person from "../assets/person.svg";
 import notepad from "../assets/notepad.svg";
 import styles from "./StudentInfo.module.css";
 import notebook from "../assets/notebook.svg";
+import {Student} from "../../types/StudentType"
+import { useNavigate } from "react-router-dom";
 
 type studentInformation = {
   name: string;
@@ -9,16 +11,16 @@ type studentInformation = {
 };
 
 const StudentInfo = ({ name, id }: studentInformation) => {
-  const handleGenerateReport = () => {
-    // implemenet this
+  const navigate = useNavigate();
+  const handleGenerateReport = (id?: string) => {
+    let newDate = new Date()
+    navigate(`/indivreport/${id}/${newDate}`)
   };
-
-  const handleClickLogs = () => {
-    // implemenet this
+  const handleClickProfile = (id?: string) => {
+    navigate(`/profile/${id}`)
   };
-
-  const handleClickProfile = () => {
-    // implemenet this
+  const handleClickLog = (id?: String) => {
+    navigate(`/log/${id}`)
   };
 
   return (
@@ -26,13 +28,13 @@ const StudentInfo = ({ name, id }: studentInformation) => {
       <div className={styles.student}>
         <h1 className={styles.studentName}> {name} </h1>
         <div className={styles.icons}>
-          <button onClick={handleGenerateReport} className={styles.button}>
+          <button onClick={() => {handleGenerateReport(id)}} className={styles.button}>
             <img src={notebook} className={styles.icon} alt="Notebook Icon" />
           </button>
-          <button onClick={handleClickLogs} className={styles.button}>
+          <button onClick={() => {handleClickLog(id)}} className={styles.button}>
             <img src={notepad} className={styles.icon} alt="Notepad Icon" />
           </button>
-          <button onClick={handleClickProfile} className={styles.button}>
+          <button onClick={() => {handleClickProfile(id)}} className={styles.button}>
             <img src={person} className={styles.icon} alt="Person Icon" />
           </button>
         </div>

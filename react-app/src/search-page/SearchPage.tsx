@@ -13,6 +13,7 @@ export default function SearchPage() {
   const [failure, setFailure] = useState<string>("false");
 
   const navigate = useNavigate();
+
   useEffect(() => {
     const loadStudents = async () => {
       /* Loading is set in here, so that on state change, it remains false */
