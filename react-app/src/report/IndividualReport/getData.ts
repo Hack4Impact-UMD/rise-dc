@@ -1,13 +1,13 @@
 import {
   countHIWeeks,
-  getLogsTimeframe,
+  getLogsByTimeframe,
   getStudentWithID,
 } from "../../backend/FirestoreCalls";
 import { Log } from "../../types/LogType";
 import { IndividualSessionInformation, Week } from "./types";
 import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-import timeZone from "dayjs/timezone/iana/plugin";
+import { Student } from "../../types/StudentType";
+import { DateTime } from "luxon";
 
 const getDates = (givenDates: String) => {
   const startDate = givenDates?.substring(0, 8);
@@ -24,16 +24,15 @@ const getDates = (givenDates: String) => {
       "-" +
       startDate?.substring(4, 6) +
       "-" +
-      startDate?.substring(6) +
-      "T00:00:00Z";
+      startDate?.substring(6);
 
     const modifiedEnd =
       endDate?.substring(0, 4) +
       "-" +
       endDate?.substring(4, 6) +
       "-" +
-      endDate?.substring(6) +
-      "T00:00:00Z";
+      endDate?.substring(6);
+    // "T00:00:00Z";
 
     // const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     // const tz = new Intl.DateTimeFormat("en-GB", {
@@ -46,13 +45,34 @@ const getDates = (givenDates: String) => {
     // const offset = parseInt(diff, 10) - 4;
     // const offsetMins = offset * 60;
 
+    const startOffset = new Date(
+      new Date(modifiedStart).toLocaleString("en-US", {
+        timeZone: "America/New_York",
+      })
+    ).getTimezoneOffset();
+    const endOffset = new Date(
+      new Date(modifiedEnd).toLocaleString("en-US", {
+        timeZone: "America/New_York",
+      })
+    ).getTimezoneOffset();
+    const startLetter = startOffset == 240 ? "4" : "5";
+    const endLetter = endOffset == 240 ? "4" : "5";
+    const trueStart = new Date(
+      new Date(modifiedStart + `T00:00:00-0${startLetter}:00`).toLocaleString(
+        "en-US",
+        { timeZone: "America/New_York" }
+      )
+    );
+    const trueEnd = new Date(
+      new Date(modifiedEnd + `T00:00:00-0${endLetter}:00`).toLocaleString(
+        "en-US",
+        { timeZone: "America/New_York" }
+      )
+    );
+
     return {
-      startDate: new Date(modifiedStart)
-        .toLocaleString("en-US", { timeZone: "America/New_York" })
-        .split(",")[0],
-      endDate: new Date(modifiedEnd)
-        .toLocaleString("en-US", { timeZone: "America/New_York" })
-        .split(",")[0],
+      startDate: trueStart,
+      endDate: trueEnd,
       dateError: false,
     };
   }
@@ -93,7 +113,7 @@ const filterStudents = async (students: Map<string, Log[]>) => {
   return { high_impact_students, low_impact_students };
 };
 
-export default async function getData(dateRange: String) {
+export default async function getData(student: Student, dateRange: String) {
   const allStudents: Set<String> = new Set();
 
   const allSessions: IndividualSessionInformation = {
@@ -111,19 +131,29 @@ export default async function getData(dateRange: String) {
   };
   let error = false;
   const { startDate, endDate, dateError } = getDates(dateRange);
-
   if (dateError) {
     return { information: allSessions, error: true };
   }
 
-  await getLogsTimeframe(startDate!, endDate!)
+  await getLogsByTimeframe(student, startDate!, endDate!)
     .then((result) => {
+      console.log(result);
       if (result.length == 0) {
         error = true;
       } else {
         allSessions.dateRange = { startDate, endDate };
-        const week = [];
+        let week: Week = { highImpact: false, startDate: new Date(), logs: [] };
+        let lastSunday: string = "";
         result.forEach((log) => {
+          if (week.logs.length == 0) {
+            const hi = DateTime.fromSeconds(log.date.seconds).setZone(
+              "America/New_York"
+            );
+            const day = hi.weekday % 7;
+            const other = hi.minus({ days: day });
+            console.log(hi.toISO());
+            lastSun = other.toLocaleString();
+          }
           allSessions.total_sessions += 1;
           if (log.duration_minutes >= 30) {
             allSessions.high_impact += 1;
@@ -146,7 +176,6 @@ export default async function getData(dateRange: String) {
               allSessions.humanities_minutes += log.duration_minutes;
               break;
           }
-          dayjs.sameWeek();
         });
       }
     })

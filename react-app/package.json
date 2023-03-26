@@ -12,6 +12,7 @@
     "dayjs-plugin-utc": "^0.1.2",
     "dayjs-timezone-iana-plugin": "^0.1.0",
     "firebase": "^9.10.0",
+    "luxon": "^3.3.0",
     "randomstring": "^1.2.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -47,6 +48,7 @@
     ]
   },
   "devDependencies": {
+    "@types/luxon": "^3.2.0",
     "@types/randomstring": "^1.1.8",
     "@types/react": "^18.0.21",
     "@types/react-dom": "^18.0.6"

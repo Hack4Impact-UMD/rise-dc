@@ -344,12 +344,13 @@ export function getLogsByTimeframe(
 ): Promise<Array<Log>> {
   const filterStudent = query(
     collection(db, "Logs"),
-    where("student_id", "==", s.id)
+    where("student_id", "==", s.id),
+    where("date", ">=", sd),
+    where("date", "<=", ed),
+    orderBy("date")
   );
-  const filterStartDate = query(filterStudent, where("date", ">=", sd));
-  const filterEndDate = query(filterStartDate, where("date", "<=", ed));
   return new Promise((resolve, reject) => {
-    getDocs(filterEndDate)
+    getDocs(filterStudent)
       .then((querySnapshot) => {
         return resolve(querySnapshot.docs.map((doc) => doc.data() as Log));
       })
@@ -357,6 +358,23 @@ export function getLogsByTimeframe(
         return Promise.reject(e);
       });
   });
+  // getDocs(collection(db, "Logs"))
+  //     .then((snap) => {
+  //       const docs = snap.docs;
+  //       docs.sort((a, b) => (a.data().date > b.data().date ? 1 : -1));
+  //       const logs: Log[] = [];
+
+  //       docs.forEach((doc) => {
+  //         const log = doc.data() as Log;
+  //         if (log.date >= start && log.date <= end) {
+  //           logs.push(log);
+  //         }
+  //       });
+  //       return resolve(logs);
+  //     })
+  //     .catch((e) => {
+  //       reject(e);
+  //     });
 }
 
 export function logsToWeeks(): Promise<Array<any>> {

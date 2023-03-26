@@ -18,18 +18,19 @@ export default function IndividualReport() {
       return;
     }
     const retrieveData = async () => {
-      const studentName = await getStudentWithID(studentId)
-        .then((result) => {
-          return result.name;
+      const student = await getStudentWithID(studentId)
+        .then(async (result) => {
+          const parsedDates = await getData(result, date);
+          return result;
         })
         .catch((e) => setError(true));
-      const parsedDates = await getData(date);
-      if (parsedDates!.error) {
-        setError(true);
-        return;
-      }
+      // if (parsedDates!.error) {
+      //   setError(true);
+      //   return;
+      // }
     };
     retrieveData();
+    setLoading(false);
   }, []);
 
   return (
