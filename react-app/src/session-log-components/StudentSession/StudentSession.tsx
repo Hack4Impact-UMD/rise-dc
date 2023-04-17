@@ -1,33 +1,45 @@
-import dayjs from "dayjs";
-import downArrow from "./downArrow.svg";
-import rightArrow from "./rightArrow.svg";
+import downArrow from "../../assets/downArrow.svg";
 import { useState, useEffect } from "react";
 import SaveModal from "../Modals/SaveModal/SaveModal";
 import CancelModal from "../Modals/CancelModal/CancelModal";
 import styles from "./StudentSession.module.css";
-import { Log } from "../../types/LogType";
-import { RISEUser } from "../../types/UserType";
-import { getCurrentUser } from "../../backend/FirestoreCalls";
-import SaveExisting from "../Modals/SaveExisting/SaveExisting";
+import { Log, LogID, Subject } from "../../types/LogType";
+import ChangeExisting from "../Modals/ChangeExisting/ChangeExisting";
+import { durationToString, findDuration, formatDate } from "./helperFunctions";
+import CollapsedView from "./CollapsedView/CollapsedView";
+import { info } from "console";
 
 type studentSessionProp = {
+<<<<<<< HEAD
   id?: String;
   log?: Log;
+=======
+  logID?: LogID;
+>>>>>>> 5abcafd4088605ac8f1e1aa4c3ec7f1c32d69515
   collapse: boolean;
   newLog?: boolean;
   removeSession?: any;
+  studentId: string;
+  user?: any;
 };
 
 const StudentSession = ({
-  log,
+  logID,
   collapse,
   newLog,
   removeSession,
+  studentId,
+  user,
 }: studentSessionProp) => {
+  const log: Log = logID?.log!;
+  const currLogID = logID?.id;
   const [edit, setEdit] = useState<boolean>(newLog ? true : false);
   const [collapsed, setCollapsed] = useState<boolean>(collapse);
   const [openSaveModal, setOpenSaveModal] = useState<boolean>(false);
+  const [openChangeSaveModal, setOpenChangeSaveModal] =
+    useState<boolean>(false);
   const [openCancelModal, setOpenCancelModal] = useState<boolean>(false);
+<<<<<<< HEAD
   const [user, setUser] = useState<RISEUser>();
   const [role, setRole] = useState<"MENTOR" | "TUTOR">("MENTOR");
   useEffect(() => {
@@ -40,11 +52,17 @@ const StudentSession = ({
       })
       .catch((e) => console.log(e));
   }, []);
+=======
+  const [openChangeDeleteModal, setOpenChangeDeleteModal] =
+    useState<boolean>(false);
+  const [remove, setRemove] = useState<boolean>(false);
+>>>>>>> 5abcafd4088605ac8f1e1aa4c3ec7f1c32d69515
 
   useEffect(() => {
     setCollapsed(collapse);
   }, [collapse]);
 
+<<<<<<< HEAD
   const findDuration = (startingTime: string, endingTime: string): string => {
     const startTimeHour: number = parseInt(startingTime.split(":")[0]);
     let endTimeHour: number = parseInt(endingTime.split(":")[0]);
@@ -113,14 +131,30 @@ const StudentSession = ({
     student_id: log ? log.student_id : stud_id,
     start_time: log ? log.end_time : "00:00",
     end_time: log ? log.start_time : "00:00",
+=======
+  const [information, setInformation] = useState<Log>({
+    date: log?.date || "",
+    duration_minutes: log?.duration_minutes || 0,
+    instructor_name: log?.instructor_name || "",
+    reason: log?.reason || "",
+    creator_id: log?.creator_id || "",
+    subject: log?.subject || "ENGLISH",
+    summary: log?.summary || "",
+    type: log?.type || "MENTOR",
+    student_id: studentId,
+    start_time: log?.start_time || "00:00",
+    end_time: log?.end_time || "00:00",
+>>>>>>> 5abcafd4088605ac8f1e1aa4c3ec7f1c32d69515
   });
 
   const handleEdit = (event: React.MouseEvent<HTMLElement>) => {
     if (edit) {
-      setOpenSaveModal(!openSaveModal);
+      setOpenChangeSaveModal(!openChangeSaveModal);
+    } else {
+      setEdit(true);
     }
-    setEdit(!edit);
   };
+<<<<<<< HEAD
   console.log(new Date());
   return (
     <div
@@ -184,23 +218,19 @@ const StudentSession = ({
               }}
               information={{ info: information, id: stud_id }}
             />
+=======
+>>>>>>> 5abcafd4088605ac8f1e1aa4c3ec7f1c32d69515
 
-            <button
-              className={styles.collapseButton}
-              onClick={() => setCollapsed(!collapsed)}
-            >
-              <img
-                src={downArrow}
-                alt="Collapse Session"
-                className={styles.collapseImage}
-              />
-            </button>
-          </div>
-        )}
-      </div>
+  return (
+    <div style={remove ? { display: "none" } : {}}>
       {collapsed ? (
-        <></>
+        <CollapsedView
+          instructor_name={log?.instructor_name!}
+          date={log?.date!}
+          changeCollapse={() => setCollapsed(!collapsed)}
+        />
       ) : (
+<<<<<<< HEAD
         <div className={styles.container}>
           <div className={styles.containerLines}>
             <div className={styles.lineLabel}>{information.type}</div>
@@ -236,7 +266,118 @@ const StudentSession = ({
                   })
                 }
               ></input>
+=======
+        <div className={styles.studentSession}>
+          <div className={styles.topLine}>
+            <h2 className={styles.studentName}>{log?.instructor_name}</h2>
+            {newLog ? (
+              <div className={styles.editButtons}>
+                <button
+                  className={styles.edit}
+                  onClick={() => setOpenSaveModal(true)}
+                >
+                  Save
+                </button>
+                <button
+                  className={`${styles.edit} ${styles.cancelButton}`}
+                  onClick={() => setOpenCancelModal(true)}
+                >
+                  Cancel
+                </button>
+                <SaveModal
+                  open={openChangeSaveModal}
+                  onClose={() => setOpenChangeSaveModal(false)}
+                  information={information}
+                />
+                <CancelModal
+                  open={openCancelModal}
+                  onClose={() => setOpenCancelModal(false)}
+                  onCancel={removeSession}
+                />
+              </div>
+>>>>>>> 5abcafd4088605ac8f1e1aa4c3ec7f1c32d69515
             ) : (
+              <div className={styles.editButtons}>
+                {user.uid === log?.creator_id ? (
+                  <>
+                    <button className={styles.edit} onClick={handleEdit}>
+                      {edit ? "Save" : "Edit"}
+                    </button>
+                    <ChangeExisting
+                      open={openChangeSaveModal}
+                      onClose={() => setOpenChangeSaveModal(false)}
+                      saveInfo={() => {
+                        setEdit(!edit);
+                        setInformation(information);
+                      }}
+                      information={information}
+                      id={currLogID!}
+                      del={false}
+                    />
+                    {edit ? (
+                      <>
+                        <button
+                          className={`${styles.edit} ${styles.cancelButton}`}
+                          onClick={() => setOpenCancelModal(true)}
+                        >
+                          Cancel
+                        </button>
+                        <CancelModal
+                          open={openCancelModal}
+                          onClose={() => setOpenCancelModal(false)}
+                          onCancel={() => {
+                            setInformation({ ...information });
+                            setEdit(!edit);
+                          }}
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <button
+                          className={`${styles.edit} ${styles.cancelButton}`}
+                          onClick={() => setOpenChangeDeleteModal(true)}
+                        >
+                          Delete
+                        </button>
+                        <ChangeExisting
+                          open={openChangeDeleteModal}
+                          onClose={() => {
+                            setOpenChangeDeleteModal(false);
+                          }}
+                          saveInfo={() => {
+                            setRemove(true);
+                          }}
+                          id={currLogID!}
+                          del={true}
+                        />
+                      </>
+                    )}
+                  </>
+                ) : (
+                  <></>
+                )}
+
+                {!edit && (
+                  <button
+                    className={styles.collapseButton}
+                    onClick={() => setCollapsed(!collapsed)}
+                  >
+                    <img
+                      src={downArrow}
+                      alt="Collapse Session"
+                      className={styles.collapseImage}
+                    />
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
+          <div className={styles.container}>
+            <div className={styles.containerLines}>
+              <div className={styles.lineLabel}>
+                {information.type[0] +
+                  information.type.substring(1).toLowerCase()}
+              </div>
               <input
                 type="text"
                 className={
@@ -244,38 +385,24 @@ const StudentSession = ({
                     ? `${styles.informationEdit} ${styles.informationText}`
                     : styles.informationText
                 }
-                disabled
-                value={dayjs(information.date, "YYYY-MM-DD").format(
-                  "MMMM DD, YYYY"
-                )}
-              ></input>
-            )}
-          </div>
-          <div className={styles.containerLines}>
-            <div className={styles.timeLine}>
-              <div className={`${styles.lineLabel} ${styles.time}`}>
-                Start Time
-              </div>
-              <input
-                type="time"
-                className={
-                  edit
-                    ? ` ${styles.informationEdit} ${styles.timeEdit}`
-                    : `${styles.timeInformation} ${styles.informationText}`
-                }
                 disabled={!edit}
-                value={information.start_time}
+                value={information.instructor_name}
                 onChange={(e) =>
                   setInformation({
                     ...information,
+<<<<<<< HEAD
                     start_time: e.target.value,
                     duration_minutes: str_to_duration(
                       findDuration(e.target.value, information.end_time)
                     ),
+=======
+                    instructor_name: e.target.value,
+>>>>>>> 5abcafd4088605ac8f1e1aa4c3ec7f1c32d69515
                   })
                 }
               ></input>
             </div>
+<<<<<<< HEAD
             <div className={styles.timeLine}>
               <div className={`${styles.lineLabel} ${styles.time}`}>
                 End Time
@@ -326,45 +453,178 @@ const StudentSession = ({
                 setInformation({ ...information, reason: e.target.value })
               }
             >
+=======
+            <div className={styles.containerLines}>
+              <div className={styles.lineLabel}>Date</div>
+              {edit ? (
+                <input
+                  type="date"
+                  className={`${styles.informationEdit} ${styles.dateEdit}`}
+                  value={information.date}
+                  onChange={(e) =>
+                    setInformation({
+                      ...information,
+                      date: e.target.value,
+                    })
+                  }
+                ></input>
+              ) : (
+                <p className={styles.informationText}>
+                  {formatDate(information.date)}
+                </p>
+              )}
+            </div>
+            <div className={styles.containerLines}>
+              <div className={styles.timeLine}>
+                <div className={`${styles.lineLabel} ${styles.time}`}>
+                  Start Time (EST)
+                </div>
+                <input
+                  type="time"
+                  className={
+                    edit
+                      ? ` ${styles.informationEdit} ${styles.timeEdit}`
+                      : `${styles.timeInformation} ${styles.informationText}`
+                  }
+                  disabled={!edit}
+                  value={information.start_time}
+                  onChange={(e) =>
+                    setInformation({
+                      ...information,
+                      start_time: e.target.value,
+                      duration_minutes: findDuration(
+                        e.target.value,
+                        information.end_time
+                      ),
+                    })
+                  }
+                ></input>
+              </div>
+              <div className={styles.timeLine}>
+                <div className={`${styles.lineLabel} ${styles.time}`}>
+                  End Time (EST)
+                </div>
+                <input
+                  type="time"
+                  className={
+                    edit
+                      ? `${styles.informationEdit} ${styles.timeEdit}`
+                      : styles.informationText
+                  }
+                  disabled={!edit}
+                  value={information.end_time}
+                  onChange={(e) =>
+                    setInformation({
+                      ...information,
+                      end_time: e.target.value,
+                      duration_minutes: findDuration(
+                        information.start_time,
+                        e.target.value
+                      ),
+                    })
+                  }
+                ></input>
+              </div>
+            </div>
+            <div className={styles.containerLines}>
+              <div className={styles.lineLabel}>Duration</div>
+              <p className={styles.informationText}>
+                {durationToString(information.duration_minutes)}
+              </p>
+            </div>
+            <div className={styles.containerLines}>
+              <div className={styles.lineLabel}>Subject</div>
+>>>>>>> 5abcafd4088605ac8f1e1aa4c3ec7f1c32d69515
               {edit ? (
                 <>
-                  <option className={styles.selectOption} value="Reason 1">
-                    Reason 1
-                  </option>
-                  <option className={styles.selectOption} value="Reason 2">
-                    Reason 2
-                  </option>
-                  <option className={styles.selectOption} value="Reason 3">
-                    Reason 3
-                  </option>
+                  <select
+                    className={styles.reason}
+                    value={information.subject}
+                    onChange={(e) =>
+                      setInformation({
+                        ...information,
+                        subject: e.target.value.toUpperCase() as Subject,
+                      })
+                    }
+                  >
+                    {log.type === "MENTOR" ? (
+                      <>
+                        <option className={styles.selectOption} value="ENGLISH">
+                          English
+                        </option>
+                        <option className={styles.selectOption} value="MATH">
+                          Math
+                        </option>
+                        <option
+                          className={styles.selectOption}
+                          value="SOCIAL STUDIES"
+                        >
+                          Social Studies
+                        </option>
+                        <option className={styles.selectOption} value="SCIENCE">
+                          Science
+                        </option>
+                        <option
+                          className={styles.selectOption}
+                          value="HUMANITIES/OTHER"
+                        >
+                          Humanities/Other
+                        </option>
+                      </>
+                    ) : (
+                      <>
+                        <option
+                          className={styles.selectOption}
+                          value="College Prep Support"
+                        >
+                          College Prep Support
+                        </option>
+                        <option
+                          className={styles.selectOption}
+                          value="Mentor-Mentee Outing"
+                        >
+                          Mentor-Mentee Outing
+                        </option>
+                        <option
+                          className={styles.selectOption}
+                          value="Mentor-Mentee Outing"
+                        >
+                          Mentor-Mentee Outing
+                        </option>
+                      </>
+                    )}
+                  </select>
                 </>
               ) : (
-                <option value={information.reason}>{information.reason}</option>
+                <div className={styles.informationText}>
+                  {information.subject === "HUMANITIES/OTHER"
+                    ? "Humanities/Other"
+                    : information.subject === "SOCIAL STUDIES"
+                    ? "Social Studies"
+                    : information.subject[0] +
+                      information.subject.substring(1).toLowerCase()}
+                </div>
               )}
-            </select>
-          </div>
-          <div className={`${styles.summaryLine} ${styles.containerLines}`}>
-            <div className={styles.lineLabel}>Session Summary</div>
-            {edit ? (
-              <textarea
-                className={
-                  edit
-                    ? `${styles.informationEdit} ${styles.informationText}`
-                    : styles.informationText
-                }
-                disabled={!edit}
-                value={information.summary}
-                onChange={(e) =>
-                  setInformation({ ...information, summary: e.target.value })
-                }
-              ></textarea>
-            ) : (
-              <div
-                className={edit ? styles.summaryEdit : styles.informationText}
-              >
-                {information.summary}
-              </div>
-            )}
+            </div>
+            <div className={`${styles.summaryLine} ${styles.containerLines}`}>
+              <div className={styles.lineLabel}>Session Summary</div>
+              {edit ? (
+                <textarea
+                  className={`${styles.summaryEdit} ${styles.informationEdit} ${styles.informationText}`}
+                  value={information.summary}
+                  onChange={(e) =>
+                    setInformation({
+                      ...information,
+                      summary: e.target.value,
+                    })
+                  }
+                ></textarea>
+              ) : (
+                <div className={styles.informationText}>
+                  {information.summary}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}

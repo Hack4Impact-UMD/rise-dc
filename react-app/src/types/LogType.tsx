@@ -1,5 +1,10 @@
+export type LogID = {
+  log: Log;
+  id: string;
+};
+
 export type Log = {
-  date: Date;
+  date: string;
   duration_minutes: number;
   instructor_name: string;
   reason: string;

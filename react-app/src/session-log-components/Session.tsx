@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router";
+import { getStudentLogs, getStudentWithID } from "../backend/FirestoreCalls";
+import { useAuth } from "../auth/AuthProvider";
+import Loading from "../loading-screen/Loading";
 import AddSession from "./AddSession/AddSession";
 import Navbar from "../navbar/Navbar";
 import StudentSession from "./StudentSession/StudentSession";
 import CollapseButton from "./CollapseButton/CollapseButton";
 import styles from "./Session.module.css";
-import { Log } from "../types/LogType";
-import { getStudentLogs, getStudentWithID } from "../backend/FirestoreCalls";
-import { useParams } from "react-router";
-import Loading from "../loading-screen/Loading";
+import { LogID } from "../types/LogType";
 
 type SessionState = {
   loading: boolean;
@@ -20,14 +21,15 @@ const Session = () => {
   const starting_state: SessionState = {
     loading: true,
     error: false,
-    collapse: false,
+    collapse: true,
     addSession: false,
   };
   const [sessionState, setSessionState] =
     useState<SessionState>(starting_state);
   const [name, setName] = useState<string>();
-  const [recentLogs, setRecentLogs] = useState<{ id: string; log: Log }[]>([]);
+  const [recentLogs, setRecentLogs] = useState<LogID[]>([]);
   const student_id = useParams().id;
+  const auth = useAuth();
 
   useEffect(() => {
     if (student_id == undefined) {
@@ -95,15 +97,18 @@ const Session = () => {
                   }
                   logs={recentLogs.length}
                 />
-
-                <AddSession
-                  setAddSession={() =>
-                    setSessionState({
-                      ...sessionState,
-                      addSession: !sessionState.addSession,
-                    })
-                  }
-                />
+                {!auth.loading && auth.token.claims.role !== "admin" ? (
+                  <AddSession
+                    setAddSession={() =>
+                      setSessionState({
+                        ...sessionState,
+                        addSession: !sessionState.addSession,
+                      })
+                    }
+                  />
+                ) : (
+                  <></>
+                )}
               </div>
               {sessionState.addSession ? (
                 <StudentSession
@@ -112,6 +117,7 @@ const Session = () => {
                   removeSession={() =>
                     setSessionState({ ...sessionState, addSession: false })
                   }
+                  studentId={student_id!}
                 />
               ) : (
                 <></>
@@ -122,9 +128,10 @@ const Session = () => {
                 <>
                   {recentLogs.map((curr_log) => (
                     <StudentSession
-                      id={curr_log.id}
-                      log={curr_log.log}
+                      logID={curr_log}
                       collapse={sessionState.collapse}
+                      studentId={student_id!}
+                      user={auth.user}
                     />
                   ))}
                 </>

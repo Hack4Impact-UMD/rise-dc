@@ -1,0 +1,12 @@
+.collapsedInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 350px;
+}
+
+.date {
+  font-family: "Libre Franklin";
+  font-weight: 100;
+  margin-left: 50px;
+}

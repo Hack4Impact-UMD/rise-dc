@@ -1,28 +1,40 @@
 import { useState } from "react";
-import { storeLog, updateLog } from "../../../backend/FirestoreCalls";
+import { deleteLog, updateLog } from "../../../backend/FirestoreCalls";
 import Modal from "../../../ModalWrapper/Modal";
 import { Log } from "../../../types/LogType";
-import styles from "./SaveExisting.module.css";
+import styles from "./ChangeExisting.module.css";
 
 type saveButtonType = {
   open: boolean;
   onClose: any;
   saveInfo: any;
+<<<<<<< HEAD:react-app/src/session-log-components/Modals/SaveExisting/SaveExisting.tsx
   information: { info: Log; id: string };
+=======
+  information?: Log;
+  id: string;
+  del: boolean;
+>>>>>>> 5abcafd4088605ac8f1e1aa4c3ec7f1c32d69515:react-app/src/session-log-components/Modals/ChangeExisting/ChangeExisting.tsx
 };
 
-const SaveExisting = ({
+const ChangeExisting = ({
   open,
   onClose,
   saveInfo,
   information,
+<<<<<<< HEAD:react-app/src/session-log-components/Modals/SaveExisting/SaveExisting.tsx
+=======
+  id,
+  del,
+>>>>>>> 5abcafd4088605ac8f1e1aa4c3ec7f1c32d69515:react-app/src/session-log-components/Modals/ChangeExisting/ChangeExisting.tsx
 }: saveButtonType) => {
   const [submitted, setSubmitted] = useState<string>("");
-  const [route, setRoute] = useState<string>("./");
+  const [error, setError] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleSubmit = () => {
     setLoading(true);
+<<<<<<< HEAD:react-app/src/session-log-components/Modals/SaveExisting/SaveExisting.tsx
     updateLog(information.info, information.id)
       .then(() => {
         setSubmitted("Your changes have been saved.");
@@ -34,13 +46,37 @@ const SaveExisting = ({
         setRoute("failed");
       })
       .finally(() => setLoading(false));
+=======
+    if (del) {
+      deleteLog(id)
+        .then(() => {
+          setSubmitted("The log has been deleted.");
+          saveInfo();
+        })
+        .catch((error) => {
+          setSubmitted(
+            `An error occurred while trying to delete the log. Please try again later.`
+          );
+          setError(true);
+        })
+        .finally(() => setLoading(false));
+    } else {
+      updateLog(information!, id)
+        .then(() => {
+          setSubmitted("Your changes have been saved.");
+        })
+        .catch((error) => {
+          setSubmitted(
+            `An error occurred while trying to save your changes. Please try again later.`
+          );
+          setError(true);
+        })
+        .finally(() => setLoading(false));
+    }
+>>>>>>> 5abcafd4088605ac8f1e1aa4c3ec7f1c32d69515:react-app/src/session-log-components/Modals/ChangeExisting/ChangeExisting.tsx
   };
 
   const handleOnClose = () => {
-    if (submitted == "Your changes have been saved.") {
-      saveInfo();
-      window.location.reload();
-    }
     onClose();
     setSubmitted("");
     setLoading(false);
@@ -61,7 +97,10 @@ const SaveExisting = ({
           >
             &#x2715;
           </button>
-          <div className={styles.title}> Save Confirmation</div>
+          <div className={styles.title}>
+            {" "}
+            {del ? "Delete" : "Save"} Confirmation
+          </div>
         </div>
         {loading ? (
           <div className={styles.spinner}></div>
@@ -73,7 +112,9 @@ const SaveExisting = ({
               ) : (
                 <>
                   <p className={styles.submit}>
-                    Are you sure you would like to save your changes?
+                    {del
+                      ? "Are you sure you would like to delete this log?"
+                      : "Are you sure you would like to save your changes?"}
                   </p>
                 </>
               )}
@@ -109,4 +150,8 @@ const SaveExisting = ({
   );
 };
 
+<<<<<<< HEAD:react-app/src/session-log-components/Modals/SaveExisting/SaveExisting.tsx
 export default SaveExisting;
+=======
+export default ChangeExisting;
+>>>>>>> 5abcafd4088605ac8f1e1aa4c3ec7f1c32d69515:react-app/src/session-log-components/Modals/ChangeExisting/ChangeExisting.tsx
