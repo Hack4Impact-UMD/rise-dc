@@ -1,12 +1,12 @@
 import { useState, useEffect, Dispatch, SetStateAction } from "react";
 import styles from "./ContactInformation.module.css";
-import { Student } from "../../types/StudentType";
+import { Student, StudentID } from "../../types/StudentType";
 import CancelButton from "../CancelButton/CancelButton";
 import SaveButton from "../SaveButton/SaveButton";
 
 interface Props {
-  student: Student | undefined;
-  setStudent: Dispatch<SetStateAction<Student | undefined>>;
+  student: StudentID | undefined;
+  setStudent: Dispatch<SetStateAction<StudentID | undefined>>;
 }
 
 const ContactInformation = ({ student, setStudent }: Props) => {

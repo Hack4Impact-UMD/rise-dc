@@ -1,19 +1,20 @@
 import { useState, useEffect, SetStateAction, Dispatch } from "react";
 import { updateStudent } from "../../backend/FirestoreCalls";
-import { Student } from "../../types/StudentType";
+import { Student, StudentID } from "../../types/StudentType";
 import CancelButton from "../CancelButton/CancelButton";
 import SaveButton from "../SaveButton/SaveButton";
 import styles from "./GradeInformation.module.css";
 
 interface Props {
-  student: Student;
-  setStudent: Dispatch<SetStateAction<Student | undefined>>;
+  student: StudentID;
+  setStudent: Dispatch<SetStateAction<StudentID | undefined>>;
 }
 
 const GradeInformation = ({ student, setStudent }: Props) => {
   const [openCancelModal, setOpenCancelModal] = useState<boolean>(false);
   const [openSaveModal, setOpenSaveModal] = useState<boolean>(false);
-  const blankStudent: Student = {
+  const blankStudent: StudentID = {
+    id: "",
     address: "",
     email: "",
     grade_level: "",
@@ -41,7 +42,7 @@ const GradeInformation = ({ student, setStudent }: Props) => {
     active: true,
   };
   const [edit, setEdit] = useState<boolean>(false);
-  const [data, setData] = useState<Student>(student || blankStudent);
+  const [data, setData] = useState<StudentID>(student || blankStudent);
 
   const handleEdit = (event: React.MouseEvent<HTMLElement>) => {
     if (edit) {

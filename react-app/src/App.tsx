@@ -7,7 +7,7 @@ import SettingsPage from "./settings-page/SettingsPage";
 import { AuthProvider } from "./auth/AuthProvider";
 import StudentProfile from "./student-profile/StudentProfile";
 import Session from "./session-log-components/Session";
-import SearchPage from "./search-page/SearchPage";
+import SearchPage from "./pages/SearchPage/SearchPage";
 import InvalidPage from "./InvalidPage/InvalidPage";
 import StudentCreation from "./student-profile/CreateStudent/StudentCreation";
 import TimeReport from "./report/TimeReport/TimeReport";

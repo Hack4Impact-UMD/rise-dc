@@ -6,8 +6,8 @@ import GradeInformation from "./GradeInformation/GradeInformation";
 import NavBar from "../navbar/Navbar";
 import { useParams } from "react-router-dom";
 import { getStudentWithID } from "../backend/FirestoreCalls";
-import { Student } from "../types/StudentType";
-import Loading from "../loading-screen/Loading";
+import { Student, StudentID } from "../types/StudentType";
+import Loading from "../components/LoadingScreen/Loading";
 import Forms from "./Forms/Forms";
 import GenerateReport from "./GenerateReport/GenerateReport";
 
@@ -15,9 +15,10 @@ const StudentProfile = () => {
   const studentId = useParams().id;
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
-  const [student, setStudent] = useState<Student>();
+  const [student, setStudent] = useState<StudentID>();
 
-  const blankStudent: Student = {
+  const blankStudent: StudentID = {
+    id: "",
     address: "",
     email: "",
     grade_level: "",

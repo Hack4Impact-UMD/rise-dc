@@ -1,4 +1,4 @@
-import Modal from "../../../ModalWrapper/Modal";
+import Modal from "../../../components/ModalWrapper/Modal";
 import styles from "./ClearButton.module.css";
 
 type cancelModalType = {

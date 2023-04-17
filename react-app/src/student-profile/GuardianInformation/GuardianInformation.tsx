@@ -1,20 +1,21 @@
 import { useState, useEffect, SetStateAction, Dispatch } from "react";
 import styles from "./GuardianInformation.module.css";
-import { Student } from "../../types/StudentType";
+import { Student, StudentID } from "../../types/StudentType";
 import { storeStudent, updateStudent } from "../../backend/FirestoreCalls";
 import CancelButton from "../CancelButton/CancelButton";
 import SaveButton from "../SaveButton/SaveButton";
 
 interface Prop {
-  student: Student | undefined;
-  setStudent: Dispatch<SetStateAction<Student | undefined>>;
+  student: StudentID | undefined;
+  setStudent: Dispatch<SetStateAction<StudentID | undefined>>;
 }
 
 const GuardianInformation = ({ student, setStudent }: Prop) => {
   const [openCancelModal, setOpenCancelModal] = useState<boolean>(false);
   const [openSaveModal, setOpenSaveModal] = useState<boolean>(false);
 
-  const blankStudent: Student = {
+  const blankStudent: StudentID = {
+    id: "",
     address: "",
     email: "",
     grade_level: "",
@@ -42,7 +43,7 @@ const GuardianInformation = ({ student, setStudent }: Prop) => {
     active: true,
   };
   const [edit, setEdit] = useState<boolean>(false);
-  const [data, setData] = useState<Student>(student!);
+  const [data, setData] = useState<StudentID>(student!);
 
   useEffect(() => {
     setData({

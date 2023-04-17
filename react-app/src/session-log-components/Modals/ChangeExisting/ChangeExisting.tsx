@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { deleteLog, updateLog } from "../../../backend/FirestoreCalls";
-import Modal from "../../../ModalWrapper/Modal";
+import Modal from "../../../components/ModalWrapper/Modal";
 import { Log } from "../../../types/LogType";
 import styles from "./ChangeExisting.module.css";
 

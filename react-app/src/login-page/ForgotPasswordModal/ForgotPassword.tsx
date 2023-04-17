@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Modal from "../../ModalWrapper/Modal";
+import Modal from "../../components/ModalWrapper/Modal";
 import TextField, { TextFieldTypes } from "../TextField/TextField";
 import { sendResetEmail } from "../../backend/FirebaseCalls";
 import { AuthError } from "firebase/auth";

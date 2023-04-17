@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getStudentWithID } from "../../backend/FirestoreCalls";
-import Loading from "../../loading-screen/Loading";
+import Loading from "../../components/LoadingScreen/Loading";
 import NavBar from "../../navbar/Navbar";
 import getData, { formatDate } from "./getData";
 import styles from "./IndividualReport.module.css";

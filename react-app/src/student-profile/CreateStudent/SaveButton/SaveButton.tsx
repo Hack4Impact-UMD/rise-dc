@@ -5,7 +5,7 @@ import {
   updateStudent,
   uploadStudentFile,
 } from "../../../backend/FirestoreCalls";
-import Modal from "../../../ModalWrapper/Modal";
+import Modal from "../../../components/ModalWrapper/Modal";
 import { Student } from "../../../types/StudentType";
 import styles from "./SaveButton.module.css";
 
