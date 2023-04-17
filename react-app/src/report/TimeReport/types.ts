@@ -1,8 +1,8 @@
 import { Log } from "../../types/LogType";
 
 export type Dates = {
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
 };
 
 export type SessionInformation = {
@@ -10,14 +10,14 @@ export type SessionInformation = {
   total_sessions: number;
   high_impact: number;
   mentor: {
-    names: String[];
+    names: Set<string>;
     time: number;
   };
   students: Map<string, Log[]>;
   high_impact_students: String[];
   low_impact_students: String[];
   tutor: {
-    names: String[];
+    names: Set<string>;
     time: number;
   };
   math_minutes: number;

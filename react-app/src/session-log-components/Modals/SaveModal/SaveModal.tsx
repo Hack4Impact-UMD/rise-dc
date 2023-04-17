@@ -14,44 +14,48 @@ const SaveModal = ({ open, onClose, information }: saveModalPropsType) => {
   const [submitted, setSubmitted] = useState<string>("");
   const [route, setRoute] = useState<string>("./");
   const [loading, setLoading] = useState<boolean>(false);
-  
+
   const handleSaveLog = () => {
     setLoading(true);
     storeLog(information)
       .then((id) => {
         updateLog(information, id);
         setSubmitted("Session log has been created successfully.");
+        setRoute("succeeded");
       })
       .catch((error) => {
-        setSubmitted(
-          `Session log creation failed due to the following error: ${error}`
-        );
-        setRoute("failed");
+        setSubmitted(`Session log creation failed.`);
       })
       .finally(() => setLoading(false));
   };
 
   const handleOnClose = () => {
-    if (route != "failed") {
+    if (route == "succeeded") {
       window.location.reload();
     }
     onClose();
     setSubmitted("");
     setLoading(false);
   };
-  
+
   return (
-    <Modal open={open} onClose={(e: React.MouseEvent<HTMLButtonElement>) => handleOnClose()}>
+    <Modal
+      open={open}
+      onClose={(e: React.MouseEvent<HTMLButtonElement>) => handleOnClose()}
+    >
       <>
         <div className={styles.header}>
-          <button 
-            className={styles.close} 
-            onClick={() => {handleOnClose();}}>
+          <button
+            className={styles.close}
+            onClick={() => {
+              handleOnClose();
+            }}
+          >
             &#x2715;
           </button>
           <div className={styles.title}> New Session Log Confirmation </div>
         </div>
-        
+
         {loading ? (
           <div className={styles.spinner}></div>
         ) : (
@@ -65,7 +69,7 @@ const SaveModal = ({ open, onClose, information }: saveModalPropsType) => {
                     Are you sure you would like to create a new session?
                   </p>
                 </>
-              ) }
+              )}
             </div>
             {submitted != "" ? (
               <></>

@@ -1,5 +1,10 @@
+export type LogID = {
+  log: Log;
+  id: string;
+};
+
 export type Log = {
-  date: Date;
+  date: string;
   duration_minutes: number;
   instructor_name: string;
   reason: string;
@@ -8,11 +13,9 @@ export type Log = {
   summary: string;
   type: "MENTOR" | "TUTOR";
   student_id: string;
-  id: string;
   start_time: string;
   end_time: string;
 };
-
 
 export type Subject =
   | "ENGLISH"

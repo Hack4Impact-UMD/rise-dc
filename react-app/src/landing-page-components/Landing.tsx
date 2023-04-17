@@ -8,13 +8,20 @@ import Students from "./Students/Students";
 import Calendar from "./Calendar/Calendar";
 import NavBar from "../navbar/Navbar";
 import styles from "./Landing.module.css";
-import { getCurrentUser, getRecentLogsByCreator, getRecentLogs, getStudentsAlphabetically, countTutors, countMentors, getNumberStudents, numberOfLogs } from "../backend/FirestoreCalls";
+import {
+  getCurrentUser,
+  getRecentLogsByCreator,
+  getRecentLogs,
+  getStudentsAlphabetically,
+  getNumberStudents,
+  numberOfLogs,
+  countTypeOfUsers,
+} from "../backend/FirestoreCalls";
 import { RISEUser } from "../types/UserType";
-import {Log} from "../types/LogType"
+import { Log } from "../types/LogType";
 import { Student } from "../types/StudentType";
 
 const Landing = () => {
-  
   const [user, setUser] = useState<RISEUser>();
   const [recentLogs, setRecentLogs] = useState<Log[]>([]);
   const [students, setStudents] = useState<Student[]>([]);
@@ -24,27 +31,45 @@ const Landing = () => {
   const [numSessions, setNumSessions] = useState<number>(0);
 
   useEffect(() => {
-    getCurrentUser().then((user) => {
-      setUser(user);
-      if (user.id) {
-        getRecentLogs().then((logs) => {
-          setRecentLogs(logs)
-        }).catch((e) => console.log(e))
-      }
-      getStudentsAlphabetically().then((students) => {
-        setStudents(students)
-      }).catch((e) => console.log(e))
-      countTutors().then(num => {setNumTutors(num)}).catch((e) => console.log(e))
-      countMentors().then(num => {setNumMentors(num)}).catch((e) => console.log(e))
-      getNumberStudents().then(num => {setNumStudents(num)}).catch((e) => console.log(e))
-      numberOfLogs().then(num => {setNumSessions(num)}).catch((e) => console.log(e))
-    }).catch((e) => console.log(e));
-  }, [])
+    getCurrentUser()
+      .then((user) => {
+        setUser(user);
+        if (user.id) {
+          getRecentLogs()
+            .then((logs) => {
+              setRecentLogs(logs);
+            })
+            .catch((e) => console.log(e));
+        }
+        getStudentsAlphabetically()
+          .then((students) => {
+            setStudents(students);
+          })
+          .catch((e) => console.log(e));
+        countTypeOfUsers()
+          .then((numbers) => {
+            setNumTutors(numbers.tutors);
+            setNumMentors(numbers.mentors);
+          })
+          .catch((e) => console.log(e));
+        getNumberStudents()
+          .then((num) => {
+            setNumStudents(num);
+          })
+          .catch((e) => console.log(e));
+        numberOfLogs()
+          .then((num) => {
+            setNumSessions(num);
+          })
+          .catch((e) => console.log(e));
+      })
+      .catch((e) => console.log(e));
+  }, []);
 
   return (
     <div className={styles.landing}>
       <NavBar title=""></NavBar>
-      <Header name={user?.name || ""} role={user?.type || ""}/>
+      <Header name={user?.name || ""} role={user?.type || ""} />
       <div className={styles.content}>
         <div className={styles.calendar}>
           {" "}
@@ -57,9 +82,9 @@ const Landing = () => {
           <Statistics title="Tutors Participating" value={numTutors} />
         </div>
         <div className={styles.logsRow}>
-          <RecentLogs logs={recentLogs}/>
+          <RecentLogs logs={recentLogs} />
         </div>
-        <Students students={students}/>
+        <Students students={students} />
       </div>
     </div>
   );

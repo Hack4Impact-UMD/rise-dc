@@ -41,3 +41,14 @@
   height: 15vh;
   background-color: #d7ebd3;
 }
+
+.error {
+  height: 50vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 40px;
+}

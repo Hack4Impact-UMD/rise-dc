@@ -31,6 +31,8 @@
   font-family: "Libre Franklin";
   background: none;
   border: none;
+  margin-right: 10px;
+  padding: 10px 0;
 }
 
 .edit:hover {
@@ -170,11 +172,31 @@
   height: 100px;
   border: 1px solid;
   background-color: #ebebeb;
-  padding: 15px;
+  padding: 5px 10px 0 10px;
+  resize: vertical;
 }
 
 .summaryEdit::-webkit-scrollbar {
+  width: 10px;
+}
+
+.summaryEdit::-webkit-scrollbar-thumb {
+  background: rgb(150, 150, 150);
+  border-bottom-left-radius: 5px;
+  border-top-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-top-right-radius: 5px;
+}
+.summaryEdit::-webkit-scrollbar-track {
+  margin-top: 10px;
+}
+.summaryEdit::-webkit-scrollbar-corner {
   display: none;
+  visibility: hidden;
+}
+
+.summaryEdit::-webkit-scrollbar-thumb:hover {
+  background: rgb(131, 131, 131);
 }
 
 .summaryLine {
