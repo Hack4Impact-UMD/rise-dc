@@ -10,20 +10,22 @@
 }
 
 .body {
-  min-height: calc(100vh - 7.2rem);
+  height: calc(100vh - 7.2rem);
   background-color: #d7ecd3;
   display: flex;
   flex-flow: column wrap;
   justify-content: center;
   align-items: center;
-  overflow: auto;
+  overflow: scroll;
 }
 
 .elementButton {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   height: 34px;
   padding: 5px 25px 5px 50px;
   margin: 2rem 1.5rem 0 1rem;
-  background: url("./assets/Add.svg") no-repeat right;
   background-size: 17px;
   background-position: 15%;
   background-color: #a0b9dc;
@@ -34,11 +36,35 @@
   cursor: pointer;
 }
 
+.addImage {
+  width: 15px;
+  margin: 0 10px 0 -30px;
+}
+
 .elementButton:hover {
   background-color: #d0ecfc;
   transition: all 0.3s ease;
 }
 
+.viewMore {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 30px 0;
+  background: none;
+  border: none;
+  font-style: italic;
+  font-size: 14px;
+  color: blue;
+  font-family: "Libre Franklin", sans-serif;
+  cursor: pointer;
+}
+
+.viewMore:hover {
+  text-decoration: underline;
+}
 .failureMessage {
   padding-top: 20%;
   margin: 0 25%;
@@ -58,7 +84,7 @@
 .searchBar {
   margin: 2rem 0 0 1.5rem;
   padding: 8px 150px 8px 20px;
-  background: url("./assets/Search.svg") no-repeat right;
+  /* background: url("./assets/Search.svg") no-repeat right; */
   background-size: 17px;
   background-position: 97%;
   background-color: #f2f2f2;
@@ -66,26 +92,6 @@
   border-radius: 25px;
   font-family: "Libre Franklin", sans-serif;
   color: black;
-}
-
-.spinner {
-  content: "";
-  box-sizing: border-box;
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  margin-top: -10px;
-  margin-left: -10px;
-  border-radius: 50%;
-  border-top: 2px solid #07d;
-  border-right: 2px solid transparent;
-  animation: spinner 0.6s linear infinite;
-}
-
-@keyframes spinner {
-  to {
-    transform: rotate(360deg);
-  }
 }
 
 .topLine {
@@ -96,17 +102,52 @@
 }
 
 .whiteBackground {
-  width: 140vh;
+  width: 1000px;
   height: 70vh;
   margin-top: 25px;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
 
   border: 1px solid #c4c4c4;
   border-radius: 15px;
   box-shadow: 7px 7px 6px rgba(0, 0, 0, 0.25);
   background-color: #ffffff;
+  overflow: auto;
+  &::-webkit-scrollbar {
+    width: 15px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: transparent;
+  }
+}
+.whiteBackground:hover {
+  &::-webkit-scrollbar-thumb {
+    background-color: gray;
+  }
+  &::-webkit-scrollbar {
+    height: 12px;
+    width: 15px;
+  }
+  &::-webkit-scrollbar-track {
+    border-radius: 10px;
+    margin: 5px 0;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    height: 73px;
+    width: 10px;
+    background-clip: padding-box;
+    background-color: rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    border: 4px solid rgba(0, 0, 0, 0);
+  }
+  &::-webkit-scrollbar-corner {
+    background-color: transparent;
+  }
+
+  &::-webkit-scrollbar-corner {
+    background-color: transparent;
+  }
 }
 
 @media screen and (max-width: 700px) {

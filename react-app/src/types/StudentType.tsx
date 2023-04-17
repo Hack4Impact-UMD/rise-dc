@@ -1,5 +1,22 @@
+export type StudentID = {
+  id: string;
+  address: string;
+  email: string;
+  grade_level: string;
+  grades: Grades;
+  files: StudentFile[];
+  guardian_email: string;
+  guardian_name: string;
+  guardian_phone: string;
+  guardian_address: string;
+  high_school: string;
+  name: string;
+  phone_number: string;
+  reading_level: string;
+  active: boolean;
+};
+
 export type Student = {
-  id?: string;
   address: string;
   email: string;
   grade_level: string;

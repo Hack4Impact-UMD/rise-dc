@@ -11,7 +11,7 @@ function randomDate(start: Date, end: Date) {
 export default function addLog() {
   for (let i = 0; i < 365; i++) {
     const sampleLog: Log = {
-      date: new Date(),
+      date: "",
       duration_minutes: 0,
       instructor_name: "a",
       reason: "MATH",
@@ -55,7 +55,7 @@ export default function addLog() {
     const instructor = instructors[Math.floor(Math.random() * 2)];
     const subject: Subject = subjects[Math.floor(Math.random() * 5)];
     const student = studentIDs[Math.floor(Math.random() * 4)];
-    sampleLog.date = randomDay;
+    sampleLog.date = "";
     sampleLog.duration_minutes = duration;
     sampleLog.instructor_name = instructor.name;
     sampleLog.reason = subject;

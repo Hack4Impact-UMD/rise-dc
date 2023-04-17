@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import Modal from "../../../ModalWrapper/Modal";
+import Modal from "../../../components/ModalWrapper/Modal";
 import styles from "./GenerateReportModal.module.css";
 
 type reportModalType = {

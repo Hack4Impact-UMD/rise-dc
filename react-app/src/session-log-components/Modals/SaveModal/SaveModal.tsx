@@ -1,4 +1,4 @@
-import Modal from "../../../ModalWrapper/Modal";
+import Modal from "../../../components/ModalWrapper/Modal";
 import styles from "./SaveModal.module.css";
 import { Log } from "../../../types/LogType";
 import { storeLog, updateLog } from "../../../backend/FirestoreCalls";

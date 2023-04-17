@@ -9,7 +9,7 @@ import { useParams } from "react-router-dom";
 import { getData, formatDate } from "./getData";
 import { SessionInformation } from "./types";
 import NavBar from "../../navbar/Navbar";
-import Loading from "../../loading-screen/Loading";
+import Loading from "../../components/LoadingScreen/Loading";
 
 export default function TimeReport() {
   const [error, setError] = useState<boolean>(false);

@@ -4,15 +4,15 @@ import {
   updateStudent,
   uploadStudentFile,
 } from "../../backend/FirestoreCalls";
-import Modal from "../../ModalWrapper/Modal";
-import { Student, StudentFile } from "../../types/StudentType";
+import Modal from "../../components/ModalWrapper/Modal";
+import { Student, StudentFile, StudentID } from "../../types/StudentType";
 import styles from "./SaveButton.module.css";
 
 type saveButtonType = {
   open: boolean;
   onClose: any;
   saveInfo: any;
-  data?: Student;
+  data?: StudentID;
   files?: { uploaded: File[]; deleted: StudentFile[] };
 };
 

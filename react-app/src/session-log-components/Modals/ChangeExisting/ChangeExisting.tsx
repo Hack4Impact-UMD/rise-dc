@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { deleteLog, updateLog } from "../../../backend/FirestoreCalls";
-import Modal from "../../../ModalWrapper/Modal";
+import Modal from "../../../components/ModalWrapper/Modal";
 import { Log } from "../../../types/LogType";
 import styles from "./ChangeExisting.module.css";
 
@@ -8,13 +8,9 @@ type saveButtonType = {
   open: boolean;
   onClose: any;
   saveInfo: any;
-<<<<<<< HEAD:react-app/src/session-log-components/Modals/SaveExisting/SaveExisting.tsx
-  information: { info: Log; id: string };
-=======
   information?: Log;
   id: string;
   del: boolean;
->>>>>>> 5abcafd4088605ac8f1e1aa4c3ec7f1c32d69515:react-app/src/session-log-components/Modals/ChangeExisting/ChangeExisting.tsx
 };
 
 const ChangeExisting = ({
@@ -22,11 +18,8 @@ const ChangeExisting = ({
   onClose,
   saveInfo,
   information,
-<<<<<<< HEAD:react-app/src/session-log-components/Modals/SaveExisting/SaveExisting.tsx
-=======
   id,
   del,
->>>>>>> 5abcafd4088605ac8f1e1aa4c3ec7f1c32d69515:react-app/src/session-log-components/Modals/ChangeExisting/ChangeExisting.tsx
 }: saveButtonType) => {
   const [submitted, setSubmitted] = useState<string>("");
   const [error, setError] = useState<boolean>(false);
@@ -34,19 +27,6 @@ const ChangeExisting = ({
 
   const handleSubmit = () => {
     setLoading(true);
-<<<<<<< HEAD:react-app/src/session-log-components/Modals/SaveExisting/SaveExisting.tsx
-    updateLog(information.info, information.id)
-      .then(() => {
-        setSubmitted("Your changes have been saved.");
-      })
-      .catch((error) => {
-        setSubmitted(
-          `An error occurred while trying to save your changes. Please try again later. Error: ${error}`
-        );
-        setRoute("failed");
-      })
-      .finally(() => setLoading(false));
-=======
     if (del) {
       deleteLog(id)
         .then(() => {
@@ -73,7 +53,6 @@ const ChangeExisting = ({
         })
         .finally(() => setLoading(false));
     }
->>>>>>> 5abcafd4088605ac8f1e1aa4c3ec7f1c32d69515:react-app/src/session-log-components/Modals/ChangeExisting/ChangeExisting.tsx
   };
 
   const handleOnClose = () => {
@@ -150,8 +129,4 @@ const ChangeExisting = ({
   );
 };
 
-<<<<<<< HEAD:react-app/src/session-log-components/Modals/SaveExisting/SaveExisting.tsx
-export default SaveExisting;
-=======
 export default ChangeExisting;
->>>>>>> 5abcafd4088605ac8f1e1aa4c3ec7f1c32d69515:react-app/src/session-log-components/Modals/ChangeExisting/ChangeExisting.tsx

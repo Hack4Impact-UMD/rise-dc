@@ -15,7 +15,7 @@ import {
 } from "firebase/firestore";
 import { ref, getDownloadURL, deleteObject } from "firebase/storage";
 import { getStorage, uploadBytes } from "firebase/storage";
-import { Student, StudentFile } from "../types/StudentType";
+import { Student, StudentFile, StudentID } from "../types/StudentType";
 import { db } from "../config/firebase";
 import { Log, LogID } from "../types/LogType";
 import { getAuth } from "firebase/auth";
@@ -52,15 +52,14 @@ export function countTypeOfUsers(): Promise<{
   });
 }
 
-export function getStudentWithID(id: string): Promise<Student> {
+export function getStudentWithID(id: string): Promise<StudentID> {
   return new Promise((resolve, reject) => {
     const studentRef = doc(db, "Students", id);
     getDoc(studentRef)
       .then((studentSnap) => {
         if (studentSnap.exists()) {
-          let student = studentSnap.data();
-          student.id = id;
-          return resolve(student as Student);
+          let student = studentSnap.data() as Student;
+          return resolve({ ...student, id: studentSnap.id });
         } else {
           return reject(new Error("Student not found"));
         }
@@ -71,16 +70,19 @@ export function getStudentWithID(id: string): Promise<Student> {
   });
 }
 
-export function getAllStudents(): Promise<Array<Student>> {
+export function getAllStudents(): Promise<Array<Partial<StudentID>>> {
   return new Promise((resolve, reject) => {
     getDocs(collection(db, "Students"))
       .then((snap) => {
+        const allStudents: Partial<StudentID>[] = [];
         const students = snap.docs.map((doc) => {
           let student: Student = doc.data() as Student;
-          student.id = doc.id;
-          return student;
+          const partialStudent: Partial<StudentID> = {};
+          partialStudent.name = student.name;
+          partialStudent.id = doc.id;
+          allStudents.push(partialStudent);
         });
-        return resolve(students);
+        return resolve(allStudents);
       })
       .catch((e) => {
         return reject(e);
@@ -171,7 +173,7 @@ export function deleteLog(id: string): Promise<void> {
   });
 }
 
-export function updateStudent(student: Student): Promise<void> {
+export function updateStudent(student: StudentID): Promise<void> {
   return new Promise((resolve, reject) => {
     if (student.id) {
       const ref = doc(db, "Students", student.id);
@@ -274,7 +276,7 @@ export function getRecentLogs(): Promise<Array<Log>> {
   });
 }
 
-export function getStudentsAlphabetically(): Promise<Array<Student>> {
+export function getStudentsAlphabetically(): Promise<Array<StudentID>> {
   return new Promise((resolve, reject) => {
     const studentsRef = collection(db, "Students");
     const studentsQuery = query(studentsRef, orderBy("name"), limit(5));
@@ -282,12 +284,12 @@ export function getStudentsAlphabetically(): Promise<Array<Student>> {
     getDocs(studentsQuery)
       .then((snap) => {
         const docs = snap.docs;
-        const students: Student[] = [];
+        const students: StudentID[] = [];
 
         const length = Math.min(5, docs.length);
         for (let i = 0; i < length; i++) {
           let s = docs[i].data() as Student;
-          s.id = docs[i].id;
+          s.id = docs.id;
           students.push(s);
         }
         console.log(students);
@@ -323,7 +325,7 @@ export function getRecentLogsByCreator(creatorId: string): Promise<Array<Log>> {
 }
 
 export function getLogsByTimeframe(
-  s: Student,
+  s: StudentID,
   sd: string,
   ed: string
 ): Promise<Array<Log>> {

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { getStudentLogs, getStudentWithID } from "../backend/FirestoreCalls";
 import { useAuth } from "../auth/AuthProvider";
-import Loading from "../loading-screen/Loading";
+import Loading from "../components/LoadingScreen/Loading";
 import AddSession from "./AddSession/AddSession";
 import Navbar from "../navbar/Navbar";
 import StudentSession from "./StudentSession/StudentSession";
