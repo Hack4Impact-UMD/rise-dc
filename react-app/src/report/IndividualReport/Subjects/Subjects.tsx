@@ -2,9 +2,10 @@ import styles from "./Subjects.module.css";
 
 type SessionProps = {
   mathHours: number;
-  readingHours: number;
+  englishHours: number;
   scienceHours: number;
   historyHours: number;
+  humanitiesHours: number;
 };
 
 const Subjects = (props: SessionProps) => {
@@ -17,16 +18,20 @@ const Subjects = (props: SessionProps) => {
           <p className={styles.rowStat}>{props.mathHours}</p>
         </div>
         <div className={styles.row}>
-          <p className={styles.rowTitle}>Hours Spent on Reading</p>
-          <p className={styles.rowStat}>{props.readingHours}</p>
+          <p className={styles.rowTitle}>Hours Spent on English</p>
+          <p className={styles.rowStat}>{props.englishHours}</p>
         </div>
         <div className={styles.row}>
           <p className={styles.rowTitle}>Hours Spent on Science</p>
           <p className={styles.rowStat}>{props.scienceHours}</p>
         </div>
-        <div className={`${styles.row} ${styles.lastRow}`}>
+        <div className={styles.row}>
           <p className={styles.rowTitle}>Hours Spent on Social Studies</p>
           <p className={styles.rowStat}>{props.historyHours}</p>
+        </div>
+        <div className={`${styles.row} ${styles.lastRow}`}>
+          <p className={styles.rowTitle}>Hours Spent on Humanities/Other</p>
+          <p className={styles.rowStat}>{props.humanitiesHours}</p>
         </div>
       </div>
     </div>

@@ -11,12 +11,13 @@ import {
   orderBy,
   limit,
   arrayRemove,
+  deleteDoc,
 } from "firebase/firestore";
 import { ref, getDownloadURL, deleteObject } from "firebase/storage";
 import { getStorage, uploadBytes } from "firebase/storage";
 import { Student, StudentFile } from "../types/StudentType";
 import { db } from "../config/firebase";
-import { Log } from "../types/LogType";
+import { Log, LogID } from "../types/LogType";
 import { getAuth } from "firebase/auth";
 import { RISEUser } from "../types/UserType";
 import { SubjectHours } from "../types/SubjectHoursType";
@@ -25,6 +26,31 @@ import app from "../config/firebase";
 import { resolve } from "path";
 import { rejects } from "assert";
 import dayjs from "dayjs";
+import { updateLogs } from "../test/RepopulateLogs";
+
+export function countTypeOfUsers(): Promise<{
+  tutors: number;
+  mentors: number;
+}> {
+  return new Promise((resolve, reject) => {
+    getDocs(collection(db, "Users"))
+      .then((snap) => {
+        let numMentors = 0;
+        let numTutors = 0;
+        snap.docs.map((doc) => {
+          if (doc.data().type == "MENTOR") {
+            numMentors++;
+          } else if (doc.data().type == "TUTOR") {
+            numTutors++;
+          }
+        });
+        resolve({ tutors: numTutors, mentors: numMentors });
+      })
+      .catch((error: any) => {
+        reject(error);
+      });
+  });
+}
 
 export function getStudentWithID(id: string): Promise<Student> {
   return new Promise((resolve, reject) => {
@@ -88,7 +114,7 @@ export function storeStudent(student: Student): Promise<string> {
   return new Promise((resolve, reject) => {
     addDoc(collection(db, "Students"), student)
       .then((docRef) => {
-       // return id of student added
+        // return id of student added
         return resolve(docRef.id);
       })
       .catch((e) => {
@@ -97,10 +123,8 @@ export function storeStudent(student: Student): Promise<string> {
   });
 }
 
-// return all logs that have 
-export async function getStudentLogs(
-  student_id: string
-): Promise<{ id: string; log: Log }[]> {
+// return all logs that have
+export async function getStudentLogs(student_id: string): Promise<LogID[]> {
   const q = query(
     collection(db, "Logs"),
     where("student_id", "==", student_id)
@@ -108,12 +132,10 @@ export async function getStudentLogs(
   return new Promise((resolve, reject) => {
     getDocs(q)
       .then((querySnapshot) => {
-        const log_objects: { id: string; log: Log }[] = [];
+        const log_objects: LogID[] = [];
 
         querySnapshot.docs.map((doc) => {
-          const log = doc.data() as Log;
-          log.date = new Date(doc.data().date.seconds * 1000);
-          log_objects.push({ id: doc.id, log: log });
+          log_objects.push({ id: doc.id, log: doc.data() as Log });
         });
 
         return resolve(log_objects);
@@ -136,32 +158,15 @@ export function storeLog(log: Log): Promise<string> {
   });
 }
 
-export function countMentors(): Promise<number> {
-  const usersRef = collection(db, "Users");
-  const mentorQuery = query(usersRef, where("type", "==", "MENTOR"));
-
+export function deleteLog(id: string): Promise<void> {
   return new Promise((resolve, reject) => {
-    getDocs(mentorQuery)
-      .then((snap) => {
-        resolve(snap.size);
+    const logRef = doc(db, "Logs", id);
+    deleteDoc(logRef)
+      .then(() => {
+        return resolve();
       })
-      .catch((error: any) => {
-        reject(error);
-      });
-  });
-}
-
-export function countTutors(): Promise<number> {
-  const usersRef = collection(db, "Users");
-  const mentorQuery = query(usersRef, where("type", "==", "TUTOR"));
-
-  return new Promise((resolve, reject) => {
-    getDocs(mentorQuery)
-      .then((snap) => {
-        resolve(snap.size);
-      })
-      .catch((error: any) => {
-        reject(error);
+      .catch((e) => {
+        return reject();
       });
   });
 }
@@ -210,6 +215,7 @@ export function updateLog(log: Log, id: string): Promise<void> {
   return new Promise((resolve, reject) => {
     if (id) {
       const ref = doc(db, "Logs", id);
+<<<<<<< HEAD
       getCurrentUser().then((user) => {
         updateDoc(ref, {
           date: log.date,
@@ -229,38 +235,37 @@ export function updateLog(log: Log, id: string): Promise<void> {
             return reject(e);
           });
       });
+=======
+      updateDoc(ref, { ...log })
+        .then(() => {
+          return resolve();
+        })
+        .catch((e) => {
+          return reject(e);
+        });
+>>>>>>> 5abcafd4088605ac8f1e1aa4c3ec7f1c32d69515
     } else {
       return reject("Log missing id");
     }
   });
 }
 
-export function countHISessions(logs: Array<Log>): Promise<number> {
+export function getLogsTimeframe(
+  start: string,
+  end: string
+): Promise<Array<Log>> {
+  const q = query(
+    collection(db, "Logs"),
+    where("date", ">=", start),
+    where("date", "<=", end)
+  );
   return new Promise((resolve, reject) => {
-    let count = 0;
-    logs.forEach((log) => {
-      let minutes = log.duration_minutes;
-      if (minutes >= 30) {
-        count++;
-      }
-    });
-    return resolve(count);
-  });
-}
-export function getLogsTimeframe(start: Date, end: Date): Promise<Array<Log>> {
-  return new Promise((resolve, reject) => {
-    getDocs(collection(db, "Logs"))
+    getDocs(q)
       .then((snap) => {
         const docs = snap.docs;
         docs.sort((a, b) => (a.data().date > b.data().date ? 1 : -1));
         const logs: Log[] = [];
-
-        docs.forEach((doc) => {
-          const log = doc.data() as Log;
-          if (log.date >= start && log.date <= end) {
-            logs.push(log);
-          }
-        });
+        docs.map((doc) => logs.push(doc.data() as Log));
         return resolve(logs);
       })
       .catch((e) => {
@@ -341,17 +346,17 @@ export function getRecentLogsByCreator(creatorId: string): Promise<Array<Log>> {
 
 export function getLogsByTimeframe(
   s: Student,
-  sd: Date,
-  ed: Date
+  sd: string,
+  ed: string
 ): Promise<Array<Log>> {
-  const filterStudent = query(
+  const filterCollection = query(
     collection(db, "Logs"),
+    where("date", ">=", sd),
+    where("date", "<=", ed),
     where("student_id", "==", s.id)
   );
-  const filterStartDate = query(filterStudent, where("date", ">=", sd));
-  const filterEndDate = query(filterStartDate, where("date", "<=", ed));
   return new Promise((resolve, reject) => {
-    getDocs(filterEndDate)
+    getDocs(filterCollection)
       .then((querySnapshot) => {
         return resolve(querySnapshot.docs.map((doc) => doc.data() as Log));
       })
@@ -398,65 +403,6 @@ export function logsToWeeks(): Promise<Array<any>> {
   });
 }
 
-export function averageSessionLength(logs: Array<Log>): number {
-  let s = 0.0;
-  logs.forEach((log) => {
-    s += log.duration_minutes;
-  });
-  return s / logs.length;
-}
-
-export function hoursSpent(logs: Array<Log>): SubjectHours {
-  let hrs = {
-    english_hours: 0,
-    humanities_hours: 0,
-    socialStudies_hours: 0,
-    math_hours: 0,
-    science_hours: 0,
-  } as SubjectHours;
-  // adding time as minutes
-  logs.forEach((log) => {
-    if (log.subject == "ENGLISH") {
-      hrs.english_hours += log.duration_minutes;
-    } else if (log.subject == "MATH") {
-      hrs.math_hours += log.duration_minutes;
-    } else if (log.subject == "HUMANITIES/OTHER") {
-      hrs.humanities_hours += log.duration_minutes;
-    } else if (log.subject == "SCIENCE") {
-      hrs.science_hours += log.duration_minutes;
-    } else {
-      hrs.socialStudies_hours += log.duration_minutes;
-    }
-  });
-  // hours form
-  hrs.english_hours /= 60;
-  hrs.humanities_hours /= 60;
-  hrs.math_hours /= 60;
-  hrs.science_hours /= 60;
-  hrs.socialStudies_hours /= 60;
-  return hrs;
-}
-
-// returns true if the two dates are in the same week
-function sameWeek(date: Date, date1: Date): boolean {
-  const year = date.getFullYear();
-  const month = date.getMonth();
-  const day = date.getDate();
-  const year1 = date1.getFullYear();
-  const month1 = date1.getMonth();
-  const day1 = date1.getDate();
-  if (year != year1) {
-    return false;
-  }
-  if (month != month1) {
-    return false;
-  }
-  if (day - day1 > 7) {
-    return false;
-  }
-  return true;
-}
-
 export async function receivedHITutoring(
   logs: Promise<Array<{ id: String; log: Log }>>
 ): Promise<boolean> {
@@ -473,7 +419,7 @@ export async function receivedHITutoring(
         let date1 = date;
         logs.forEach((l) => {
           const date = l.log.date;
-          const same = sameWeek(date, date1);
+          const same = 0;
           if (!same) {
             thirty = true;
             ninety = 0;
@@ -495,30 +441,17 @@ export async function receivedHITutoring(
   });
 }
 
-
-export function totalSessions(student: Student): Promise<number> {
-  return new Promise((resolve, reject) => {
-    const studentQuery = query(
-      collection(db, "Logs"),
-      where("student_id", "==", student.id)
-    );
-    getDocs(studentQuery)
-      .then((querySnapshot) => {
-        return resolve(
-          querySnapshot.docs.map((doc) => doc.data() as Log).length
-        );
-      })
-      .catch((e) => {
-        return Promise.reject(e);
-      });
-  });
-}
-
-export async function getAllLogs(): Promise<Array<Log>> {
+export async function getAllLogs(): Promise<Array<LogID>> {
   return new Promise((resolve, reject) => {
     getDocs(collection(db, "Logs"))
       .then((snap) => {
-        return resolve(snap.docs.map((doc) => doc.data() as Log));
+        const logs: LogID[] = [];
+        snap.docs.map((doc) => {
+          const log = doc.data() as Log;
+          const id = doc.id;
+          logs.push({ log, id });
+        });
+        return resolve(logs);
       })
       .catch((e) => reject(e));
   });
@@ -546,7 +479,7 @@ export function countHIWeeks(logs: Array<Log>): number {
   let date1 = date;
   logs.forEach((log) => {
     const date = log.date;
-    const same = sameWeek(date, date1);
+    const same = 0;
     if (!same) {
       thirty = true;
       ninety = 0;
@@ -561,21 +494,6 @@ export function countHIWeeks(logs: Array<Log>): number {
     date1 = date;
   });
   return count;
-}
-
-export function getTotalHours(): Promise<number> {
-  return new Promise((resolve, reject) => {
-    getDocs(collection(db, "Logs"))
-      .then((snap) => {
-        const logs = snap.docs.map((doc) => doc.data() as Log);
-        let count = 0;
-        logs.forEach((log) => {
-          count += log.duration_minutes;
-        });
-        return resolve((count /= 60));
-      })
-      .catch((e) => reject(e));
-  });
 }
 
 export function getNumberStudents(): Promise<number> {

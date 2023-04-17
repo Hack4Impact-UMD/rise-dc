@@ -1,0 +1,98 @@
+@import url("https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@700&display=swap");
+
+.container {
+  height: 400px;
+  width: 1000px;
+  background: #ffffff;
+  border: 1px solid #c4c4c4;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 25px;
+  margin: 3rem 0;
+}
+.topLine {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  height: 60px;
+  margin-top: 20px;
+  margin-left: 3rem;
+}
+.mainText {
+  font-family: "Libre Franklin", sans-serif;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 1.5rem;
+  line-height: 30px;
+  letter-spacing: 0.06em;
+}
+.highImpact {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: #498ae5;
+  background-color: #cbebf8;
+  margin-left: 100px;
+  padding: 0 10px;
+  height: 30px;
+  border-radius: 10px;
+}
+.students {
+  display: flex;
+  width: 100%;
+  height: 30px;
+}
+
+.titles {
+  color: #ababab;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 40px;
+  margin: 0 2rem 1rem 3rem;
+  font-weight: 300;
+}
+.coloredCircle {
+  width: 16px;
+  height: 16px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  border-radius: 8px;
+  background: #a0b9dc;
+  border: 1px solid #a0b9dc;
+}
+.noColor {
+  background: white;
+}
+.lastRow {
+  border: none;
+  margin-bottom: 1rem;
+}
+
+.allSubfields {
+  border-right: 1px solid #ababab;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  font-size: 15px;
+  height: 30px;
+}
+.date {
+  width: 60px;
+}
+.highImp {
+  width: 110px;
+}
+.duration {
+  width: 100px;
+}
+.reason {
+  width: 200px;
+}
+.instructor {
+  width: 200px;
+}
