@@ -1,51 +1,65 @@
 import { useState } from "react";
-import { storeLog, updateLog } from "../../../backend/FirestoreCalls";
+import { deleteLog, updateLog } from "../../../backend/FirestoreCalls";
 import Modal from "../../../ModalWrapper/Modal";
 import { Log } from "../../../types/LogType";
-import styles from "./SaveExisting.module.css";
+import styles from "./ChangeExisting.module.css";
 
 type saveButtonType = {
   open: boolean;
   onClose: any;
   saveInfo: any;
-  information: Log;
+  information?: Log;
+  id: string;
+  del: boolean;
 };
 
-const SaveExisting = ({
+const ChangeExisting = ({
   open,
   onClose,
   saveInfo,
-    information,
+  information,
+  id,
+  del,
 }: saveButtonType) => {
   const [submitted, setSubmitted] = useState<string>("");
-  const [route, setRoute] = useState<string>("./");
+  const [error, setError] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleSubmit = () => {
     setLoading(true);
-    updateLog(information, information.id).then(() => {
-        setSubmitted("Your changes have been saved.");
+    if (del) {
+      deleteLog(id)
+        .then(() => {
+          setSubmitted("The log has been deleted.");
+          saveInfo();
         })
         .catch((error) => {
-            setSubmitted(
-                `An error occurred while trying to save your changes. Please try again later. Error: ${error}`
-            );
-            setRoute("failed");
+          setSubmitted(
+            `An error occurred while trying to delete the log. Please try again later.`
+          );
+          setError(true);
         })
         .finally(() => setLoading(false));
+    } else {
+      updateLog(information!, id)
+        .then(() => {
+          setSubmitted("Your changes have been saved.");
+        })
+        .catch((error) => {
+          setSubmitted(
+            `An error occurred while trying to save your changes. Please try again later.`
+          );
+          setError(true);
+        })
+        .finally(() => setLoading(false));
+    }
   };
 
-
   const handleOnClose = () => {
-    if (submitted == "Your changes have been saved.") {
-      saveInfo();
-      window.location.reload();
-    }
     onClose();
     setSubmitted("");
     setLoading(false);
   };
-  
 
   return (
     <Modal
@@ -62,7 +76,10 @@ const SaveExisting = ({
           >
             &#x2715;
           </button>
-          <div className={styles.title}> Save Confirmation</div>
+          <div className={styles.title}>
+            {" "}
+            {del ? "Delete" : "Save"} Confirmation
+          </div>
         </div>
         {loading ? (
           <div className={styles.spinner}></div>
@@ -74,7 +91,9 @@ const SaveExisting = ({
               ) : (
                 <>
                   <p className={styles.submit}>
-                    Are you sure you would like to save your changes?
+                    {del
+                      ? "Are you sure you would like to delete this log?"
+                      : "Are you sure you would like to save your changes?"}
                   </p>
                 </>
               )}
@@ -110,5 +129,4 @@ const SaveExisting = ({
   );
 };
 
-export default SaveExisting;
-
+export default ChangeExisting;

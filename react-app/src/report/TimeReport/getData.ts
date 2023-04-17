@@ -11,7 +11,7 @@ const getDates = (givenDates: String) => {
   const startDate = givenDates?.substring(0, 8);
   const endDate = givenDates?.substring(8);
   if (startDate == undefined || endDate == undefined || endDate.length != 8) {
-    return { startDate: new Date(), endDate: new Date(), dateError: true };
+    return { startDate: "", endDate: "", dateError: true };
   } else {
     const modifiedStart =
       startDate?.substring(0, 4) +
@@ -27,21 +27,9 @@ const getDates = (givenDates: String) => {
       "-" +
       endDate?.substring(6);
 
-    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const tz = new Intl.DateTimeFormat("en-GB", {
-      timeZone: timeZone,
-      timeZoneName: "short",
-    }).format(new Date());
-
-    const diff = tz.split("GMT")[1];
-    const offset = parseInt(diff, 10);
-    const offsetMins = offset * 60;
-
     return {
-      startDate: new Date(
-        new Date(modifiedStart).getTime() - offsetMins * 60000
-      ),
-      endDate: new Date(new Date(modifiedEnd).getTime() - offsetMins * 60000),
+      startDate: modifiedStart,
+      endDate: modifiedEnd,
       dateError: false,
     };
   }
@@ -82,22 +70,22 @@ const filterStudents = async (students: Map<string, Log[]>) => {
   return { high_impact_students, low_impact_students };
 };
 
-export default async function getData(dateRange: String) {
+export const getData = async (dateRange: String) => {
   const allStudents: Set<String> = new Set();
 
   const allSessions: SessionInformation = {
-    dateRange: { startDate: new Date(), endDate: new Date() },
+    dateRange: { startDate: "", endDate: "" },
     total_sessions: 0,
     high_impact: 0,
     mentor: {
-      names: [],
+      names: new Set(),
       time: 0,
     },
     students: new Map(),
     high_impact_students: [],
     low_impact_students: [],
     tutor: {
-      names: [],
+      names: new Set(),
       time: 0,
     },
     math_minutes: 0,
@@ -126,7 +114,7 @@ export default async function getData(dateRange: String) {
             const type = log.type === "MENTOR" ? "mentor" : "tutor";
             const subject = log.subject.toString();
             allSessions[type].time += log.duration_minutes;
-            allSessions[type].names.push(log.instructor_name);
+            allSessions[type].names.add(log.instructor_name);
             switch (log.subject) {
               case "MATH":
                 allSessions.math_minutes += log.duration_minutes;
@@ -166,4 +154,44 @@ export default async function getData(dateRange: String) {
     allSessions.low_impact_students = low_impact_students;
     return { information: allSessions, error };
   }
-}
+};
+
+export const formatDate = (date: string): string => {
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const month = monthNames[parseInt(date.split("-")[1]) - 1];
+  const getEnding = (day: number) => {
+    if (day > 3 && day < 21) return "th";
+    switch (day % 10) {
+      case 1:
+        return "st";
+      case 2:
+        return "nd";
+      case 3:
+        return "rd";
+      default:
+        return "th";
+    }
+  };
+  const ending = getEnding(parseInt(date.split("-")[2]));
+  const finalDate =
+    month +
+    " " +
+    parseInt(date.split("-")[2]) +
+    ending +
+    ", " +
+    date.split("-")[0];
+  return finalDate;
+};
