@@ -1,18 +1,28 @@
 .statistic {
-  width: 120px;
+  width: 110px;
   height: 120px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-evenly;
   background-color: white;
   border: 1px solid #c4c4c4;
-  padding: 1rem 1rem 0 1rem;
+  padding: 0 0.8rem 0 1.2rem;
   margin: 1rem 0 1rem 0;
   border-radius: 10%;
   box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
-  font-size: 0.7rem;
 }
 
+.title {
+  font-family: "Fjalla One";
+  font-weight: 100;
+  font-size: 1rem;
+}
+
+.value {
+  font-family: "Fjalla One";
+  font-weight: 600;
+  font-size: 1.3rem;
+}
 @media screen and (max-width: 800px) {
   .statistic {
     width: 150px;

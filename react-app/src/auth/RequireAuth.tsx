@@ -12,7 +12,7 @@ const RequireAuth: React.FC<Props> = ({ children }) => {
   if (authContext.loading) {
     return <Loading />;
   } else if (!authContext.user) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/login" state={{ redir: window.location.pathname }} />;
   }
 
   return <AuthProvider children={children} />;

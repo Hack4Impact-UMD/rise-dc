@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Button from "./Button/Button";
 import ForgotPassword from "./ForgotPasswordModal/ForgotPassword";
 import TextField, { TextFieldTypes } from "./TextField/TextField";
-import { authenticateUser } from "../backend/FirebaseCalls";
-import { logOut } from "../backend/FirebaseCalls";
+import { authenticateUser } from "../../backend/FirebaseCalls";
+import { logOut } from "../../backend/FirebaseCalls";
 import { AuthError } from "@firebase/auth";
-import logo from "./assets/rise-dc-logo.png";
+import logo from "../../assets/rise-dc-logo.png";
 import styles from "./Login.module.css";
 
 const LoginPage: React.FC<any> = () => {
@@ -16,40 +16,31 @@ const LoginPage: React.FC<any> = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [openForgotModal, setOpenForgotModal] = useState<boolean>(false);
 
+  const location = useLocation();
+  const directTo: string = location.state?.redir || "/";
   const navigate = useNavigate();
 
   const login = () => {
     authenticateUser(email, password)
       .then(() => {
-        setTimeout(() => {
-          setIsLoading(false);
-          navigate("/landing");
-        }, 300);
+        navigate(directTo);
       })
       .catch((error) => {
-        setTimeout(() => {
-          let code = (error as AuthError).code;
-          if (code === "auth/user-not-found") {
-            setFailureMessage(
-              "Account does not exist. Make sure your email is correct."
-            );
-          } else if (code === "auth/wrong-password") {
-            setFailureMessage("Incorrect Password");
-          } else if (code === "auth/too-many-requests") {
-            setFailureMessage(
-              "Access to this account has been temporarily disabled due to many failed login attempts. You can reset your password or try again later."
-            );
-          } else {
-            setFailureMessage("Incorrect email or password");
-          }
-          setIsLoading(false);
-        }, 300);
-      });
+        let code = (error as AuthError).code;
+        if (code === "auth/too-many-requests") {
+          setFailureMessage(
+            "Access to this account has been temporarily disabled due to many failed login attempts. You can reset your password or try again later."
+          );
+        } else {
+          setFailureMessage("Incorrect email or password");
+        }
+      })
+      .finally(() => setTimeout(() => setIsLoading(false), 300));
   };
 
   useEffect(() => {
     const logOutFunction = async () => {
-      logOut();
+      await logOut();
     };
     logOutFunction();
   }, []);

@@ -25,15 +25,16 @@
 }
 
 .text {
-  font-weight: 600;
+  font-weight: 500;
   margin-top: 0.5rem;
   padding: 0.3rem;
 }
 
 .role {
   padding-top: 1.5rem;
+  font-weight: 300;
+  font-family: "Libre Franklin";
 }
-
 
 .welcome_container {
   display: flex;

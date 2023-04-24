@@ -14,7 +14,8 @@
 }
 
 .container {
-  background: url("./assets/login-background.png") no-repeat center center fixed;
+  background: url("../../assets/login-background.png") no-repeat center center
+    fixed;
   background-color: rgb(215, 235, 211);
   background-size: cover;
   display: flex;
