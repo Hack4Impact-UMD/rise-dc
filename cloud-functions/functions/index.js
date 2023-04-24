@@ -17,41 +17,42 @@ exports.createUser = functions.https.onCall(async (data, context) => {
   // Check if current user is authenticated.
   if (context.auth.uid == null) {
     throw new functions.https.HttpsError(
-        "unauthenticated",
-        "failed to authenticate request. ID token is missing or invalid.",
+      "unauthenticated",
+      "failed to authenticate request. ID token is missing or invalid."
     );
   }
 
   // Check that current user is an admin.
-  auth
-      .getUser(context.auth.uid)
-      .then((userRecord) => {
-        if (userRecord.customClaims["role"] != "admin") {
-          throw new functions.https.HttpsError(
-              "permission-denied",
-              "Permission denied. Only admins can create new users.",
-          );
-        }
-      });
+  auth.getUser(context.auth.uid).then((userRecord) => {
+    if (userRecord.customClaims["role"] != "admin") {
+      throw new functions.https.HttpsError(
+        "permission-denied",
+        "Permission denied. Only admins can create new users."
+      );
+    }
+  });
 
   // Check that arguments exist.
   // TODO: improve data validation
   if (data.email == null || data.role == null || data.name == null) {
     throw new functions.https.HttpsError(
-        "invalid-argument",
-        "Missing arguments. Request must include email, name, and role.",
+      "invalid-argument",
+      "Missing arguments. Request must include email, name, and role."
     );
   }
 
   try {
-    const userRecord = await auth.createUser(
-        {email: data.email, password: "defaultpassword"});
+    const userRecord = await auth.createUser({
+      email: data.email,
+      password: "defaultpassword",
+    });
 
-    auth.setCustomUserClaims(userRecord.uid, {role: data.role});
-    db.collection("Users").add(
-        {firebase_id: userRecord.uid,
-          name: data.name,
-          type: data.role.toUpperCase()});
+    auth.setCustomUserClaims(userRecord.uid, { role: data.role });
+    db.collection("Users").add({
+      firebase_id: userRecord.uid,
+      name: data.name,
+      type: data.role.toUpperCase(),
+    });
     return;
   } catch (error) {
     throw new functions.https.HttpsError("unknown", `${error}`);
@@ -70,29 +71,32 @@ exports.deleteUser = functions.https.onCall(async (data, context) => {
   // Check if current user is authenticated.
   if (context.auth.uid == null) {
     throw new functions.https.HttpsError(
-        "unauthenticated",
-        "failed to authenticate request. ID token is missing or invalid.",
+      "unauthenticated",
+      "failed to authenticate request. ID token is missing or invalid."
     );
   }
 
   // Check that current user is an admin.
   const userRecord = await auth.getUser(context.auth.uid);
   if (userRecord.customClaims["role"] != "admin") {
-      throw new functions.https.HttpsError(
-          "permission-denied",
-          "Permission denied. Only admins can delete users.",
-      );
+    throw new functions.https.HttpsError(
+      "permission-denied",
+      "Permission denied. Only admins can delete users."
+    );
   }
 
   try {
     await auth.deleteUser(data.uid);
     functions.logger.log(`Deleting user with uid: ${data.uid}`);
-    return db.collection("Users").where("firebase_id", "==", data.uid).get()
-        .then((querySnapshot) => {
-          querySnapshot.forEach((documentSnapshot) => {
-            documentSnapshot.ref.delete();
-          });
+    return db
+      .collection("Users")
+      .where("firebase_id", "==", data.uid)
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((documentSnapshot) => {
+          documentSnapshot.ref.delete();
         });
+      });
   } catch (error) {
     functions.logger.error(error);
     throw new functions.https.HttpsError("unknown", `${error}`);
@@ -107,64 +111,63 @@ exports.setUserRole = functions.https.onCall((data, context) => {
   const auth = admin.auth();
   // authenticate caller
   auth
-      .verifyIdToken(data.idToken)
-      .then((claims) => {
+    .verifyIdToken(data.idToken)
+    .then((claims) => {
       // check input
-        if (data.uid != null && data.role != null) {
+      if (data.uid != null && data.role != null) {
         // check that caller is admin
-          if (claims.role == "admin") {
-            auth.setCustomUserClaims(data.uid, {role: data.role});
-          } else {
-            throw new functions.https.HttpsError(
-                "permission-denied",
-                "Only an admin user can change roles",
-            );
-          }
+        if (claims.role == "admin") {
+          auth.setCustomUserClaims(data.uid, { role: data.role });
         } else {
           throw new functions.https.HttpsError(
-              "invalid-argument",
-              "Must provide a uid and role",
+            "permission-denied",
+            "Only an admin user can change roles"
           );
         }
-      })
-      .catch((error) => {
+      } else {
         throw new functions.https.HttpsError(
-            "permission-denied",
-            "Failed to authenticate: " + error,
+          "invalid-argument",
+          "Must provide a uid and role"
         );
-      });
+      }
+    })
+    .catch((error) => {
+      throw new functions.https.HttpsError(
+        "permission-denied",
+        "Failed to authenticate: " + error
+      );
+    });
 });
 
 exports.createFirstAdmin = functions.https.onRequest((req, res) => {
   const auth = admin.auth();
   auth
-      .setCustomUserClaims("OSTlNGSgPWhcDya9QnNaD0OJmVr1", {role: "admin"})
-      .then( () => {
-        auth
-            .getUserByEmail("songa@umd.edu")
-            .then((userRecord) => {
-              const role = userRecord.customClaims["role"];
-              res.json({result: `songa@umd.edu role is ${role}`});
-            })
-            .catch((error) => {
-              res.json({result: error});
-            });
-      })
-      .catch((error) => {
-        res.json({result: "Operation Failed:" + error});
-      });
+    .setCustomUserClaims("OSTlNGSgPWhcDya9QnNaD0OJmVr1", { role: "admin" })
+    .then(() => {
+      auth
+        .getUserByEmail("songa@umd.edu")
+        .then((userRecord) => {
+          const role = userRecord.customClaims["role"];
+          res.json({ result: `songa@umd.edu role is ${role}` });
+        })
+        .catch((error) => {
+          res.json({ result: error });
+        });
+    })
+    .catch((error) => {
+      res.json({ result: "Operation Failed:" + error });
+    });
 });
 
 exports.getUserRole = functions.https.onRequest((req, res) => {
   const auth = admin.auth();
   auth
-      .getUserByEmail(req.email)
-      .then((userRecord) => {
-        const role = userRecord.customClaims["role"];
-        res.json({result: `role for ${req.email} is ${role}`});
-      })
-      .catch((error) => {
-        res.json({result: error});
-      });
+    .getUserByEmail(req.email)
+    .then((userRecord) => {
+      const role = userRecord.customClaims["role"];
+      res.json({ result: `role for ${req.email} is ${role}` });
+    })
+    .catch((error) => {
+      res.json({ result: error });
+    });
 });
-
