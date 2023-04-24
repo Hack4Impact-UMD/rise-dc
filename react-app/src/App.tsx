@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route, redirect } from "react-router-dom";
 import RequireAuth from "./auth/RequireAuth";
 import RequireAdminAuth from "./auth/RequireAdminAuth";
-import Login from "./login-page/Login";
-import Landing from "./landing-page-components/Landing";
+import Login from "./pages/Login/Login";
+import Landing from "./pages/LandingPage/Landing";
 import SettingsPage from "./settings-page/SettingsPage";
 import { AuthProvider } from "./auth/AuthProvider";
 import StudentProfile from "./student-profile/StudentProfile";

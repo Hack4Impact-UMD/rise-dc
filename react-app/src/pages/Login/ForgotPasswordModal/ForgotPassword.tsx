@@ -1,9 +1,10 @@
 import { useState } from "react";
-import Modal from "../../components/ModalWrapper/Modal";
+import Modal from "../../../components/ModalWrapper/Modal";
 import TextField, { TextFieldTypes } from "../TextField/TextField";
-import { sendResetEmail } from "../../backend/FirebaseCalls";
+import { sendResetEmail } from "../../../backend/FirebaseCalls";
 import { AuthError } from "firebase/auth";
 import styles from "./ForgotPassword.module.css";
+import Loading from "../../../components/LoadingScreen/Loading";
 
 type forgotModalType = {
   open: boolean;
@@ -30,14 +31,14 @@ const ForgotPassword = ({ open, onClose }: forgotModalType) => {
         .catch((error) => {
           setTimeout(() => {
             let code = (error as AuthError).code;
-            console.log(code);
             if (
               code === "auth/invalid-email" ||
-              code === "auth/missing-email"
+              code === "auth/missing-email" ||
+              code == "auth/user-not-found"
             ) {
-              setErrorEmail("Make sure your email is correct.");
+              setSubmitted(true);
             } else {
-              setErrorEmail("Please try again later");
+              setErrorEmail("Error occurred. Please try again later");
             }
             setLoading(false);
           }, 300);
@@ -108,13 +109,7 @@ const ForgotPassword = ({ open, onClose }: forgotModalType) => {
               {submitted ? (
                 "Back to Login"
               ) : (
-                <div>
-                  {loading ? (
-                    <div className={styles.spinner}></div>
-                  ) : (
-                    "Reset Password"
-                  )}
-                </div>
+                <div>{loading ? <Loading /> : "Reset Password"}</div>
               )}
             </button>
           </div>

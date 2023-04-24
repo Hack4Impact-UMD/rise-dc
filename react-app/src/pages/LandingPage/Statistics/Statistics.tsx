@@ -8,8 +8,8 @@ type statProp = {
 export default function Statistics({ title, value }: statProp) {
   return (
     <div className={styles.statistic}>
-      <h1>{value}</h1>
-      <h2>{title}</h2>
+      <p className={styles.value}>{value}</p>
+      <p className={styles.title}>{title}</p>
     </div>
   );
 }

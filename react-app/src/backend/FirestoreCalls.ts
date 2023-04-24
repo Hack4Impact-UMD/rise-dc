@@ -18,36 +18,49 @@ import { getStorage, uploadBytes } from "firebase/storage";
 import { Student, StudentFile, StudentID } from "../types/StudentType";
 import { db } from "../config/firebase";
 import { Log, LogID } from "../types/LogType";
-import { getAuth } from "firebase/auth";
 import { RISEUser } from "../types/UserType";
-import { SubjectHours } from "../types/SubjectHoursType";
+
 import randomstring from "randomstring";
 import app from "../config/firebase";
-import { resolve } from "path";
-import { rejects } from "assert";
-import dayjs from "dayjs";
-import { updateLogs } from "../test/RepopulateLogs";
 
-export function countTypeOfUsers(): Promise<{
-  tutors: number;
-  mentors: number;
-}> {
+import { useAuth } from "../auth/AuthProvider";
+
+export function getUsers(): Promise<RISEUser[]> {
   return new Promise((resolve, reject) => {
     getDocs(collection(db, "Users"))
       .then((snap) => {
-        let numMentors = 0;
-        let numTutors = 0;
+        const users: RISEUser[] = [];
         snap.docs.map((doc) => {
-          if (doc.data().type == "MENTOR") {
-            numMentors++;
-          } else if (doc.data().type == "TUTOR") {
-            numTutors++;
-          }
+          const user = doc.data() as RISEUser;
+          user.id = doc.id;
+          users.push(user);
         });
-        resolve({ tutors: numTutors, mentors: numMentors });
+        resolve(users);
       })
       .catch((error: any) => {
         reject(error);
+      });
+  });
+}
+
+export function getUserWithID(id: string): Promise<RISEUser[]> {
+  return new Promise((resolve, reject) => {
+    const q = query(collection(db, "Users"), where("firebase_id", "==", id));
+    getDocs(q)
+      .then((userSnap) => {
+        if (userSnap.size > 0) {
+          const users: RISEUser[] = [];
+          userSnap.docs.map((user) => {
+            let riseUser = user.data() as RISEUser;
+            users.push(riseUser);
+          });
+          return resolve(users);
+        } else {
+          return reject(new Error("User not found"));
+        }
+      })
+      .catch((e) => {
+        return reject(e);
       });
   });
 }
@@ -82,33 +95,12 @@ export function getAllStudents(): Promise<Array<Partial<StudentID>>> {
           partialStudent.id = doc.id;
           allStudents.push(partialStudent);
         });
+        allStudents.sort((a, b) => (a.name! > b.name! ? 1 : -1));
         return resolve(allStudents);
       })
       .catch((e) => {
         return reject(e);
       });
-  });
-}
-
-export function getCurrentUser(): Promise<RISEUser> {
-  return new Promise((resolve, reject) => {
-    const user = getAuth(app).currentUser;
-    const usersRef = collection(db, "Users");
-    if (user) {
-      getDocs(query(usersRef, where("firebase_id", "==", user.uid)))
-        .then((docs) => {
-          docs.forEach((doc) => {
-            const u = doc.data() as RISEUser;
-            u.id = doc.id;
-            return resolve(u);
-          });
-        })
-        .catch((e) => {
-          return reject(e);
-        });
-    } else {
-      return reject(new Error("Error retrieving user"));
-    }
   });
 }
 
@@ -230,6 +222,7 @@ export function updateLog(log: Log, id: string): Promise<void> {
   });
 }
 
+/* Takes dates in the form YYYY-MM-DD */
 export function getLogsTimeframe(
   start: string,
   end: string
@@ -242,10 +235,12 @@ export function getLogsTimeframe(
   return new Promise((resolve, reject) => {
     getDocs(q)
       .then((snap) => {
-        const docs = snap.docs;
-        docs.sort((a, b) => (a.data().date > b.data().date ? 1 : -1));
         const logs: Log[] = [];
-        docs.map((doc) => logs.push(doc.data() as Log));
+        if (snap.size != 0) {
+          const docs = snap.docs;
+          docs.sort((a, b) => (a.data().date > b.data().date ? 1 : -1));
+          docs.map((doc) => logs.push(doc.data() as Log));
+        }
         return resolve(logs);
       })
       .catch((e) => {
@@ -276,30 +271,30 @@ export function getRecentLogs(): Promise<Array<Log>> {
   });
 }
 
-export function getStudentsAlphabetically(): Promise<Array<StudentID>> {
-  return new Promise((resolve, reject) => {
-    const studentsRef = collection(db, "Students");
-    const studentsQuery = query(studentsRef, orderBy("name"), limit(5));
+// export function getStudentsAlphabetically(): Promise<Array<StudentID>> {
+//   return new Promise((resolve, reject) => {
+//     const studentsRef = collection(db, "Students");
+//     const studentsQuery = query(studentsRef, orderBy("name"), limit(5));
 
-    getDocs(studentsQuery)
-      .then((snap) => {
-        const docs = snap.docs;
-        const students: StudentID[] = [];
+//     getDocs(studentsQuery)
+//       .then((snap) => {
+//         const docs = snap.docs;
+//         const students: StudentID[] = [];
 
-        const length = Math.min(5, docs.length);
-        for (let i = 0; i < length; i++) {
-          let s = docs[i].data() as Student;
-          s.id = docs.id;
-          students.push(s);
-        }
-        console.log(students);
-        return resolve(students);
-      })
-      .catch((e) => {
-        reject(e);
-      });
-  });
-}
+//         const length = Math.min(5, docs.length);
+//         for (let i = 0; i < length; i++) {
+//           let s = docs[i].data() as Student;
+//           s.id = docs.id;
+//           students.push(s);
+//         }
+//         console.log(students);
+//         return resolve(students);
+//       })
+//       .catch((e) => {
+//         reject(e);
+//       });
+//   });
+// }
 
 export function getRecentLogsByCreator(creatorId: string): Promise<Array<Log>> {
   return new Promise((resolve, reject) => {
