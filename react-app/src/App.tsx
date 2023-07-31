@@ -3,15 +3,16 @@ import RequireAuth from "./auth/RequireAuth";
 import RequireAdminAuth from "./auth/RequireAdminAuth";
 import Login from "./pages/Login/Login";
 import Landing from "./pages/LandingPage/Landing";
-import SettingsPage from "./settings-page/SettingsPage";
+import SettingsPage from "./pages/SettingsPage/SettingsPage";
 import { AuthProvider } from "./auth/AuthProvider";
-import StudentProfile from "./student-profile/StudentProfile";
+import StudentProfile from "./pages/StudentProfile/StudentProfile";
 import Session from "./session-log-components/Session";
-import SearchPage from "./pages/SearchPage/SearchPage";
-import InvalidPage from "./InvalidPage/InvalidPage";
-import StudentCreation from "./student-profile/CreateStudent/StudentCreation";
+import AllUsers from "./pages/AllUsers/AllUsers";
+import InvalidPage from "./pages/InvalidPage/InvalidPage";
+import StudentCreation from "./pages/StudentProfile/CreateStudent/StudentCreation";
 import TimeReport from "./report/TimeReport/TimeReport";
 import IndividualReport from "./report/IndividualReport/IndividualReport";
+import UsersPage from "./pages/AllUsers/IntroPage";
 
 function App() {
   return (
@@ -37,8 +38,16 @@ function App() {
             element={<RequireAuth children={<Session />} />}
           />
           <Route
-            path="/search"
-            element={<RequireAuth children={<SearchPage />} />}
+            path="/users"
+            element={<RequireAuth children={<UsersPage />} />}
+          />
+          <Route
+            path="/students"
+            element={<RequireAuth children={<AllUsers mode="STUDENTS" />} />}
+          />
+          <Route
+            path="/teachers"
+            element={<RequireAuth children={<AllUsers mode="TEACHERS" />} />}
           />
           <Route
             path="/createstudent"

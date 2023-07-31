@@ -1,0 +1,201 @@
+@import url("https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fjalla+One&family=Gothic+A1:wght@300;400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Libre+Franklin&display=swap");
+
+* {
+  margin: 0px;
+  padding: 0px;
+}
+
+.body {
+  height: 100%;
+  background-color: #d7ecd3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1 1 100%;
+  overflow: auto;
+}
+
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-flow: column;
+}
+
+.header {
+  height: 150px;
+  background-color: #ffffff;
+}
+
+.rise-dc-img {
+  position: absolute;
+  object-fit: contain;
+  margin-top: 25px;
+  margin-left: 60px;
+  height: 20px;
+  width: 20px;
+}
+
+.settings-page-title {
+  font-family: "Gothic A1", sans-serif;
+  font-size: 40px;
+  font-weight: 400;
+  margin-top: 50px;
+  margin-left: 190px;
+}
+
+.settingsForm {
+  width: 620px;
+  height: 310px;
+  margin: 3rem 1.5rem 1.5rem 1.5rem;
+  padding: 0.7rem;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  border-radius: 30px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
+    rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  overflow-x: auto;
+}
+
+.creationForm {
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  margin: 1.5rem;
+  padding: 0.7rem 0.7rem 2.25rem 0.7rem;
+  width: 620px;
+  overflow-y: auto;
+  flex-grow: 1;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
+    rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  border-radius: 30px;
+}
+
+.profile {
+  margin: 20px 0 0 20px;
+  margin-top: 20px;
+  margin-left: 20px;
+  font-size: 20px;
+  font-family: "Fjalla One", sans-serif;
+}
+
+.creationProfile {
+  margin: 20px 0 10px 20px;
+  margin-top: 20px;
+  margin-left: 20px;
+  font-size: 20px;
+  font-family: "Fjalla One", sans-serif;
+}
+
+.resetEmail {
+  display: block;
+  margin-top: 30px;
+  margin-left: 20px;
+  margin-bottom: 0.2rem;
+  font-size: 13px;
+  color: #000000;
+  font-weight: 100;
+  font-family: "Libre Franklin", sans-serif;
+}
+
+.resetPassword {
+  display: block;
+  margin-top: 20px;
+  margin-left: 20px;
+  margin-bottom: 4px;
+  font-size: 13px;
+  color: #000000;
+  font-weight: 100;
+  font-family: "Libre Franklin", sans-serif;
+}
+.selectInput {
+  margin-left: 20px;
+  color: #afaeae;
+  font-family: "Libre Franklin", sans-serif;
+  width: 370px;
+  margin-top: 10px;
+  color: black;
+}
+
+.input {
+  display: block;
+  margin-left: 20px;
+  color: #afaeae;
+  font-family: "Libre Franklin", sans-serif;
+  padding: 5px 200px 5px 10px;
+  border-radius: 20px;
+  border: 1px solid #c4c4c4;
+  margin-top: 10px;
+  color: black;
+  background-color: #eae7e7;
+}
+
+input::placeholder {
+  overflow: visible;
+}
+
+.creationInput {
+  margin-top: 10px;
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.adminForm {
+  height: 120px;
+}
+
+.button {
+  width: 125px;
+  height: 30px;
+  display: block;
+  margin-left: 20px;
+  color: #afaeae;
+  font-family: "Libre Franklin", sans-serif;
+  padding: 0.32rem 2.5rem;
+  border-radius: 20px;
+  border: none;
+  margin-top: 10px;
+  color: black;
+  background-color: #a0b9dc;
+  font-weight: 100;
+  cursor: pointer;
+  text-align: center;
+}
+
+.button:hover {
+  background-color: #d0ecfc;
+  border: none;
+}
+
+.invalidInput {
+  border: 1px solid red;
+}
+
+@media screen and (max-width: 800px) {
+  .settingsForm {
+    width: 450px;
+  }
+  .formSecond {
+    width: 450px;
+  }
+  .input {
+    padding-right: 100px;
+  }
+  .button {
+    width: 100px;
+    padding: 0.32rem 0;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .body {
+    align-items: start;
+  }
+}
