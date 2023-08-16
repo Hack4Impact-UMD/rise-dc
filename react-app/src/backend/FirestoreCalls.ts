@@ -26,6 +26,7 @@ import app from "../config/firebase";
 import { useAuth } from "../auth/AuthProvider";
 
 export function getUsers(): Promise<RISEUser[]> {
+  console.log("running");
   return new Promise((resolve, reject) => {
     getDocs(collection(db, "Users"))
       .then((snap) => {

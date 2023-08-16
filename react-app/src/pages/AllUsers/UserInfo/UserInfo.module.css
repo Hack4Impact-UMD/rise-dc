@@ -1,0 +1,65 @@
+.icon {
+  width: 30px;
+  height: 30px;
+  margin-right: 0.25rem;
+}
+
+.icons {
+  width: 80%;
+  margin-right: 1.5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
+}
+
+.button {
+  background-color: #a0b9dc;
+  border-style: none;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.student {
+  height: 50px;
+  padding: 0.3rem 0.3rem 0.3rem 1rem;
+  margin: 0 1.5rem 0.5rem 1.5rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: #a0b9dc;
+  border-radius: 15px;
+}
+
+.studentName {
+  width: 40%;
+  font-family: "Fjalla One";
+  font-size: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.teacherRole {
+  font-family: "Libre Franklin";
+  font-style: italic;
+  font-size: 0.6rem;
+  padding-left: 20px;
+  color: #5a5a5a;
+}
+
+.student:hover {
+  background-color: #cbebf8;
+}
+
+.student:hover .button {
+  background-color: #cbebf8;
+}
+
+@media screen and (max-width: 800px) {
+  .container {
+    width: calc(100% - 3.5rem);
+  }
+}

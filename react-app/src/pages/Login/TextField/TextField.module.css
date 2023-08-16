@@ -2,7 +2,7 @@
   width: 31vh;
   min-width: 180px;
   height: 2vh;
-  padding: 0.53rem 0 0.53rem 1.6vh;
+  padding: 0.53rem 2.2rem 0.53rem 1.6vh;
   margin: 5px 0;
   border: 1.4px lightgrey solid;
   border-radius: 1.4rem;
@@ -15,4 +15,21 @@
   font-family: "Libre Franklin";
   font-size: 0.8rem;
   margin-left: 1.6vh;
+}
+
+.showPasswordButton {
+  border: none;
+  background: none;
+  cursor: pointer;
+  margin-left: -30px;
+}
+
+.showPasswordIcon {
+  width: 20px;
+}
+
+.showPassword {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
